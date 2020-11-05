@@ -1,4 +1,4 @@
-package dynamic_beat_2;
+package dynamic_beat_3;
 
 public class Main {
 	public static final int SCREEN_WIDTH = 1280;

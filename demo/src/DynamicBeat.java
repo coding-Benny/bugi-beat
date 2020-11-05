@@ -1,8 +1,14 @@
-package dynamic_beat_2;
+package dynamic_beat_3;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.File;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -22,6 +28,10 @@ public class DynamicBeat extends JFrame {
 		setVisible(true);
 		
 		introBackground = new ImageIcon(Main.class.getResource("../images/intro-background.jpg")).getImage();
+		
+		/* 시작화면에서 음악이 무한 반복됨 */
+		Music introMusic = new Music("intro-music.mp3", true);
+		introMusic.start();
 	}
 	
 	public void paint(Graphics g) {
