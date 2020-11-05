@@ -1,4 +1,4 @@
-package dynamic_beat_4;
+package dynamic_beat_5;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -17,13 +17,20 @@ public class DynamicBeat extends JFrame {
 
 	private Image screenImage;
 	private Graphics screenGraphic;
-
+	
 	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/exitEntered.png"));
 	private ImageIcon exitBtnImg = new ImageIcon(Main.class.getResource("../images/exit.png"));
 	
-	private Image introBackground = new ImageIcon(Main.class.getResource("../images/intro-background.jpg")).getImage();
+	private ImageIcon startBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/btnStartEntered.png"));
+	private ImageIcon startBtnImg = new ImageIcon(Main.class.getResource("../images/btnStart.png"));
+	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/btnQuitEntered.png"));
+	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("../images/btnQuit.png"));
+	
+	private Image background = new ImageIcon(Main.class.getResource("../images/intro-background.jpg")).getImage();
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
 	private JButton exitBtn = new JButton(exitBtnImg);
+	private JButton startBtn = new JButton(startBtnImg);
+	private JButton quitBtn = new JButton(quitBtnImg);
 	
 	private int mouseX, mouseY;
 	
@@ -71,6 +78,69 @@ public class DynamicBeat extends JFrame {
 		});
 		add(exitBtn);
 		
+		startBtn.setBounds(40, 200, 400, 100);
+		startBtn.setBorderPainted(false);
+		startBtn.setContentAreaFilled(false);
+		startBtn.setFocusPainted(false);
+		startBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				startBtn.setIcon(startBtnEnteredImg);
+				startBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+				btnEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				startBtn.setIcon(startBtnImg);
+				startBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+				btnPressedMusic.start();
+				startBtn.setVisible(false);
+				quitBtn.setVisible(false);
+				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();	
+			}
+		});
+		add(startBtn);
+		
+		quitBtn.setBounds(40, 330, 400, 100);
+		quitBtn.setBorderPainted(false);
+		quitBtn.setContentAreaFilled(false);
+		quitBtn.setFocusPainted(false);
+		quitBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				quitBtn.setIcon(quitBtnEnteredImg);
+				quitBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+				btnEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				quitBtn.setIcon(quitBtnImg);
+				quitBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+				btnPressedMusic.start();
+				try {
+					Thread.sleep(1000);	/* 효과음이 정상적으로 나타날 수 있도록 sleep */
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				}
+				System.exit(0);
+			}
+		});
+		add(quitBtn);
+		
 		menuBar.setBounds(0, 0, 1280, 32);
 		menuBar.addMouseListener(new MouseAdapter() {
 			@Override
@@ -102,7 +172,7 @@ public class DynamicBeat extends JFrame {
 	}
 
 	public void screenDraw(Graphics g) {
-		g.drawImage(introBackground, 0, 0, null);
+		g.drawImage(background, 0, 0, null);
 		/*
 		 * 이미지 그리기 이외에도 프레임에 추가된 컴포넌트를 그려줌 menuBar는 항상 존재하는 이미지이고 고정적이기 때문에
 		 * paintComponents로 그림
