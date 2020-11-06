@@ -1,4 +1,4 @@
-package dynamic_beat_5;
+package dynamic_beat_6;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -25,14 +25,24 @@ public class DynamicBeat extends JFrame {
 	private ImageIcon startBtnImg = new ImageIcon(Main.class.getResource("../images/btnStart.png"));
 	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/btnQuitEntered.png"));
 	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("../images/btnQuit.png"));
+	private ImageIcon leftBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/left-entered.png"));
+	private ImageIcon leftBtnImg = new ImageIcon(Main.class.getResource("../images/left.png"));
+	private ImageIcon rightBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/right-entered.png"));
+	private ImageIcon rightBtnImg = new ImageIcon(Main.class.getResource("../images/right.png"));
 	
+	private Image titleImg = new ImageIcon(Main.class.getResource("../images/kitchen-title-image.png")).getImage();
+	private Image selectedImg = new ImageIcon(Main.class.getResource("../images/kitchen-start-image.png")).getImage();
 	private Image background = new ImageIcon(Main.class.getResource("../images/intro-background.jpg")).getImage();
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
 	private JButton exitBtn = new JButton(exitBtnImg);
 	private JButton startBtn = new JButton(startBtnImg);
 	private JButton quitBtn = new JButton(quitBtnImg);
+	private JButton leftBtn = new JButton(leftBtnImg);
+	private JButton rightBtn = new JButton(rightBtnImg);
 	
 	private int mouseX, mouseY;
+	
+	private boolean isMainScreen = false;
 	
 	public DynamicBeat() {
 		setUndecorated(true); /* 실행 시 menuBar가 보이지 않음 */
@@ -103,7 +113,10 @@ public class DynamicBeat extends JFrame {
 				btnPressedMusic.start();
 				startBtn.setVisible(false);
 				quitBtn.setVisible(false);
-				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();	
+				leftBtn.setVisible(true);
+				rightBtn.setVisible(true);
+				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();
+				isMainScreen = true;
 			}
 		});
 		add(startBtn);
@@ -141,6 +154,64 @@ public class DynamicBeat extends JFrame {
 		});
 		add(quitBtn);
 		
+		leftBtn.setVisible(false);
+		leftBtn.setBounds(140, 310, 60, 60);
+		leftBtn.setBorderPainted(false);
+		leftBtn.setContentAreaFilled(false);
+		leftBtn.setFocusPainted(false);
+		leftBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				leftBtn.setIcon(leftBtnEnteredImg);
+				leftBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+				btnEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				leftBtn.setIcon(leftBtnImg);
+				leftBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+				btnPressedMusic.start();
+				// 왼쪽 버튼 이벤트
+			}
+		});
+		add(leftBtn);
+		
+		rightBtn.setVisible(false);
+		rightBtn.setBounds(1080, 310, 60, 60);
+		rightBtn.setBorderPainted(false);
+		rightBtn.setContentAreaFilled(false);
+		rightBtn.setFocusPainted(false);
+		rightBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				rightBtn.setIcon(rightBtnEnteredImg);
+				rightBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+				btnEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				rightBtn.setIcon(rightBtnImg);
+				rightBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+				btnPressedMusic.start();
+				// 오른쪽 버튼 이벤트
+			}
+		});
+		add(rightBtn);
+		
 		menuBar.setBounds(0, 0, 1280, 32);
 		menuBar.addMouseListener(new MouseAdapter() {
 			@Override
@@ -173,6 +244,10 @@ public class DynamicBeat extends JFrame {
 
 	public void screenDraw(Graphics g) {
 		g.drawImage(background, 0, 0, null);
+		if (isMainScreen) {
+			g.drawImage(selectedImg, 340, 100, null);
+			g.drawImage(titleImg, 330, 70, null);
+		}
 		/*
 		 * 이미지 그리기 이외에도 프레임에 추가된 컴포넌트를 그려줌 menuBar는 항상 존재하는 이미지이고 고정적이기 때문에
 		 * paintComponents로 그림
