@@ -1,4 +1,4 @@
-package dynamic_beat_6;
+package dynamic_beat_7;
 
 import java.io.BufferedInputStream;
 import java.io.File;

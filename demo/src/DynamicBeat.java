@@ -1,4 +1,4 @@
-package dynamic_beat_6;
+package dynamic_beat_7;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,8 +31,6 @@ public class DynamicBeat extends JFrame {
 	private ImageIcon rightBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/right-entered.png"));
 	private ImageIcon rightBtnImg = new ImageIcon(Main.class.getResource("../images/right.png"));
 	
-	private Image titleImg = new ImageIcon(Main.class.getResource("../images/kitchen-title-image.png")).getImage();
-	private Image selectedImg = new ImageIcon(Main.class.getResource("../images/kitchen-start-image.png")).getImage();
 	private Image background = new ImageIcon(Main.class.getResource("../images/intro-background.jpg")).getImage();
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
 	private JButton exitBtn = new JButton(exitBtnImg);
@@ -44,6 +43,13 @@ public class DynamicBeat extends JFrame {
 	
 	private boolean isMainScreen = false;
 	
+	ArrayList<Track> trackList = new ArrayList<Track>();
+	
+	private Image titleImg;
+	private Image selectedImg;
+	private Music selectedMusic;
+	private int nowSelected = 0;
+	
 	public DynamicBeat() {
 		setUndecorated(true); /* 실행 시 menuBar가 보이지 않음 */
 		setTitle("Dynamic Beat");
@@ -54,6 +60,21 @@ public class DynamicBeat extends JFrame {
 		setVisible(true);
 		setBackground(new Color(0, 0, 0, 0));
 		setLayout(null);
+		
+		/* 시작화면에서 음악이 무한 반복됨 */
+		Music introMusic = new Music("intro-music.mp3", true);
+		introMusic.start();
+		
+		trackList.add(new Track("kitchen-title-image.png", "kitchen-start-image.png",
+				"kitchen-game-image.png", "kitchen-highlight.mp3", "Kitchen.mp3"));
+		trackList.add(new Track("biscuit-title-image.png", "biscuit-start-image.png",
+				"biscuit-game-image.png", "biscuit-highlight.mp3", "Biscuit.mp3"));
+		trackList.add(new Track("cafe-title-image.png", "cafe-start-image.png",
+				"cafe-game-image.png", "cafe-highlight.mp3", "Cafe.mp3"));
+		trackList.add(new Track("onion-title-image.png", "onion-start-image.png",
+				"onion-game-image.png", "onion-highlight.mp3", "Onion.mp3"));
+		trackList.add(new Track("alien-title-image.png", "alien-start-image.png",
+				"alien-game-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3"));
 
 		exitBtn.setBounds(1245, 0, 32, 32);
 		exitBtn.setBorderPainted(false);
@@ -111,6 +132,8 @@ public class DynamicBeat extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 				btnPressedMusic.start();
+				introMusic.close();
+				selectTrack(0);
 				startBtn.setVisible(false);
 				quitBtn.setVisible(false);
 				leftBtn.setVisible(true);
@@ -178,7 +201,7 @@ public class DynamicBeat extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 				btnPressedMusic.start();
-				// 왼쪽 버튼 이벤트
+				selectLeft();
 			}
 		});
 		add(leftBtn);
@@ -207,7 +230,7 @@ public class DynamicBeat extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 				btnPressedMusic.start();
-				// 오른쪽 버튼 이벤트
+				selectRight();
 			}
 		});
 		add(rightBtn);
@@ -229,10 +252,6 @@ public class DynamicBeat extends JFrame {
 			}
 		});
 		add(menuBar);
-		
-		/* 시작화면에서 음악이 무한 반복됨 */
-		Music introMusic = new Music("intro-music.mp3", true);
-		introMusic.start();
 	}
 
 	public void paint(Graphics g) {
@@ -246,7 +265,7 @@ public class DynamicBeat extends JFrame {
 		g.drawImage(background, 0, 0, null);
 		if (isMainScreen) {
 			g.drawImage(selectedImg, 340, 100, null);
-			g.drawImage(titleImg, 330, 70, null);
+			g.drawImage(titleImg, 320, 15, null);
 		}
 		/*
 		 * 이미지 그리기 이외에도 프레임에 추가된 컴포넌트를 그려줌 menuBar는 항상 존재하는 이미지이고 고정적이기 때문에
@@ -254,5 +273,30 @@ public class DynamicBeat extends JFrame {
 		 */
 		paintComponents(g);
 		this.repaint();
+	}
+	
+	public void selectTrack(int nowSelected) {
+		if (selectedMusic != null)
+			selectedMusic.close();
+		titleImg = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getTitleImage())).getImage();
+		selectedImg = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getStartImage())).getImage();
+		selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true);
+		selectedMusic.start();
+	}
+	
+	public void selectLeft() {
+		if (nowSelected == 0)
+			nowSelected = trackList.size() - 1;
+		else
+			nowSelected--;
+		selectTrack(nowSelected);
+	}
+	
+	public void selectRight() {
+		if (nowSelected == trackList.size() - 1)
+			nowSelected = 0;
+		else
+			nowSelected++;
+		selectTrack(nowSelected);
 	}
 }
