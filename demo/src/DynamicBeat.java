@@ -1,4 +1,4 @@
-package dynamic_beat_7;
+package dynamic_beat_8;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -31,6 +31,11 @@ public class DynamicBeat extends JFrame {
 	private ImageIcon rightBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/right-entered.png"));
 	private ImageIcon rightBtnImg = new ImageIcon(Main.class.getResource("../images/right.png"));
 	
+	private ImageIcon easyBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/easyBtnEntered.png"));
+	private ImageIcon easyBtnImg = new ImageIcon(Main.class.getResource("../images/easyBtn.png"));
+	private ImageIcon hardBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/hardBtnEntered.png"));
+	private ImageIcon hardBtnImg = new ImageIcon(Main.class.getResource("../images/hardBtn.png"));
+	
 	private Image background = new ImageIcon(Main.class.getResource("../images/intro-background.jpg")).getImage();
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
 	private JButton exitBtn = new JButton(exitBtnImg);
@@ -38,6 +43,8 @@ public class DynamicBeat extends JFrame {
 	private JButton quitBtn = new JButton(quitBtnImg);
 	private JButton leftBtn = new JButton(leftBtnImg);
 	private JButton rightBtn = new JButton(rightBtnImg);
+	private JButton easyBtn = new JButton(easyBtnImg);
+	private JButton hardBtn = new JButton(hardBtnImg);
 	
 	private int mouseX, mouseY;
 	
@@ -138,6 +145,8 @@ public class DynamicBeat extends JFrame {
 				quitBtn.setVisible(false);
 				leftBtn.setVisible(true);
 				rightBtn.setVisible(true);
+				easyBtn.setVisible(true);
+				hardBtn.setVisible(true);
 				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();
 				isMainScreen = true;
 			}
@@ -235,6 +244,64 @@ public class DynamicBeat extends JFrame {
 		});
 		add(rightBtn);
 		
+		easyBtn.setVisible(false);
+		easyBtn.setBounds(375, 580, 250, 67);
+		easyBtn.setBorderPainted(false);
+		easyBtn.setContentAreaFilled(false);
+		easyBtn.setFocusPainted(false);
+		easyBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				easyBtn.setIcon(easyBtnEnteredImg);
+				easyBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+				btnEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				easyBtn.setIcon(easyBtnImg);
+				easyBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+				btnPressedMusic.start();
+				gameStart(nowSelected, "easy");
+			}
+		});
+		add(easyBtn);
+		
+		hardBtn.setVisible(false);
+		hardBtn.setBounds(655, 580, 250, 67);
+		hardBtn.setBorderPainted(false);
+		hardBtn.setContentAreaFilled(false);
+		hardBtn.setFocusPainted(false);
+		hardBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				hardBtn.setIcon(hardBtnEnteredImg);
+				hardBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+				btnEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				hardBtn.setIcon(hardBtnImg);
+				hardBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+				btnPressedMusic.start();
+				gameStart(nowSelected, "hard");
+			}
+		});
+		add(hardBtn);
+		
 		menuBar.setBounds(0, 0, 1280, 32);
 		menuBar.addMouseListener(new MouseAdapter() {
 			@Override
@@ -298,5 +365,16 @@ public class DynamicBeat extends JFrame {
 		else
 			nowSelected++;
 		selectTrack(nowSelected);
+	}
+	
+	public void gameStart(int nowSelected, String difficulty) {
+		if (selectedMusic != null)
+			selectedMusic.close();
+		isMainScreen = false;
+		leftBtn.setVisible(false);
+		rightBtn.setVisible(false);
+		easyBtn.setVisible(false);
+		hardBtn.setVisible(false);
+		background = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getGameImage())).getImage();
 	}
 }

@@ -1,4 +1,4 @@
-package dynamic_beat_7;
+package dynamic_beat_8;
 
 public class Track {
 	private String titleImage;	// 제목 부분 이미지
