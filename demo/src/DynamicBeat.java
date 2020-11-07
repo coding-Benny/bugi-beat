@@ -36,6 +36,9 @@ public class DynamicBeat extends JFrame {
 	private ImageIcon hardBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/hardBtnEntered.png"));
 	private ImageIcon hardBtnImg = new ImageIcon(Main.class.getResource("../images/hardBtn.png"));
 	
+	ImageIcon backBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/backBtnEntered.png"));
+	private ImageIcon backBtnImg = new ImageIcon(Main.class.getResource("../images/backBtn.png"));
+	
 	private Image background = new ImageIcon(Main.class.getResource("../images/intro-background.jpg")).getImage();
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
 	private JButton exitBtn = new JButton(exitBtnImg);
@@ -45,6 +48,7 @@ public class DynamicBeat extends JFrame {
 	private JButton rightBtn = new JButton(rightBtnImg);
 	private JButton easyBtn = new JButton(easyBtnImg);
 	private JButton hardBtn = new JButton(hardBtnImg);
+	private JButton backBtn = new JButton(backBtnImg);
 	
 	private int mouseX, mouseY;
 	
@@ -302,6 +306,35 @@ public class DynamicBeat extends JFrame {
 		});
 		add(hardBtn);
 		
+		backBtn.setVisible(false);
+		backBtn.setBounds(20, 50, 60, 60);
+		backBtn.setBorderPainted(false);
+		backBtn.setContentAreaFilled(false);
+		backBtn.setFocusPainted(false);
+		backBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				backBtn.setIcon(backBtnEnteredImg);
+				backBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+				btnEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				backBtn.setIcon(backBtnImg);
+				backBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+				btnPressedMusic.start();
+				backToMain();
+			}
+		});
+		add(backBtn);
+		
 		menuBar.setBounds(0, 0, 1280, 32);
 		menuBar.addMouseListener(new MouseAdapter() {
 			@Override
@@ -376,5 +409,17 @@ public class DynamicBeat extends JFrame {
 		easyBtn.setVisible(false);
 		hardBtn.setVisible(false);
 		background = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getGameImage())).getImage();
+		backBtn.setVisible(true);
+	}
+	
+	public void backToMain() {
+		isMainScreen = true;
+		leftBtn.setVisible(true);
+		rightBtn.setVisible(true);
+		easyBtn.setVisible(true);
+		hardBtn.setVisible(true);
+		background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();
+		backBtn.setVisible(false);
+		selectTrack(nowSelected);
 	}
 }
