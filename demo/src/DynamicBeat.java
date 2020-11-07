@@ -59,6 +59,7 @@ public class DynamicBeat extends JFrame {
 	private Image titleImg;
 	private Image selectedImg;
 	private Music selectedMusic;
+	private Music introMusic = new Music("intro-music.mp3", true);
 	private int nowSelected = 0;
 	
 	public DynamicBeat() {
@@ -72,8 +73,6 @@ public class DynamicBeat extends JFrame {
 		setBackground(new Color(0, 0, 0, 0));
 		setLayout(null);
 		
-		/* 시작화면에서 음악이 무한 반복됨 */
-		Music introMusic = new Music("intro-music.mp3", true);
 		introMusic.start();
 		
 		trackList.add(new Track("kitchen-title-image.png", "kitchen-start-image.png",
@@ -143,16 +142,7 @@ public class DynamicBeat extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 				btnPressedMusic.start();
-				introMusic.close();
-				selectTrack(0);
-				startBtn.setVisible(false);
-				quitBtn.setVisible(false);
-				leftBtn.setVisible(true);
-				rightBtn.setVisible(true);
-				easyBtn.setVisible(true);
-				hardBtn.setVisible(true);
-				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();
-				isMainScreen = true;
+				enterToMain();
 			}
 		});
 		add(startBtn);
@@ -421,5 +411,18 @@ public class DynamicBeat extends JFrame {
 		background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();
 		backBtn.setVisible(false);
 		selectTrack(nowSelected);
+	}
+	
+	public void enterToMain() {
+		startBtn.setVisible(false);
+		quitBtn.setVisible(false);
+		background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();
+		isMainScreen = true;
+		leftBtn.setVisible(true);
+		rightBtn.setVisible(true);
+		easyBtn.setVisible(true);
+		hardBtn.setVisible(true);
+		introMusic.close();
+		selectTrack(0);
 	}
 }
