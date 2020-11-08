@@ -1,15 +1,15 @@
-package dynamic_beat_12;
+package dynamic_beat_13;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
 public class Game extends Thread {
-	private Image noteImg = new ImageIcon(Main.class.getResource("../images/note.png")).getImage();
 	private Image noteRouteLineImg = new ImageIcon(Main.class.getResource("../images/noteRouteLine.png")).getImage();
 	private Image judgementLineImg = new ImageIcon(Main.class.getResource("../images/judgement-line.png")).getImage();
 	private Image gameInfoImg = new ImageIcon(Main.class.getResource("../images/gameInfo.png")).getImage();
@@ -27,12 +27,15 @@ public class Game extends Thread {
 	private String musicTitle;
 	private Music gameMusic;
 	
+	ArrayList<Note> noteList = new ArrayList<Note>();
+	
 	public Game(String titleName, String difficulty, String musicTitle) {
 		this.titleName = titleName;
 		this.difficulty = difficulty;
 		this.musicTitle = musicTitle;
 		gameMusic = new Music(this.musicTitle, false);
 		gameMusic.start();
+		dropNotes(titleName);
 	}
 	
 	public void screenDraw(Graphics2D g) {
@@ -54,14 +57,10 @@ public class Game extends Thread {
 		g.drawImage(noteRouteLineImg, 1055, 30, null);
 		g.drawImage(gameInfoImg, 0, 660, null);
 		g.drawImage(judgementLineImg, 0, 580, null);
-		g.drawImage(noteImg, 229, 120, null);
-		g.drawImage(noteImg, 333, 580, null);
-		g.drawImage(noteImg, 437, 500, null);
-		g.drawImage(noteImg, 541, 340, null);
-		g.drawImage(noteImg, 640, 340, null);
-		g.drawImage(noteImg, 745, 325, null);
-		g.drawImage(noteImg, 849, 305, null);
-		g.drawImage(noteImg, 953, 305, null);
+		for (int i = 0; i < noteList.size(); i++) {
+			Note note = noteList.get(i);
+			note.screenDraw(g);
+		}
 		g.setColor(Color.WHITE);
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g.setFont(new Font("Arial", Font.BOLD, 30));
@@ -154,5 +153,11 @@ public class Game extends Thread {
 	public void close() {
 		gameMusic.close();
 		this.interrupt();
+	}
+	
+	public void dropNotes(String titleName) {
+		Note note = new Note(228, "short");
+		note.start();
+		noteList.add(note);
 	}
 }
