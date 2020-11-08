@@ -1,4 +1,4 @@
-package dynamic_beat_13;
+package dynamic_beat_14;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -34,8 +34,6 @@ public class Game extends Thread {
 		this.difficulty = difficulty;
 		this.musicTitle = musicTitle;
 		gameMusic = new Music(this.musicTitle, false);
-		gameMusic.start();
-		dropNotes(titleName);
 	}
 	
 	public void screenDraw(Graphics2D g) {
@@ -147,7 +145,7 @@ public class Game extends Thread {
 	
 	@Override
 	public void run() {
-		
+		dropNotes();
 	}
 	
 	public void close() {
@@ -155,9 +153,77 @@ public class Game extends Thread {
 		this.interrupt();
 	}
 	
-	public void dropNotes(String titleName) {
-		Note note = new Note(228, "short");
-		note.start();
-		noteList.add(note);
+	public void dropNotes() {
+		Beat[] beats = null;
+		if (titleName.equals("Alien - Lee SuHyun")) {
+			int startTime = 4460 - Main.REACH_TIME * 1000;
+			int gap = 125;
+			beats = new Beat[] {
+					new Beat(startTime, "Space"),
+					new Beat(startTime + gap * 2, "D"),
+					new Beat(startTime + gap * 4, "F"),
+					new Beat(startTime + gap * 6, "K"),
+					new Beat(startTime + gap * 8, "J"),
+					new Beat(startTime + gap * 10, "Space"),
+					new Beat(startTime + gap * 12, "S"),
+					new Beat(startTime + gap * 14, "L"),
+					new Beat(startTime + gap * 16, "F"),
+					new Beat(startTime + gap * 18, "D"),
+					new Beat(startTime + gap * 20, "K"),
+					new Beat(startTime + gap * 22, "J"),
+					new Beat(startTime + gap * 24, "Space"),
+					new Beat(startTime + gap * 26, "F"),
+					new Beat(startTime + gap * 28, "J"),
+					new Beat(startTime + gap * 30, "D"),
+					new Beat(startTime + gap * 32, "L"),
+					new Beat(startTime + gap * 34, "K"),
+					new Beat(startTime + gap * 36, "S"),
+					new Beat(startTime + gap * 38, "Space"),
+			};
+		}
+		else if (titleName.equals("Kitchen - Lukrembo")) {
+			int startTime = 1000;
+			int gap = 125;
+			beats = new Beat[] {
+					new Beat(startTime, "D"),
+			};
+		}
+		else if (titleName.equals("Biscuit - Lukrembo")) {
+			int startTime = 1000;
+			beats = new Beat[] {
+					new Beat(startTime, "S"),
+			};
+		}
+		else if (titleName.equals("Cafe - Lukrembo")) {
+			int startTime = 1000;
+			beats = new Beat[] {
+					new Beat(startTime, "F"),
+			};
+		}
+		else if (titleName.equals("Onion - Lukrembo")) {
+			int startTime = 1000;
+			beats = new Beat[] {
+					new Beat(startTime, "J"),
+			};
+		}
+		int i = 0;
+		gameMusic.start();
+		while (i < beats.length && !isInterrupted()) {
+			boolean dropped = false;
+			if (beats[i].getTime() <= gameMusic.getTime()) {
+				Note note = new Note(beats[i].getNoteName());
+				note.start();
+				noteList.add(note);
+				i++;
+				dropped = true;
+			}
+			if (!dropped) {
+				try {
+					Thread.sleep(5);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

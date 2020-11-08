@@ -1,4 +1,4 @@
-package dynamic_beat_13;
+package dynamic_beat_14;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -67,6 +67,17 @@ public class DynamicBeat extends JFrame {
 	public static Game game;
 	
 	public DynamicBeat() {
+		trackList.add(new Track("kitchen-title-image.png", "kitchen-start-image.png",
+				"kitchen-game-image.png", "kitchen-highlight.mp3", "Kitchen.mp3", "Kitchen - Lukrembo"));
+		trackList.add(new Track("biscuit-title-image.png", "biscuit-start-image.png",
+				"biscuit-game-image.png", "biscuit-highlight.mp3", "Biscuit.mp3", "Biscuit - Lukrembo"));
+		trackList.add(new Track("cafe-title-image.png", "cafe-start-image.png",
+				"cafe-game-image.png", "cafe-highlight.mp3", "Cafe.mp3", "Cafe - Lukrembo"));
+		trackList.add(new Track("onion-title-image.png", "onion-start-image.png",
+				"onion-game-image.png", "onion-highlight.mp3", "Onion.mp3", "Onion - Lukrembo"));
+		trackList.add(new Track("alien-title-image.png", "alien-start-image.png",
+				"alien-game-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3", "Alien - Lee SuHyun"));
+		
 		setUndecorated(true); /* 실행 시 menuBar가 보이지 않음 */
 		setTitle("Dynamic Beat");
 		setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
@@ -79,18 +90,7 @@ public class DynamicBeat extends JFrame {
 		
 		addKeyListener(new KeyListener());
 		
-		introMusic.start();
-		
-		trackList.add(new Track("kitchen-title-image.png", "kitchen-start-image.png",
-				"kitchen-game-image.png", "kitchen-highlight.mp3", "Kitchen.mp3", "Kitchen - Lukrembo"));
-		trackList.add(new Track("biscuit-title-image.png", "biscuit-start-image.png",
-				"biscuit-game-image.png", "biscuit-highlight.mp3", "Biscuit.mp3", "Biscuit - Lukrembo"));
-		trackList.add(new Track("cafe-title-image.png", "cafe-start-image.png",
-				"cafe-game-image.png", "cafe-highlight.mp3", "Cafe.mp3", "Cafe - Lukrembo"));
-		trackList.add(new Track("onion-title-image.png", "onion-start-image.png",
-				"onion-game-image.png", "onion-highlight.mp3", "Onion.mp3", "Onion - Lukrembo"));
-		trackList.add(new Track("alien-title-image.png", "alien-start-image.png",
-				"alien-game-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3", "Alien - Lee SuHyun"));
+		introMusic.start();		
 
 		exitBtn.setBounds(1245, 0, 32, 32);
 		exitBtn.setBorderPainted(false);
@@ -371,6 +371,11 @@ public class DynamicBeat extends JFrame {
 		 * paintComponents로 그림
 		 */
 		paintComponents(g);
+		try {
+			Thread.sleep(5);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.repaint();
 	}
 	
@@ -410,8 +415,9 @@ public class DynamicBeat extends JFrame {
 		background = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getGameImage())).getImage();
 		backBtn.setVisible(true);
 		isGameScreen = true;
-		setFocusable(true);	/* 화면 전환시에도 항상 MainFrame에 키보드 Focus가 맞춰져 있도록 함 */
 		game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getGameMusic());
+		game.start();
+		setFocusable(true);	/* 화면 전환시에도 항상 MainFrame에 키보드 Focus가 맞춰져 있도록 함 */
 	}
 	
 	public void backToMain() {
