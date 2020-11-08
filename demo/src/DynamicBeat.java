@@ -1,12 +1,10 @@
-package dynamic_beat_10;
+package dynamic_beat_11;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -42,11 +40,6 @@ public class DynamicBeat extends JFrame {
 	ImageIcon backBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/backBtnEntered.png"));
 	private ImageIcon backBtnImg = new ImageIcon(Main.class.getResource("../images/backBtn.png"));
 	
-	private Image gameInfoImg = new ImageIcon(Main.class.getResource("../images/gameInfo.png")).getImage();
-	private Image judgementLineImg = new ImageIcon(Main.class.getResource("../images/judgement-line.png")).getImage();
-	private Image noteRouteImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
-	private Image noteRouteLineImg = new ImageIcon(Main.class.getResource("../images/noteRouteLine.png")).getImage();
-	private Image noteImg = new ImageIcon(Main.class.getResource("../images/note.png")).getImage();
 	private Image background = new ImageIcon(Main.class.getResource("../images/intro-background.jpg")).getImage();
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.png")));
 	private JButton exitBtn = new JButton(exitBtnImg);
@@ -71,6 +64,8 @@ public class DynamicBeat extends JFrame {
 	private Music introMusic = new Music("intro-music.mp3", true);
 	private int nowSelected = 0;
 	
+	public static Game game = new Game();
+	
 	public DynamicBeat() {
 		setUndecorated(true); /* 실행 시 menuBar가 보이지 않음 */
 		setTitle("Dynamic Beat");
@@ -81,6 +76,8 @@ public class DynamicBeat extends JFrame {
 		setVisible(true);
 		setBackground(new Color(0, 0, 0, 0));
 		setLayout(null);
+		
+		addKeyListener(new KeyListener());
 		
 		introMusic.start();
 		
@@ -367,49 +364,7 @@ public class DynamicBeat extends JFrame {
 			g.drawImage(titleImg, 320, 15, null);
 		}
 		if (isGameScreen) {
-			g.drawImage(noteRouteImg, 228, 30, null);
-			g.drawImage(noteRouteImg, 332, 30, null);
-			g.drawImage(noteRouteImg, 436, 30, null);
-			g.drawImage(noteRouteImg, 539, 30, null);
-			g.drawImage(noteRouteImg, 644, 30, null);
-			g.drawImage(noteRouteImg, 744, 30, null);
-			g.drawImage(noteRouteImg, 850, 30, null);
-			g.drawImage(noteRouteImg, 954, 30, null);
-			g.drawImage(noteRouteLineImg, 224, 30, null);
-			g.drawImage(noteRouteLineImg, 328, 30, null);
-			g.drawImage(noteRouteLineImg, 432, 30, null);
-			g.drawImage(noteRouteLineImg, 536, 30, null);
-			g.drawImage(noteRouteLineImg, 740, 30, null);
-			g.drawImage(noteRouteLineImg, 844, 30, null);
-			g.drawImage(noteRouteLineImg, 948, 30, null);
-			g.drawImage(noteRouteLineImg, 1055, 30, null);
-			g.drawImage(gameInfoImg, 0, 660, null);
-			g.drawImage(judgementLineImg, 0, 580, null);
-			g.drawImage(noteImg, 229, 120, null);
-			g.drawImage(noteImg, 333, 580, null);
-			g.drawImage(noteImg, 437, 500, null);
-			g.drawImage(noteImg, 541, 340, null);
-			g.drawImage(noteImg, 640, 340, null);
-			g.drawImage(noteImg, 745, 325, null);
-			g.drawImage(noteImg, 849, 305, null);
-			g.drawImage(noteImg, 953, 305, null);
-			g.setColor(Color.WHITE);
-			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			g.setFont(new Font("Arial", Font.BOLD, 30));
-			g.drawString("Kitchen - Lukerembo", 20, 702);
-			g.drawString("Easy", 1190, 702);
-			g.setFont(new Font("Arial", Font.PLAIN, 26));
-			g.setColor(Color.DARK_GRAY);
-			g.drawString("S", 270, 609);
-			g.drawString("D", 374, 609);
-			g.drawString("F", 478, 609);
-			g.drawString("Space Bar", 580, 609);
-			g.drawString("J", 784, 609);
-			g.drawString("K", 889, 609);
-			g.drawString("L", 993, 609);
-			g.setColor(Color.LIGHT_GRAY);
-			g.setFont(new Font("Elephant", Font.BOLD, 30));
-			g.drawString("000000", 565, 702);
+			game.screenDraw(g);
 		}
 		/*
 		 * 이미지 그리기 이외에도 프레임에 추가된 컴포넌트를 그려줌 menuBar는 항상 존재하는 이미지이고 고정적이기 때문에
@@ -455,6 +410,7 @@ public class DynamicBeat extends JFrame {
 		background = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getGameImage())).getImage();
 		backBtn.setVisible(true);
 		isGameScreen = true;
+		setFocusable(true);	/* 화면 전환시에도 항상 MainFrame에 키보드 Focus가 맞춰져 있도록 함 */
 	}
 	
 	public void backToMain() {
