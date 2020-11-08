@@ -1,4 +1,4 @@
-package dynamic_beat_11;
+package dynamic_beat_12;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -64,7 +64,7 @@ public class DynamicBeat extends JFrame {
 	private Music introMusic = new Music("intro-music.mp3", true);
 	private int nowSelected = 0;
 	
-	public static Game game = new Game();
+	public static Game game;
 	
 	public DynamicBeat() {
 		setUndecorated(true); /* 실행 시 menuBar가 보이지 않음 */
@@ -82,15 +82,15 @@ public class DynamicBeat extends JFrame {
 		introMusic.start();
 		
 		trackList.add(new Track("kitchen-title-image.png", "kitchen-start-image.png",
-				"kitchen-game-image.png", "kitchen-highlight.mp3", "Kitchen.mp3"));
+				"kitchen-game-image.png", "kitchen-highlight.mp3", "Kitchen.mp3", "Kitchen - Lukrembo"));
 		trackList.add(new Track("biscuit-title-image.png", "biscuit-start-image.png",
-				"biscuit-game-image.png", "biscuit-highlight.mp3", "Biscuit.mp3"));
+				"biscuit-game-image.png", "biscuit-highlight.mp3", "Biscuit.mp3", "Biscuit - Lukrembo"));
 		trackList.add(new Track("cafe-title-image.png", "cafe-start-image.png",
-				"cafe-game-image.png", "cafe-highlight.mp3", "Cafe.mp3"));
+				"cafe-game-image.png", "cafe-highlight.mp3", "Cafe.mp3", "Cafe - Lukrembo"));
 		trackList.add(new Track("onion-title-image.png", "onion-start-image.png",
-				"onion-game-image.png", "onion-highlight.mp3", "Onion.mp3"));
+				"onion-game-image.png", "onion-highlight.mp3", "Onion.mp3", "Onion - Lukrembo"));
 		trackList.add(new Track("alien-title-image.png", "alien-start-image.png",
-				"alien-game-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3"));
+				"alien-game-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3", "Alien - Lee SuHyun"));
 
 		exitBtn.setBounds(1245, 0, 32, 32);
 		exitBtn.setBorderPainted(false);
@@ -268,7 +268,7 @@ public class DynamicBeat extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 				btnPressedMusic.start();
-				gameStart(nowSelected, "easy");
+				gameStart(nowSelected, "Easy");
 			}
 		});
 		add(easyBtn);
@@ -297,7 +297,7 @@ public class DynamicBeat extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 				btnPressedMusic.start();
-				gameStart(nowSelected, "hard");
+				gameStart(nowSelected, "Hard");
 			}
 		});
 		add(hardBtn);
@@ -411,6 +411,7 @@ public class DynamicBeat extends JFrame {
 		backBtn.setVisible(true);
 		isGameScreen = true;
 		setFocusable(true);	/* 화면 전환시에도 항상 MainFrame에 키보드 Focus가 맞춰져 있도록 함 */
+		game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getGameMusic());
 	}
 	
 	public void backToMain() {
@@ -423,6 +424,7 @@ public class DynamicBeat extends JFrame {
 		backBtn.setVisible(false);
 		selectTrack(nowSelected);
 		isGameScreen = false;
+		game.close();
 	}
 	
 	public void enterToMain() {
