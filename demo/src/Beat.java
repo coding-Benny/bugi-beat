@@ -1,4 +1,4 @@
-package dynamic_beat_15;
+package dynamic_beat_16;
 
 public class Beat {
 	private int time;
