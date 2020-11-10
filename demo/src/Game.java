@@ -1,4 +1,4 @@
-package dynamic_beat_14;
+package dynamic_beat_15;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -57,7 +57,13 @@ public class Game extends Thread {
 		g.drawImage(judgementLineImg, 0, 580, null);
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
-			note.screenDraw(g);
+			if (!note.isProceeded()) {	/* 사용하지 않는 노트는 화면에서 삭제 */
+				noteList.remove(i);
+				i--;
+			}
+			else {
+				note.screenDraw(g);
+			}
 		}
 		g.setColor(Color.WHITE);
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -79,6 +85,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressS() {
+		judge("S");
 		noteRouteSImg = new ImageIcon(Main.class.getResource("../images/noteRoutePressed.png")).getImage();
 		new Music("drumSmall1.mp3", false).start();
 	}
@@ -88,6 +95,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressD() {
+		judge("D");
 		noteRouteDImg = new ImageIcon(Main.class.getResource("../images/noteRoutePressed.png")).getImage();
 		new Music("drumSmall1.mp3", false).start();
 	}
@@ -97,6 +105,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressF() {
+		judge("F");
 		noteRouteFImg = new ImageIcon(Main.class.getResource("../images/noteRoutePressed.png")).getImage();
 		new Music("drumSmall1.mp3", false).start();
 	}
@@ -106,6 +115,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressSpace() {
+		judge("Space");
 		noteRouteSpace1Img = new ImageIcon(Main.class.getResource("../images/noteRoutePressed.png")).getImage();
 		noteRouteSpace2Img = new ImageIcon(Main.class.getResource("../images/noteRoutePressed.png")).getImage();
 		new Music("drumBig1.mp3", false).start();
@@ -117,6 +127,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressJ() {
+		judge("J");
 		noteRouteJImg = new ImageIcon(Main.class.getResource("../images/noteRoutePressed.png")).getImage();
 		new Music("drumSmall1.mp3", false).start();
 	}
@@ -126,6 +137,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressK() {
+		judge("K");
 		noteRouteKImg = new ImageIcon(Main.class.getResource("../images/noteRoutePressed.png")).getImage();
 		new Music("drumSmall1.mp3", false).start();
 	}
@@ -135,6 +147,7 @@ public class Game extends Thread {
 	}
 	
 	public void pressL() {
+		judge("L");
 		noteRouteLImg = new ImageIcon(Main.class.getResource("../images/noteRoutePressed.png")).getImage();
 		new Music("drumSmall1.mp3", false).start();
 	}
@@ -145,7 +158,7 @@ public class Game extends Thread {
 	
 	@Override
 	public void run() {
-		dropNotes();
+		dropNotes(this.titleName);
 	}
 	
 	public void close() {
@@ -153,11 +166,11 @@ public class Game extends Thread {
 		this.interrupt();
 	}
 	
-	public void dropNotes() {
+	public void dropNotes(String titleName) {
 		Beat[] beats = null;
-		if (titleName.equals("Alien - Lee SuHyun")) {
+		if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Easy")) {
 			int startTime = 4460 - Main.REACH_TIME * 1000;
-			int gap = 125;
+			int gap = 125;	/* 박자 계산 */
 			beats = new Beat[] {
 					new Beat(startTime, "Space"),
 					new Beat(startTime + gap * 2, "D"),
@@ -181,26 +194,77 @@ public class Game extends Thread {
 					new Beat(startTime + gap * 38, "Space"),
 			};
 		}
-		else if (titleName.equals("Kitchen - Lukrembo")) {
+		else if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Hard")) {
+			int startTime = 4460 - Main.REACH_TIME * 1000;
+			int gap = 125;	/* 박자 계산 */
+			beats = new Beat[] {
+					new Beat(startTime, "Space"),
+					new Beat(startTime + gap * 2, "D"),
+					new Beat(startTime + gap * 4, "F"),
+					new Beat(startTime + gap * 6, "K"),
+					new Beat(startTime + gap * 8, "J"),
+					new Beat(startTime + gap * 10, "Space"),
+					new Beat(startTime + gap * 12, "S"),
+					new Beat(startTime + gap * 14, "L"),
+					new Beat(startTime + gap * 16, "F"),
+					new Beat(startTime + gap * 18, "D"),
+					new Beat(startTime + gap * 20, "K"),
+					new Beat(startTime + gap * 22, "J"),
+					new Beat(startTime + gap * 24, "Space"),
+					new Beat(startTime + gap * 26, "F"),
+					new Beat(startTime + gap * 28, "J"),
+					new Beat(startTime + gap * 30, "D"),
+					new Beat(startTime + gap * 32, "L"),
+					new Beat(startTime + gap * 34, "K"),
+					new Beat(startTime + gap * 36, "S"),
+					new Beat(startTime + gap * 38, "Space"),
+			};
+		}
+		else if (titleName.equals("Kitchen - Lukrembo") && difficulty.equals("Easy")) {
 			int startTime = 1000;
 			int gap = 125;
 			beats = new Beat[] {
 					new Beat(startTime, "D"),
 			};
 		}
-		else if (titleName.equals("Biscuit - Lukrembo")) {
+		else if (titleName.equals("Kitchen - Lukrembo") && difficulty.equals("Hard")) {
+			int startTime = 1000;
+			int gap = 125;
+			beats = new Beat[] {
+					new Beat(startTime, "D"),
+			};
+		}
+		else if (titleName.equals("Biscuit - Lukrembo") && difficulty.equals("Easy")) {
 			int startTime = 1000;
 			beats = new Beat[] {
 					new Beat(startTime, "S"),
 			};
 		}
-		else if (titleName.equals("Cafe - Lukrembo")) {
+		else if (titleName.equals("Biscuit - Lukrembo") && difficulty.equals("Hard")) {
+			int startTime = 1000;
+			beats = new Beat[] {
+					new Beat(startTime, "Space"),
+			};
+		}
+		else if (titleName.equals("Cafe - Lukrembo") && difficulty.equals("Easy")) {
 			int startTime = 1000;
 			beats = new Beat[] {
 					new Beat(startTime, "F"),
 			};
 		}
-		else if (titleName.equals("Onion - Lukrembo")) {
+		else if (titleName.equals("Cafe - Lukrembo") && difficulty.equals("Hard")) {
+			int startTime = 1000;
+			beats = new Beat[] {
+					new Beat(startTime, "F"),
+			};
+		}
+		else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Easy")) {
+			int startTime = 1000;
+			beats = new Beat[] {
+					new Beat(startTime, "J"),
+			};
+		}
+		else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Hard")) {
 			int startTime = 1000;
 			beats = new Beat[] {
 					new Beat(startTime, "J"),
@@ -223,6 +287,19 @@ public class Game extends Thread {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			}
+		}
+	}
+	
+	/*
+	 * 큐처럼 먼저 떨어지는 노트에 대해서 입력 정확도 검사
+	 */
+	public void judge(String input) {
+		for(int i = 0; i < noteList.size(); i++) {
+			Note note = noteList.get(i);
+			if (input.equals(note.getNoteType())) {
+				note.judge();
+				break;
 			}
 		}
 	}

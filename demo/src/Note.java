@@ -1,4 +1,4 @@
-package dynamic_beat_14;
+package dynamic_beat_15;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -9,6 +9,22 @@ public class Note extends Thread {
 	private Image noteImg = new ImageIcon(Main.class.getResource("../images/note.png")).getImage();
 	private int x, y = 580 - (1000 / Main.SLEEP_TIME * Main.NOTE_SPEED) * Main.REACH_TIME;	/* Note 생성 후 1초 뒤에 판정 라인에 다다름 */
 	private String noteType;
+	private boolean proceeded = true;
+	
+	public String getNoteType() {
+		return noteType;
+	}
+	
+	public boolean isProceeded() {
+		return proceeded;
+	}
+	
+	/*
+	 * 노트를 성공적으로 입력해서 해당 노트가 더 이상 이동하지 않도록 함
+	 */
+	public void close() {
+		proceeded = false;
+	}
 	
 	public Note(String noteType) {
 		if (noteType.equals("S")) {
@@ -47,6 +63,10 @@ public class Note extends Thread {
 	
 	public void drop() {
 		y += Main.NOTE_SPEED;
+		if (y > 620) {	/* 판정바를 지나친 경우 */
+			System.out.println("Miss");
+			close();
+		}
 	}
 	
 	@Override
@@ -54,11 +74,47 @@ public class Note extends Thread {
 		try {
 			while (true) {	/* 1초에 100번 실행 = 1초에 700px만큼 note가 떨어짐 */
 				drop();
-				Thread.sleep(Main.SLEEP_TIME);
+				if (proceeded) {
+					Thread.sleep(Main.SLEEP_TIME);
+				}
+				else {
+					interrupt();
+					break;
+				}
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
 	}
 
+	public void judge() {
+		if (y >= 613) {
+			System.out.println("Late");
+			close();
+		}
+		else if (y >= 600) {
+			System.out.println("Good");
+			close();
+		}
+		else if (y >= 587) {
+			System.out.println("Great");
+			close();
+		}
+		else if (y >= 573) {
+			System.out.println("Perfect");
+			close();
+		}
+		else if (y >= 565) {
+			System.out.println("Great");
+			close();
+		}
+		else if (y >= 550) {
+			System.out.println("Good");
+			close();
+		}
+		else if (y >= 535) {
+			System.out.println("Early");
+			close();
+		}
+	}
 }
