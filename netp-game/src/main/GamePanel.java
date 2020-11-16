@@ -26,7 +26,11 @@ public class GamePanel extends JPanel {
 	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("../images/roomquit0.png"));
 	private ImageIcon roomsetEnteredImg = new ImageIcon(Main.class.getResource("../images/roomsetting1.png"));
 	private ImageIcon roomsetImg = new ImageIcon(Main.class.getResource("../images/roomsetting0.png"));
-
+	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("../images/room-bg1.png"));
+	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("../images/room2-bg1.png"));
+	
+	private ImageIcon gamescreenbgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png"));
+	
 	private JButton startBtn = new JButton(startBtnImg);
 	private JButton roomsetBtn = new JButton(roomsetImg);
 	private JButton quitBtn = new JButton(quitBtnImg);
@@ -67,8 +71,11 @@ public class GamePanel extends JPanel {
 	public GamePanel() {
 		setSize(800, 720);
 		setLayout(null);
-		background = new ImageIcon(Main.class.getResource("../images/room-bg1.png")).getImage();
-		gamescreenbg = new ImageIcon(Main.class.getResource("../images/game-bg0.png")).getImage();
+		if(GameRoom.bgImg==1)
+			background = bg1Img.getImage();
+		else
+			background = bg2Img.getImage();
+		gamescreenbg = gamescreenbgImg.getImage();
 
 		roomsetPanel.setBounds(12, 100, 780, 442); // 가로위치, 세로위치, 가로길이, 세로길이
 		roomsetPanel.setVisible(false);
@@ -192,7 +199,9 @@ public class GamePanel extends JPanel {
 		roomchatPanel.setVisible(false);
 		startBtn.setVisible(false);
 		roomsetBtn.setVisible(false);
-		gamescreenbg = new ImageIcon(Main.class.getResource("../images/6line-bg.png")).getImage();
+		roomsetPanel.setVisible(false);
+		
+		gamescreenbg = GameRoom.line4_bg_Img.getImage();
 		GameRoom.standbyMusic.close();
 		// game = new StartGame(GameRoom.trackList.get(nowSelected).getTitleName(),
 		// difficulty, GameRoom.trackList.get(nowSelected).getGameMusic());

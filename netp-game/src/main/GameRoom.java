@@ -21,6 +21,11 @@ public class GameRoom extends JFrame {
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/bar.png")));
 	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/exit1.png"));
 	private ImageIcon exitBtnImg = new ImageIcon(Main.class.getResource("../images/exit0.png"));
+	public static ImageIcon line6_bg_Img = new ImageIcon(Main.class.getResource("../images/6line-bg.png"));
+	public static ImageIcon fever_line6_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-6line-bg.png"));
+	public static ImageIcon line4_bg_Img = new ImageIcon(Main.class.getResource("../images/4line-bg.png"));
+	public static ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-4line-bg.png"));
+	
 	private JButton exitBtn = new JButton(exitBtnImg);
 	
 	private GamePanel gamePanel = new GamePanel();
@@ -33,6 +38,8 @@ public class GameRoom extends JFrame {
 	public static  Music selectedMusic;  //방에서 선택한 노래
 	public static  Image selectedImg;
 	public static  int nowSelected = 0;
+	public static  int line = 4;  //칸 수 
+	public static  int bgImg = 2; //배경이미지
 	
 	public GameRoom() {
 		super("게임 방");

@@ -21,6 +21,7 @@ public class RoomSetting extends JPanel {
 	private ImageIcon hardBtnImg = new ImageIcon(Main.class.getResource("../images/hardBtn.png"));
 	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/quitBtnEntered.png"));
 	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("../images/quitBtn.png"));
+	private ImageIcon bgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png"));
 	
 	private JButton leftBtn = new JButton(leftBtnImg);
 	private JButton rightBtn = new JButton(rightBtnImg);
@@ -38,7 +39,7 @@ public class RoomSetting extends JPanel {
 	public RoomSetting() {
 		setSize(780, 442);
 		setLayout(null);
-		background = new ImageIcon(Main.class.getResource("../images/game-bg0.png")).getImage();
+		background = bgImg.getImage();
 		
 		//rightBtn.setVisible(false);
 		rightBtn.setBounds(500, 100, 45, 75);
