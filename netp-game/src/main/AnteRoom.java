@@ -11,6 +11,8 @@ public class AnteRoom extends JFrame {
 	
 	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("../images/anteroom1-bg.png"));
 	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("../images/anteroom2-bg.png"));
+
+	private RoomSetting roomSetPanel = new RoomSetting();
 	
 	public void paint(Graphics g) {//그리는 함수
 		g.drawImage(background, 0, 0, null);
@@ -29,7 +31,7 @@ public class AnteRoom extends JFrame {
 		setVisible(true);
 		getContentPane().setLayout(null);
 
-		if(RoomSetting.bgSet==1)
+		if(roomSetPanel.getBgSet() == 1)
 			background = bg1Img.getImage();
 		else
 			background = bg2Img.getImage();

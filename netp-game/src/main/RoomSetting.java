@@ -33,11 +33,11 @@ public class RoomSetting extends JPanel {
 	private static ArrayList<Track> trackList = new ArrayList<Track>();
 	
 	private String difficulty = "Easy";
-	private static Music selectedMusic;
-	private static Image selectedImg;
-	public static int nowSelected = 0;
-	public static int line = 6;  //칸 수 
-	public static int bgSet = 2; //배경이미지
+	private Music selectedMusic;
+	private Image selectedImg;
+	public int nowSelected = 0;
+	public int line = 4;	// 기본(easy) 칸 수 
+	public int bgSet = 2;	// 배경 이미지 번호
 	
 	public void paint(Graphics g) { //그리는 함수
 		g.drawImage(background, 0, 0, null);
@@ -53,7 +53,9 @@ public class RoomSetting extends JPanel {
 
 		trackList.add(new Track("onion-start-image.png", "onion-highlight.mp3", "Onion.mp3", "Onion - Lukrembo"));
 		trackList.add(new Track("alien-start-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3", "Alien - Lee SuHyun"));
-		
+
+		selectedImg = new ImageIcon(Main.class.getResource("../images/" + trackList.get(0).getStartImage())).getImage();
+
 		rightBtn.setBounds(500, 100, 45, 75);
 		rightBtn.setBorderPainted(false);
 		rightBtn.setContentAreaFilled(false);
@@ -214,7 +216,7 @@ public class RoomSetting extends JPanel {
 	}
 	
 
-	public static void selectTrack(int nowSelected) {
+	public void selectTrack(int nowSelected) {
 		if (selectedMusic != null)
 			selectedMusic.close();
 		selectedImg = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getStartImage())).getImage();
@@ -251,5 +253,13 @@ public class RoomSetting extends JPanel {
 	
 	public int getLine() {
 		return line;
+	}
+	
+	public int getBgSet() {
+		return bgSet;
+	}
+	
+	public String getDifficulty() {
+		return difficulty;
 	}
 }

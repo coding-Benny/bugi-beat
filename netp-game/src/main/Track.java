@@ -18,24 +18,31 @@ public class Track {
 	public String getStartImage() {
 		return startImage;
 	}
+	
 	public void setStartImage(String startImage) {
 		this.startImage = startImage;
 	}
+	
 	public String getStartMusic() {
 		return startMusic;
 	}
+	
 	public void setStartMusic(String startMusic) {
 		this.startMusic = startMusic;
 	}
+	
 	public String getGameMusic() {
 		return gameMusic;
 	}
+	
 	public void setGameMusic(String gameMusic) {
 		this.gameMusic = gameMusic;
 	}
+	
 	public String getTitleName() {
 		return titleName;
 	}
+	
 	public void setTitleName(String titleName) {
 		this.titleName = titleName;
 	}

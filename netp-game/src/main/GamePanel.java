@@ -73,7 +73,7 @@ public class GamePanel extends JPanel {
 	public GamePanel() {
 		setSize(800, 720);
 		setLayout(null);
-		if(RoomSetting.bgSet==1)
+		if(roomSetPanel.getBgSet() == 1)
 			background = bg1Img.getImage();
 		else
 			background = bg2Img.getImage();
@@ -150,8 +150,6 @@ public class GamePanel extends JPanel {
 					if (Main.SOUND_EFFECT) {
 						Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 						btnPressedMusic.start();
-						
-						RoomSetting.selectTrack(RoomSetting.nowSelected);
 						roomSetPanel.setVisible(true);
 					}
 			}
@@ -198,14 +196,17 @@ public class GamePanel extends JPanel {
 	public void gameStart(int nowSelected, String difficulty) {
 		selectedMusic = roomSetPanel.getSelectedMusic();
 		musicTitle = roomSetPanel.getTrackList().get(nowSelected).getTitleName();
+		
 		if (selectedMusic != null)
 			selectedMusic.close();
+		
 		isMainScreen = false;
 		isGameScreen = true;
 		roomChatPanel.setVisible(false);
 		startBtn.setVisible(false);
 		roomsetBtn.setVisible(false);
 		roomSetPanel.setVisible(false);
+		
 		if(roomSetPanel.getLine()==6)
 			gameScreenBg = line6_bg_Img.getImage();
 		if(roomSetPanel.getLine()==4)

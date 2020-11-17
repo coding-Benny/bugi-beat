@@ -11,10 +11,12 @@ public class Note extends Thread {
 	private Image line4_noteImg = new ImageIcon(Main.class.getResource("../images/4line-note.png")).getImage();
 	private Image fever_line6_noteImg = new ImageIcon(Main.class.getResource("../images/6line-note.png")).getImage();
 	private Image fever_line4_noteImg = new ImageIcon(Main.class.getResource("../images/4line-note.png")).getImage();
-	private Image noteImg;
+	
+	private RoomSetting roomSetting = new RoomSetting();
 	
 	private int x, y = 500 - (1000 / Main.SLEEP_TIME * Main.NOTE_SPEED) * Main.REACH_TIME;	/* Note 생성 후 1초 뒤에 판정 라인에 다다름 */
 	private String noteType;
+	private String difficulty;
 	private boolean proceeded = true;
 	
 	public String getNoteType() {
@@ -32,44 +34,61 @@ public class Note extends Thread {
 		proceeded = false;
 	}
 	
-	public Note(String noteType) {
-		if (noteType.equals("S")) {
-			x = 10;
+	public Note(String noteType, String difficulty) {
+		if (difficulty.equals("Easy")) {
+			if (noteType.equals("D")) {
+				x = 48;
+			}
+			else if (noteType.equals("F")) {
+				x = 221;
+			}
+			else if (noteType.equals("J")) {
+				x = 392;
+			}
+			else if (noteType.equals("K")) {
+				x = 566;
+			}
 		}
-		else if (noteType.equals("D")) {
-			x = 50;
-		}
-		else if (noteType.equals("F")) {
-			x = 80;
-		}
-		else if (noteType.equals("Space")) {
-			x = 100;
-		}
-		else if (noteType.equals("J")) {
-			x = 120;
-		}
-		else if (noteType.equals("K")) {
-			x = 160;
-		}
-		else if (noteType.equals("L")) {
-			x = 180;
+		else if (difficulty.equals("Hard")) {
+			if (noteType.equals("S")) {
+				x = 46;
+			}
+			else if (noteType.equals("D")) {
+				x = 160;
+			}
+			else if (noteType.equals("F")) {
+				x = 278;
+			}
+			else if (noteType.equals("J")) {
+				x = 391;
+			}
+			else if (noteType.equals("K")) {
+				x = 506;
+			}
+			else if (noteType.equals("L")) {
+				x = 622;
+			}
 		}
 		this.noteType = noteType;
+		this.difficulty = difficulty;
 	}
 	
 	public void screenDraw(Graphics2D g) {
 		if (!noteType.equals("Space")) {
-			g.drawImage(noteImg, x, y, null);
+			if (difficulty.equals("Easy"))
+				g.drawImage(line4_noteImg, x, y, null);
+			else if (difficulty.equals("Hard")) {
+				g.drawImage(line6_noteImg, x, y, null);
+			}
 		}
 		else {
-			g.drawImage(noteImg, x, y, null);
-			g.drawImage(noteImg, x + 100, y, null);
+			// 아이템 시각 효과 그리기
 		}
 	}
 	
 	public void drop() {
 		y += Main.NOTE_SPEED;
-		if (y > 620) {	/* 판정바를 지나친 경우 */
+		if (y > 560) {	/* 판정바를 지나친 경우 */
 			System.out.println("Miss");
 			close();
 		}
@@ -94,40 +113,30 @@ public class Note extends Thread {
 	}
 
 	public String judge() {
-		if (y >= 613) {
-			System.out.println("Late");
-			close();
-			return "Late";
-		}
-		else if (y >= 600) {
+		if (y >= 545) {
 			System.out.println("Good");
 			close();
 			return "Good";
 		}
-		else if (y >= 587) {
+		else if (y >= 530) {
 			System.out.println("Great");
 			close();
 			return "Great";
 		}
-		else if (y >= 573) {
+		else if (y >= 470) {
 			System.out.println("Perfect");
 			close();
 			return "Perfect";
 		}
-		else if (y >= 565) {
+		else if (y >= 440) {
 			System.out.println("Great");
 			close();
 			return "Great";
 		}
-		else if (y >= 550) {
+		else if (y >= 400) {
 			System.out.println("Good");
 			close();
 			return "Good";
-		}
-		else if (y >= 535) {
-			System.out.println("Early");
-			close();
-			return "Early";
 		}
 		return "None";
 	}

@@ -225,50 +225,36 @@ public class Game extends Thread {
 
 	public void dropNotes(String titleName) {
 		Beat[] beats = null;
-		if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Easy") && line == 6) {
-			int startTime = 4460 - Main.REACH_TIME * 1000;
-			int gap = 125; /* 박자 계산 */
-			beats = new Beat[] { new Beat(startTime, "Space"), new Beat(startTime + gap * 2, "D"),
-					new Beat(startTime + gap * 4, "F"), new Beat(startTime + gap * 6, "K"),
-					new Beat(startTime + gap * 8, "J"), new Beat(startTime + gap * 10, "Space"),
-					new Beat(startTime + gap * 12, "S"), new Beat(startTime + gap * 14, "L"),
-					new Beat(startTime + gap * 16, "F"), new Beat(startTime + gap * 18, "D"),
-					new Beat(startTime + gap * 20, "K"), new Beat(startTime + gap * 22, "J"),
-					new Beat(startTime + gap * 28, "J"), new Beat(startTime + gap * 30, "D"),
-					new Beat(startTime + gap * 32, "L"), new Beat(startTime + gap * 34, "K"),
-					new Beat(startTime + gap * 36, "S"), new Beat(startTime + gap * 38, "Space"), };
+		if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Easy") && line == 4) {
+			int startTime = 6884 - Main.REACH_TIME * 1000;
+			int gap = 128; /* 박자 계산 */
+			beats = new Beat[] { 
+					new Beat(startTime, "J"),
+					new Beat(startTime + gap * 4, "F"),
+					new Beat(startTime + gap * 8, "K"),
+					new Beat(startTime + gap * 12, "D"),
+					new Beat(startTime + gap * 16, "J"),
+					new Beat(startTime + gap * 20, "D"),
+					new Beat(startTime + gap * 24, "F"),
+					new Beat(startTime + gap * 28, "K"),
+					new Beat(startTime + gap * 32, "K"),
+					new Beat(startTime + gap * 36, "J"),
+			};
 		} else if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Hard") && line == 6) {
-			int startTime = 4460 - Main.REACH_TIME * 1000;
-			int gap = 125; /* 박자 계산 */
-			beats = new Beat[] { new Beat(startTime, "Space"), new Beat(startTime + gap * 2, "D"),
-					new Beat(startTime + gap * 4, "F"), new Beat(startTime + gap * 6, "K"),
-					new Beat(startTime + gap * 8, "J"), new Beat(startTime + gap * 10, "Space"),
-					new Beat(startTime + gap * 12, "S"), new Beat(startTime + gap * 14, "L"),
-					new Beat(startTime + gap * 16, "F"), new Beat(startTime + gap * 18, "D"),
-					new Beat(startTime + gap * 20, "K"), new Beat(startTime + gap * 22, "J"),
-					new Beat(startTime + gap * 28, "J"), new Beat(startTime + gap * 30, "D"),
-					new Beat(startTime + gap * 32, "L"), new Beat(startTime + gap * 34, "K"),
-					new Beat(startTime + gap * 36, "S"), new Beat(startTime + gap * 38, "Space"), };
-		} else if (titleName.equals("Kitchen - Lukrembo") && difficulty.equals("Easy")) {
-			int startTime = 1000;
-			int gap = 125;
-			beats = new Beat[] { new Beat(startTime, "D"), };
-		} else if (titleName.equals("Kitchen - Lukrembo") && difficulty.equals("Hard")) {
-			int startTime = 1000;
-			int gap = 125;
-			beats = new Beat[] { new Beat(startTime, "D"), };
-		} else if (titleName.equals("Biscuit - Lukrembo") && difficulty.equals("Easy")) {
-			int startTime = 1000;
-			beats = new Beat[] { new Beat(startTime, "S"), };
-		} else if (titleName.equals("Biscuit - Lukrembo") && difficulty.equals("Hard")) {
-			int startTime = 1000;
-			beats = new Beat[] { new Beat(startTime, "Space"), };
-		} else if (titleName.equals("Cafe - Lukrembo") && difficulty.equals("Easy")) {
-			int startTime = 1000;
-			beats = new Beat[] { new Beat(startTime, "F"), };
-		} else if (titleName.equals("Cafe - Lukrembo") && difficulty.equals("Hard")) {
-			int startTime = 1000;
-			beats = new Beat[] { new Beat(startTime, "F"), };
+			int startTime = 6884 - Main.REACH_TIME * 1000;
+			int gap = 128; /* 박자 계산 */
+			beats = new Beat[] {
+					new Beat(startTime, "S"),
+					new Beat(startTime + gap * 4, "F"),
+					new Beat(startTime + gap * 8, "K"),
+					new Beat(startTime + gap * 12, "D"),
+					new Beat(startTime + gap * 16, "L"),
+					new Beat(startTime + gap * 20, "D"),
+					new Beat(startTime + gap * 24, "F"),
+					new Beat(startTime + gap * 28, "K"),
+					new Beat(startTime + gap * 32, "K"),
+					new Beat(startTime + gap * 36, "J"),
+			};
 		} else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Easy")) {
 			int startTime = 1000;
 			beats = new Beat[] { new Beat(startTime, "J"), };
@@ -281,7 +267,7 @@ public class Game extends Thread {
 		while (i < beats.length && !isInterrupted()) {
 			boolean dropped = false;
 			if (beats[i].getTime() <= gameMusic.getTime()) {
-				Note note = new Note(beats[i].getNoteName());
+				Note note = new Note(beats[i].getNoteName(), difficulty);
 				note.start();
 				noteList.add(note);
 				i++;
