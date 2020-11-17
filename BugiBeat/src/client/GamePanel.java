@@ -15,20 +15,26 @@ public class GamePanel extends JPanel {
 	private Graphics screenGraphic;
 
 	private Music standbyMusic = new Music("stand by beat.mp3", true);
-	
+
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private RoomChat roomChatPanel = new RoomChat();
 	private Image background;
 	private Image gameScreenBg;
-	private ImageIcon gamescreenImg4 = new ImageIcon(Main.class.getResource("../images/4line-bg.png"));
-	private ImageIcon gamescreenImg6 = new ImageIcon(Main.class.getResource("../images/6line-bg.png"));
+
+	private ImageIcon gamescreenbgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png"));
+	private ImageIcon line6_bg_Img = new ImageIcon(Main.class.getResource("../images/6line-bg.png"));
+	private ImageIcon fever_line6_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-6line-bg.png"));
+	private ImageIcon line4_bg_Img = new ImageIcon(Main.class.getResource("../images/4line-bg.png"));
+	private ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-4line-bg.png"));
 	private ImageIcon startBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/start1.png"));
 	private ImageIcon startBtnImg = new ImageIcon(Main.class.getResource("../images/start0.png"));
 	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/roomquit1.png"));
 	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("../images/roomquit0.png"));
 	private ImageIcon roomsetEnteredImg = new ImageIcon(Main.class.getResource("../images/roomsetting1.png"));
 	private ImageIcon roomsetImg = new ImageIcon(Main.class.getResource("../images/roomsetting0.png"));
-
+	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("../images/room-bg1.png"));
+	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("../images/room2-bg1.png"));
+	
 	private JButton startBtn = new JButton(startBtnImg);
 	private JButton roomsetBtn = new JButton(roomsetImg);
 	private JButton quitBtn = new JButton(quitBtnImg);
@@ -36,10 +42,10 @@ public class GamePanel extends JPanel {
 	private boolean isGameScreen = false;
 	private String musicTitle;
 	private Music selectedMusic;
-	
+
 	public static Game game;
 
-	public void paint(Graphics g) { // 컴포넌트 본인만 paint
+	public void paint(Graphics g) {	// 컴포넌트 본인만 paint
 		screenImage = createImage(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
 		screenGraphic = screenImage.getGraphics();
 		screenDraw((Graphics2D) screenGraphic);
@@ -47,41 +53,35 @@ public class GamePanel extends JPanel {
 	}
 
 	public void screenDraw(Graphics2D g) {
-		g.drawImage(background, 0, 0, null);
-		g.drawImage(gameScreenBg, 12, 100, null);
-		
+		if (isMainScreen) {
+			g.drawImage(background, 0, 0, null);
+			g.drawImage(gameScreenBg, 12, 100, null);
+		}
 		if (isGameScreen) {
-			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			g.setFont(new Font("산돌수필B", Font.PLAIN, 22));
-			g.setColor(Color.WHITE);
-			g.drawString(musicTitle, 40, 40);
+			g.drawImage(background, 0, 0, null);
+			g.drawImage(gameScreenBg, 12, 100, null);
+			
 			g.drawImage(screenImage, 0, 0, null);
-			//game.screenDraw(g);
+			game.screenDraw(g);
 		}
 
-		/*
-		 * 이미지 그리기 이외에도 프레임에 추가된 컴포넌트를 그려줌 menuBar는 항상 존재하는 이미지이고 고정적이기 때문에
-		 * paintComponents로 그림
-		 */
-		paintComponents(g);
-		try {
-			Thread.sleep(5);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		this.repaint();
+		paintComponents(g);
 
 	}
 
 	public GamePanel() {
 		setSize(800, 720);
 		setLayout(null);
-		background = new ImageIcon(Main.class.getResource("../images/room-bg1.png")).getImage();
-		gameScreenBg = new ImageIcon(Main.class.getResource("../images/game-bg0.png")).getImage();
-
-		standbyMusic.start();
+		if(roomSetPanel.getBgSet()==1)
+			background = bg1Img.getImage();
+		else
+			background = bg2Img.getImage();
+		gameScreenBg = gamescreenbgImg.getImage();
 		
-		roomSetPanel.setBounds(12, 100, 780, 442); // 가로위치, 세로위치, 가로길이, 세로길이
+		standbyMusic.start();
+
+		roomSetPanel.setBounds(12, 100, 780, 442);
 		roomSetPanel.setVisible(false);
 		add(roomSetPanel);
 		
@@ -97,14 +97,12 @@ public class GamePanel extends JPanel {
 		startBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				if (!isGameScreen) {
 					startBtn.setIcon(startBtnEnteredImg);
 					startBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 					if (Main.SOUND_EFFECT) {
 						Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
 						btnEnteredMusic.start();
 					}
-				}
 			}
 
 			@Override
@@ -115,13 +113,11 @@ public class GamePanel extends JPanel {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (!isGameScreen) {
 					if (Main.SOUND_EFFECT) {
 						Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 						btnPressedMusic.start();
 					}
 					gameStart(roomSetPanel.getNowSelected(), "Easy");
-				}
 			}
 		});
 		add(startBtn);
@@ -134,14 +130,12 @@ public class GamePanel extends JPanel {
 		roomsetBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				if (!isGameScreen) {
 					roomsetBtn.setIcon(roomsetEnteredImg);
 					roomsetBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 					if (Main.SOUND_EFFECT) {
 						Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
 						btnEnteredMusic.start();
 					}
-				}
 			}
 
 			@Override
@@ -152,15 +146,11 @@ public class GamePanel extends JPanel {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (!isGameScreen) {
 					if (Main.SOUND_EFFECT) {
 						Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 						btnPressedMusic.start();
-
-						//RoomSetting.selectTrack(GameRoom.nowSelected);
 						roomSetPanel.setVisible(true);
 					}
-				}
 			}
 		});
 		add(roomsetBtn);
@@ -192,7 +182,7 @@ public class GamePanel extends JPanel {
 					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 					btnPressedMusic.start();
 				}
-				// 방나가기
+				// 방 나가기
 			}
 		});
 		add(quitBtn);
@@ -212,9 +202,14 @@ public class GamePanel extends JPanel {
 		roomChatPanel.setVisible(false);
 		startBtn.setVisible(false);
 		roomsetBtn.setVisible(false);
-		gameScreenBg = new ImageIcon(Main.class.getResource("../images/6line-bg.png")).getImage();
+		roomSetPanel.setVisible(false);
+		if(roomSetPanel.getLine() == 4)
+			gameScreenBg = line6_bg_Img.getImage();
+		if(roomSetPanel.getLine() == 4)
+			gameScreenBg = line4_bg_Img.getImage();
 		standbyMusic.close();
-		game = new Game(musicTitle, difficulty, roomSetPanel.getTrackList().get(nowSelected).getGameMusic());
+		
+		game = new Game(musicTitle, difficulty, roomSetPanel.getTrackList().get(nowSelected).getGameMusic(), roomSetPanel.getLine());
 		game.start();
 		setFocusable(true);
 	}

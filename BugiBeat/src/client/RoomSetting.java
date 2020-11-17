@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class RoomSetting extends JPanel {
+
 	private Image background;
 	private ImageIcon leftBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/leftBtn0.png"));
 	private ImageIcon leftBtnImg = new ImageIcon(Main.class.getResource("../images/leftBtn1.png"));
@@ -21,21 +22,24 @@ public class RoomSetting extends JPanel {
 	private ImageIcon hardBtnImg = new ImageIcon(Main.class.getResource("../images/hardBtn.png"));
 	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/quitBtnEntered.png"));
 	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("../images/quitBtn.png"));
+	private ImageIcon bgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png"));
 	
 	private JButton leftBtn = new JButton(leftBtnImg);
 	private JButton rightBtn = new JButton(rightBtnImg);
 	private JButton easyBtn;
 	private JButton hardBtn;
 	private JButton quitBtn = new JButton(quitBtnImg);
-	
+
 	private ArrayList<Track> trackList = new ArrayList<Track>();
 	
 	private String difficulty = "Easy";
 	private Music selectedMusic;
 	private Image selectedImg;
-	private int nowSelected = 0;
+	public int nowSelected = 0;
+	public int line = 4;  // 칸 수 
+	public int bgSet = 2; // 배경이미지
 	
-	public void paint(Graphics g) {
+	public void paint(Graphics g) { // 그리는 함수
 		g.drawImage(background, 0, 0, null);
 		g.drawImage(selectedImg, 70, 40, null);
 		paintComponents(g);
@@ -48,9 +52,9 @@ public class RoomSetting extends JPanel {
 		trackList.add(new Track("onion-start-image.png", "onion-highlight.mp3", "Onion.mp3", "Onion - Lukrembo"));
 		trackList.add(new Track("alien-start-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3", "Alien - Lee SuHyun"));
 		
-		background = new ImageIcon(Main.class.getResource("../images/game-bg0.png")).getImage();
+		background = bgImg.getImage();
 		selectedImg = new ImageIcon(Main.class.getResource("../images/" + trackList.get(0).getStartImage())).getImage();
-		
+
 		rightBtn.setBounds(500, 100, 45, 75);
 		rightBtn.setBorderPainted(false);
 		rightBtn.setContentAreaFilled(false);
@@ -240,5 +244,13 @@ public class RoomSetting extends JPanel {
 	
 	public Music getSelectedMusic() {
 		return selectedMusic;
+	}
+	
+	public int getLine() {
+		return line;
+	}
+	
+	public int getBgSet() {
+		return bgSet;
 	}
 }

@@ -12,7 +12,7 @@ public class RoomChat extends JPanel {
 	private ImageIcon roomchatImg = new ImageIcon(Main.class.getResource("../images/roomchat-bg.png"));
 	private ImageIcon roomchattingImg = new ImageIcon(Main.class.getResource("../images/roomchatting-bg.png"));
 	
-	public void paint(Graphics g) {	// 그리는 함수
+	public void paint(Graphics g) {
 		g.drawImage(background1, 0, 0, null);
 		g.drawImage(background2, 0, 120, null);
 		
