@@ -36,15 +36,14 @@ public class MonitorPanel extends JPanel {
 		{
 			game.screenDraw(g);
 		}
-		paintComponents(g);
 		*/
-		this.repaint();
+		paintComponents(g);
 	}
 	
 	public MonitorPanel() {
 		setSize(480, 720);
 		setLayout(null);
-		if(GameRoom.bgImg==1)
+		if(RoomSetting.bgSet==1)
 			background = bg1Img.getImage();
 		else
 			background = bg2Img.getImage();

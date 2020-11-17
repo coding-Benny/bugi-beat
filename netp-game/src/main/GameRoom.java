@@ -16,30 +16,15 @@ public class GameRoom extends JFrame {
 
 	private Image background;
 
-	public static Music standbyMusic = new Music("stand by beat.mp3", true);
-	
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/bar.png")));
 	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/exit1.png"));
 	private ImageIcon exitBtnImg = new ImageIcon(Main.class.getResource("../images/exit0.png"));
-	public static ImageIcon line6_bg_Img = new ImageIcon(Main.class.getResource("../images/6line-bg.png"));
-	public static ImageIcon fever_line6_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-6line-bg.png"));
-	public static ImageIcon line4_bg_Img = new ImageIcon(Main.class.getResource("../images/4line-bg.png"));
-	public static ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-4line-bg.png"));
-	
 	private JButton exitBtn = new JButton(exitBtnImg);
 	
 	private GamePanel gamePanel = new GamePanel();
 	private MonitorPanel monitorPanel = new MonitorPanel();
-	private JLayeredPane Menubar = new JLayeredPane();
-
-	public static ArrayList<Track> trackList = new ArrayList<Track>();
+	
 	private int mouseX, mouseY;
-	public static int level = 0;  //기본 난이도 easy
-	public static  Music selectedMusic;  //방에서 선택한 노래
-	public static  Image selectedImg;
-	public static  int nowSelected = 0;
-	public static  int line = 4;  //칸 수 
-	public static  int bgImg = 2; //배경이미지
 	
 	public GameRoom() {
 		super("게임 방");
@@ -51,11 +36,6 @@ public class GameRoom extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 		getContentPane().setLayout(null);;
-		
-		trackList.add(new Track("onion-start-image.png", "onion-highlight.mp3", "Onion.mp3", "Onion - Lukrembo"));
-		trackList.add(new Track("alien-start-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3", "Alien - Lee SuHyun"));
-
-		standbyMusic.start();
 		
 		menuBar.setBounds(0, 0, 1220, 30);
 		menuBar.addMouseListener(new MouseAdapter() {
@@ -85,7 +65,7 @@ public class GameRoom extends JFrame {
 			public void mouseEntered(MouseEvent e) {
 				exitBtn.setIcon(exitBtnEnteredImg);
 				exitBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				if(Main.soundeffect) {
+				if(Main.SOUND_EFFECT) {
 					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
 					btnEnteredMusic.start();
 				}
@@ -99,7 +79,7 @@ public class GameRoom extends JFrame {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(Main.soundeffect) {
+				if(Main.SOUND_EFFECT) {
 					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 					btnPressedMusic.start();
 				}

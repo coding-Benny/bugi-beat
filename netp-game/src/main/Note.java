@@ -7,8 +7,13 @@ import javax.swing.ImageIcon;
 
 
 public class Note extends Thread {
-	private Image noteImg = new ImageIcon(Main.class.getResource("../images/note.png")).getImage();
-	private int x, y = 580 - (1000 / Main.SLEEP_TIME * Main.NOTE_SPEED) * Main.REACH_TIME;	/* Note 생성 후 1초 뒤에 판정 라인에 다다름 */
+	private Image line6_noteImg = new ImageIcon(Main.class.getResource("../images/6line-note.png")).getImage();
+	private Image line4_noteImg = new ImageIcon(Main.class.getResource("../images/4line-note.png")).getImage();
+	private Image fever_line6_noteImg = new ImageIcon(Main.class.getResource("../images/6line-note.png")).getImage();
+	private Image fever_line4_noteImg = new ImageIcon(Main.class.getResource("../images/4line-note.png")).getImage();
+	private Image noteImg;
+	
+	private int x, y = 500 - (1000 / Main.SLEEP_TIME * Main.NOTE_SPEED) * Main.REACH_TIME;	/* Note 생성 후 1초 뒤에 판정 라인에 다다름 */
 	private String noteType;
 	private boolean proceeded = true;
 	
@@ -29,25 +34,25 @@ public class Note extends Thread {
 	
 	public Note(String noteType) {
 		if (noteType.equals("S")) {
-			x = 228;
+			x = 10;
 		}
 		else if (noteType.equals("D")) {
-			x = 346;
+			x = 50;
 		}
 		else if (noteType.equals("F")) {
-			x = 464;
+			x = 80;
 		}
 		else if (noteType.equals("Space")) {
-			x = 582;
+			x = 100;
 		}
 		else if (noteType.equals("J")) {
-			x = 824;
+			x = 120;
 		}
 		else if (noteType.equals("K")) {
-			x = 942;
+			x = 160;
 		}
 		else if (noteType.equals("L")) {
-			x = 1096;
+			x = 180;
 		}
 		this.noteType = noteType;
 	}

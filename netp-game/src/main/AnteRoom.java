@@ -15,7 +15,6 @@ public class AnteRoom extends JFrame {
 	public void paint(Graphics g) {//그리는 함수
 		g.drawImage(background, 0, 0, null);
 		
-		g.drawImage(GameRoom.selectedImg, 70, 40, null);
 		paintComponents(g);
 	}
 	
@@ -30,7 +29,7 @@ public class AnteRoom extends JFrame {
 		setVisible(true);
 		getContentPane().setLayout(null);
 
-		if(GameRoom.bgImg==1)
+		if(RoomSetting.bgSet==1)
 			background = bg1Img.getImage();
 		else
 			background = bg2Img.getImage();
