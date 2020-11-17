@@ -1,0 +1,223 @@
+package client;
+
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
+import javax.swing.*;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class GamePanel extends JPanel {
+	private Image screenImage;
+	private Graphics screenGraphic;
+
+	private Music standbyMusic = new Music("stand by beat.mp3", true);
+
+	private RoomSetting roomSetPanel = new RoomSetting();
+	private RoomChat roomChatPanel = new RoomChat();
+	private Image background;
+	private Image gameScreenBg;
+
+	private ImageIcon gameScreenBgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png"));
+	private ImageIcon line6_bg_Img = new ImageIcon(Main.class.getResource("../images/6line-bg.png"));
+	private ImageIcon fever_line6_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-6line-bg.png"));
+	private ImageIcon line4_bg_Img = new ImageIcon(Main.class.getResource("../images/4line-bg.png"));
+	private ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-4line-bg.png"));
+	private ImageIcon startBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/start1.png"));
+	private ImageIcon startBtnImg = new ImageIcon(Main.class.getResource("../images/start0.png"));
+	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/roomquit1.png"));
+	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("../images/roomquit0.png"));
+	private ImageIcon roomSetEnteredImg = new ImageIcon(Main.class.getResource("../images/roomsetting1.png"));
+	private ImageIcon roomSetImg = new ImageIcon(Main.class.getResource("../images/roomsetting0.png"));
+	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("../images/room-bg1.png"));
+	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("../images/room2-bg1.png"));
+	
+	private JButton startBtn = new JButton(startBtnImg);
+	private JButton roomSetBtn = new JButton(roomSetImg);
+	private JButton quitBtn = new JButton(quitBtnImg);
+	private boolean isMainScreen = true;
+	private boolean isGameScreen = false;
+	private String musicTitle;
+	private Music selectedMusic;
+
+	public static Game game;
+
+	public void paint(Graphics g) {	// 컴포넌트 본인만 paint
+		screenImage = createImage(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
+		screenGraphic = screenImage.getGraphics();
+		screenDraw((Graphics2D) screenGraphic);
+		g.drawImage(screenImage, 0, 0, null);
+	}
+
+	public void screenDraw(Graphics2D g) {
+		if (isMainScreen) {
+			g.drawImage(background, 0, 0, null);
+			g.drawImage(gameScreenBg, 12, 100, null);
+		}
+		if (isGameScreen) {
+			g.drawImage(background, 0, 0, null);
+			g.drawImage(gameScreenBg, 12, 100, null);
+			
+			g.drawImage(screenImage, 0, 0, null);
+			game.screenDraw(g);
+		}
+		paintComponents(g);
+		try {
+			Thread.sleep(5);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		this.repaint();
+	}
+
+	public GamePanel() {
+		setSize(800, 720);
+		setLayout(null);
+		if(roomSetPanel.getBgSet() == 1)
+			background = bg1Img.getImage();
+		else
+			background = bg2Img.getImage();
+		gameScreenBg = gameScreenBgImg.getImage();
+		
+		standbyMusic.start();
+
+		roomSetPanel.setBounds(12, 100, 780, 442);
+		roomSetPanel.setVisible(false);
+		add(roomSetPanel);
+		
+		roomChatPanel.setBounds(50, 540, 550, 180);
+		roomChatPanel.setVisible(true);
+		add(roomChatPanel);
+
+//		if (방장이면 statBtn, 아니면 readyBtn) {
+		startBtn.setBounds(630, 550, 144, 60);
+		startBtn.setBorderPainted(false);
+		startBtn.setContentAreaFilled(false);
+		startBtn.setFocusPainted(false);
+		startBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+					startBtn.setIcon(startBtnEnteredImg);
+					startBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					if (Main.SOUND_EFFECT) {
+						Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+						btnEnteredMusic.start();
+					}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				startBtn.setIcon(startBtnImg);
+				startBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+					if (Main.SOUND_EFFECT) {
+						Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+						btnPressedMusic.start();
+					}
+					gameStart(roomSetPanel.getNowSelected(), roomSetPanel.getDifficulty());
+					addKeyListener(new KeyListener());
+			}
+		});
+		add(startBtn);
+//		}
+
+		roomSetBtn.setBounds(630, 600, 144, 60);
+		roomSetBtn.setBorderPainted(false);
+		roomSetBtn.setContentAreaFilled(false);
+		roomSetBtn.setFocusPainted(false);
+		roomSetBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+					roomSetBtn.setIcon(roomSetEnteredImg);
+					roomSetBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					if (Main.SOUND_EFFECT) {
+						Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+						btnEnteredMusic.start();
+					}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				roomSetBtn.setIcon(roomSetImg);
+				roomSetBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+					if (Main.SOUND_EFFECT) {
+						Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+						btnPressedMusic.start();
+						roomSetPanel.setVisible(true);
+					}
+			}
+		});
+		add(roomSetBtn);
+
+		quitBtn.setBounds(630, 650, 144, 60);
+		quitBtn.setBorderPainted(false);
+		quitBtn.setContentAreaFilled(false);
+		quitBtn.setFocusPainted(false);
+		quitBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				quitBtn.setIcon(quitBtnEnteredImg);
+				quitBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				if (Main.SOUND_EFFECT) {
+					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+					btnEnteredMusic.start();
+				}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				quitBtn.setIcon(quitBtnImg);
+				quitBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (Main.SOUND_EFFECT) {
+					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+					btnPressedMusic.start();
+				}
+				// 방 나가기
+			}
+		});
+		add(quitBtn);
+		
+		// 대기상태, 방설정 game-bg0.png
+		// 게임시작 game-bg1.png
+
+	}
+
+	public void gameStart(int nowSelected, String difficulty) {
+		selectedMusic = roomSetPanel.getSelectedMusic();
+		musicTitle = roomSetPanel.getTrackList().get(nowSelected).getTitleName();
+		
+		if (selectedMusic != null)
+			selectedMusic.close();
+		
+		isMainScreen = false;
+		isGameScreen = true;
+		roomChatPanel.setVisible(false);
+		startBtn.setVisible(false);
+		roomSetBtn.setVisible(false);
+		roomSetPanel.setVisible(false);
+		
+		if (roomSetPanel.getLine() == 6)
+			gameScreenBg = line6_bg_Img.getImage();
+		else if (roomSetPanel.getLine() == 4)
+			gameScreenBg = line4_bg_Img.getImage();
+		standbyMusic.close();
+		
+		game = new Game(musicTitle, difficulty, roomSetPanel.getTrackList().get(nowSelected).getGameMusic(), roomSetPanel.getLine());
+		game.start();
+		setFocusable(true);
+	}
+}
