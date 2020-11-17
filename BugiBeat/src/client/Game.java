@@ -81,12 +81,12 @@ public class Game extends Thread {
 
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 			g.setColor(Color.WHITE);
-			g.drawString("S", 110, 536);
-			g.drawString("D", 225, 536);
-			g.drawString("F", 340, 536);
-			g.drawString("J", 455, 536);
-			g.drawString("K", 570, 536);
-			g.drawString("L", 690, 536);
+			g.drawString("S", 106, 540);
+			g.drawString("D", 217, 540);
+			g.drawString("F", 336, 540);
+			g.drawString("J", 451, 540);
+			g.drawString("K", 566, 540);
+			g.drawString("L", 682, 540);
 			
 			g.drawImage(judgeImg, 190, 270, null);
 		}

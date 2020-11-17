@@ -36,8 +36,8 @@ public class RoomSetting extends JPanel {
 	private Music selectedMusic;
 	private Image selectedImg;
 	public int nowSelected = 0;
-	public int line = 4;  // 칸 수 
-	public int bgSet = 2; // 배경이미지
+	public int line = 4;  // 기본(easy) 칸 수 
+	public int bgSet = 2; // 배경 이미지
 	
 	public void paint(Graphics g) { // 그리는 함수
 		g.drawImage(background, 0, 0, null);
@@ -143,6 +143,7 @@ public class RoomSetting extends JPanel {
 				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 				btnPressedMusic.start();
 				difficulty = "Easy";
+				line = 4;
 				easyBtn.setIcon(easyBtnEnteredImg);
 				hardBtn.setIcon(hardBtnImg);
 			}
@@ -171,6 +172,7 @@ public class RoomSetting extends JPanel {
 				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 				btnPressedMusic.start();
 				difficulty = "Hard";
+				line = 6;
 				easyBtn.setIcon(easyBtnImg);
 				hardBtn.setIcon(hardBtnEnteredImg);
 			}
@@ -252,5 +254,9 @@ public class RoomSetting extends JPanel {
 	
 	public int getBgSet() {
 		return bgSet;
+	}
+	
+	public String getDifficulty() {
+		return difficulty;
 	}
 }
