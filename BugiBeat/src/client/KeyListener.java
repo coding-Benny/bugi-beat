@@ -35,7 +35,7 @@ public class KeyListener extends KeyAdapter {
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (GamePanel.game == null) { /* 게임 진행중이 아니라면 아래 작업을 거치지 않도록 무력화 */
+		if (GamePanel.game == null) {	/* 게임 진행중이 아니라면 아래 작업을 거치지 않도록 무력화 */
 			return;
 		}
 		

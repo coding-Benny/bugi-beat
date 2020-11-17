@@ -64,16 +64,19 @@ public class GamePanel extends JPanel {
 			g.drawImage(screenImage, 0, 0, null);
 			game.screenDraw(g);
 		}
-
-		this.repaint();
 		paintComponents(g);
-
+		try {
+			Thread.sleep(5);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		this.repaint();
 	}
 
 	public GamePanel() {
 		setSize(800, 720);
 		setLayout(null);
-		if(roomSetPanel.getBgSet()==1)
+		if(roomSetPanel.getBgSet() == 1)
 			background = bg1Img.getImage();
 		else
 			background = bg2Img.getImage();
@@ -89,7 +92,7 @@ public class GamePanel extends JPanel {
 		roomChatPanel.setVisible(true);
 		add(roomChatPanel);
 
-//		if(방장이면 statBtn, 아니면 readyBtn) {
+//		if (방장이면 statBtn, 아니면 readyBtn) {
 		startBtn.setBounds(630, 550, 144, 60);
 		startBtn.setBorderPainted(false);
 		startBtn.setContentAreaFilled(false);
@@ -118,6 +121,7 @@ public class GamePanel extends JPanel {
 						btnPressedMusic.start();
 					}
 					gameStart(roomSetPanel.getNowSelected(), roomSetPanel.getDifficulty());
+					addKeyListener(new KeyListener());
 			}
 		});
 		add(startBtn);

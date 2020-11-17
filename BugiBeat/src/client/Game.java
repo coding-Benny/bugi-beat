@@ -44,18 +44,16 @@ public class Game extends Thread {
 	}
 
 	public void screenDraw(Graphics2D g) {
+		g.drawImage(feverBar_bg, 570, 10, null);
+		g.drawImage(lifeBar_bg, 570, 50, null);
+		g.drawImage(judgementLineImg, 11, 500, null);
 		if (line == 6) {
-			g.drawImage(judgementLineImg, 11, 500, null);
-			g.drawImage(noteRouteSImg, 10, 100, null);
-			g.drawImage(noteRouteDImg, 20, 100, null);
-			g.drawImage(noteRouteFImg, 30, 100, null);
-			g.drawImage(noteRouteJImg, 40, 100, null);
-			g.drawImage(noteRouteKImg, 50, 100, null);
-			g.drawImage(noteRouteLImg, 60, 100, null);
-			g.drawImage(noteRouteLImg, 60, 100, null);
-			
-			g.drawImage(feverBar_bg, 570, 10, null);
-			g.drawImage(lifeBar_bg, 570, 50, null);
+			g.drawImage(noteRouteSImg, 45, 80, null);
+			g.drawImage(noteRouteDImg, 160, 80, null);
+			g.drawImage(noteRouteFImg, 276, 80, null);
+			g.drawImage(noteRouteJImg, 391, 80, null);
+			g.drawImage(noteRouteKImg, 506, 80, null);
+			g.drawImage(noteRouteLImg, 622, 80, null);
 			
 			for (int i = 0; i < noteList.size(); i++) {
 				Note note = noteList.get(i);
@@ -69,6 +67,7 @@ public class Game extends Thread {
 				}
 			}
 			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 24));
 			g.setColor(Color.WHITE);
 			g.drawString(titleName, 40, 38);
@@ -92,14 +91,10 @@ public class Game extends Thread {
 		}
 		
 		else if (line == 4) {
-			g.drawImage(judgementLineImg, 11, 500, null);
-			g.drawImage(noteRouteSImg, 155, 100, null);
-			g.drawImage(noteRouteDImg, 330, 100, null);
-			g.drawImage(noteRouteKImg, 500, 100, null);
-			g.drawImage(noteRouteLImg, 675, 100, null);
-
-			g.drawImage(feverBar_bg, 570, 20, null);
-			g.drawImage(lifeBar_bg, 570, 60, null);
+			g.drawImage(noteRouteDImg, 48, 80, null);
+			g.drawImage(noteRouteFImg, 221, 80, null);
+			g.drawImage(noteRouteJImg, 392, 80, null);
+			g.drawImage(noteRouteKImg, 566, 80, null);
 			
 			for (int i = 0; i < noteList.size(); i++) {
 				Note note = noteList.get(i);
@@ -125,10 +120,10 @@ public class Game extends Thread {
 
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 			g.setColor(Color.WHITE);
-			g.drawString("S", 136, 540);
-			g.drawString("D", 309, 540);
-			g.drawString("K", 479, 540);
-			g.drawString("L", 656, 540);
+			g.drawString("D", 136, 540);
+			g.drawString("F", 309, 540);
+			g.drawString("J", 479, 540);
+			g.drawString("K", 656, 540);
 		}
 		g.drawImage(judgeImg, 190, 270, null);
 	}
@@ -226,32 +221,36 @@ public class Game extends Thread {
 
 	public void dropNotes(String titleName) {
 		Beat[] beats = null;
-		if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Easy") && line == 6) {
-			int startTime = 4460 - Main.REACH_TIME * 1000;
-			int gap = 125; /* 박자 계산 */
-			beats = new Beat[] { new Beat(startTime, "Space"), new Beat(startTime + gap * 2, "D"),
-					new Beat(startTime + gap * 4, "F"), new Beat(startTime + gap * 6, "K"),
-					new Beat(startTime + gap * 8, "J"), new Beat(startTime + gap * 10, "Space"),
-					new Beat(startTime + gap * 12, "S"), new Beat(startTime + gap * 14, "L"),
-					new Beat(startTime + gap * 16, "F"), new Beat(startTime + gap * 18, "D"),
-					new Beat(startTime + gap * 20, "K"), new Beat(startTime + gap * 22, "J"),
-					new Beat(startTime + gap * 24, "Space"), new Beat(startTime + gap * 26, "F"),
-					new Beat(startTime + gap * 28, "J"), new Beat(startTime + gap * 30, "D"),
-					new Beat(startTime + gap * 32, "L"), new Beat(startTime + gap * 34, "K"),
-					new Beat(startTime + gap * 36, "S"), new Beat(startTime + gap * 38, "Space"), };
+		if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Easy") && line == 4) {
+			int startTime = 6884 - Main.REACH_TIME * 1000;
+			int gap = 128; /* 박자 계산 */
+			beats = new Beat[] { 
+					new Beat(startTime, "J"),
+					new Beat(startTime + gap * 4, "F"),
+					new Beat(startTime + gap * 8, "K"),
+					new Beat(startTime + gap * 12, "D"),
+					new Beat(startTime + gap * 16, "J"),
+					new Beat(startTime + gap * 20, "D"),
+					new Beat(startTime + gap * 24, "F"),
+					new Beat(startTime + gap * 28, "K"),
+					new Beat(startTime + gap * 32, "K"),
+					new Beat(startTime + gap * 36, "J"),
+			};
 		} else if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Hard") && line == 6) {
-			int startTime = 4460 - Main.REACH_TIME * 1000;
-			int gap = 125; /* 박자 계산 */
-			beats = new Beat[] { new Beat(startTime, "Space"), new Beat(startTime + gap * 2, "D"),
-					new Beat(startTime + gap * 4, "F"), new Beat(startTime + gap * 6, "K"),
-					new Beat(startTime + gap * 8, "J"), new Beat(startTime + gap * 10, "Space"),
-					new Beat(startTime + gap * 12, "S"), new Beat(startTime + gap * 14, "L"),
-					new Beat(startTime + gap * 16, "F"), new Beat(startTime + gap * 18, "D"),
-					new Beat(startTime + gap * 20, "K"), new Beat(startTime + gap * 22, "J"),
-					new Beat(startTime + gap * 24, "Space"), new Beat(startTime + gap * 26, "F"),
-					new Beat(startTime + gap * 28, "J"), new Beat(startTime + gap * 30, "D"),
-					new Beat(startTime + gap * 32, "L"), new Beat(startTime + gap * 34, "K"),
-					new Beat(startTime + gap * 36, "S"), new Beat(startTime + gap * 38, "Space"), };
+			int startTime = 6884 - Main.REACH_TIME * 1000;
+			int gap = 128; /* 박자 계산 */
+			beats = new Beat[] {
+					new Beat(startTime, "S"),
+					new Beat(startTime + gap * 4, "F"),
+					new Beat(startTime + gap * 8, "K"),
+					new Beat(startTime + gap * 12, "D"),
+					new Beat(startTime + gap * 16, "L"),
+					new Beat(startTime + gap * 20, "D"),
+					new Beat(startTime + gap * 24, "F"),
+					new Beat(startTime + gap * 28, "K"),
+					new Beat(startTime + gap * 32, "K"),
+					new Beat(startTime + gap * 36, "J"),
+			};
 		} else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Easy")) {
 			int startTime = 1000;
 			beats = new Beat[] { new Beat(startTime, "J"), };
@@ -264,7 +263,7 @@ public class Game extends Thread {
 		while (i < beats.length && !isInterrupted()) {
 			boolean dropped = false;
 			if (beats[i].getTime() <= gameMusic.getTime()) {
-				Note note = new Note(beats[i].getNoteName());
+				Note note = new Note(beats[i].getNoteName(), difficulty);
 				note.start();
 				noteList.add(note);
 				i++;

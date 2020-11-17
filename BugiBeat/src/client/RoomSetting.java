@@ -36,10 +36,10 @@ public class RoomSetting extends JPanel {
 	private Music selectedMusic;
 	private Image selectedImg;
 	public int nowSelected = 0;
-	public int line = 4;  // 기본(easy) 칸 수 
-	public int bgSet = 2; // 배경 이미지
+	public int line = 4;	// 기본(easy) 칸 수 
+	public int bgSet = 2;	// 배경 이미지 번호
 	
-	public void paint(Graphics g) { // 그리는 함수
+	public void paint(Graphics g) {
 		g.drawImage(background, 0, 0, null);
 		g.drawImage(selectedImg, 70, 40, null);
 		paintComponents(g);
