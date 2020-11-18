@@ -1,4 +1,4 @@
-package client;
+
 
 public class Beat {
 	private int time;

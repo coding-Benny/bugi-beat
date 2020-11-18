@@ -1,4 +1,4 @@
-package client;
+
 
 public class Track {
 	private String startImage;	// 게임 선택 창 표지 이미지

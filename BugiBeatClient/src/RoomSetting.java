@@ -1,4 +1,4 @@
-package client;
+
 
 import java.awt.*;
 import java.awt.Graphics;
@@ -12,17 +12,17 @@ import javax.swing.*;
 public class RoomSetting extends JPanel {
 
 	private Image background;
-	private ImageIcon leftBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/leftBtn0.png"));
-	private ImageIcon leftBtnImg = new ImageIcon(Main.class.getResource("../images/leftBtn1.png"));
-	private ImageIcon rightBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/rightBtn0.png"));
-	private ImageIcon rightBtnImg = new ImageIcon(Main.class.getResource("../images/rightBtn1.png"));
-	private ImageIcon easyBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/easyBtnEntered.png"));
-	private ImageIcon easyBtnImg = new ImageIcon(Main.class.getResource("../images/easyBtn.png"));
-	private ImageIcon hardBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/hardBtnEntered.png"));
-	private ImageIcon hardBtnImg = new ImageIcon(Main.class.getResource("../images/hardBtn.png"));
-	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/quitBtnEntered.png"));
-	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("../images/quitBtn.png"));
-	private ImageIcon bgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png"));
+	private ImageIcon leftBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/leftBtn0.png"));
+	private ImageIcon leftBtnImg = new ImageIcon(Main.class.getResource("/images/leftBtn1.png"));
+	private ImageIcon rightBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/rightBtn0.png"));
+	private ImageIcon rightBtnImg = new ImageIcon(Main.class.getResource("/images/rightBtn1.png"));
+	private ImageIcon easyBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/easyBtnEntered.png"));
+	private ImageIcon easyBtnImg = new ImageIcon(Main.class.getResource("/images/easyBtn.png"));
+	private ImageIcon hardBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/hardBtnEntered.png"));
+	private ImageIcon hardBtnImg = new ImageIcon(Main.class.getResource("/images/hardBtn.png"));
+	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/quitBtnEntered.png"));
+	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("/images/quitBtn.png"));
+	private ImageIcon bgImg = new ImageIcon(Main.class.getResource("/images/game-bg0.png"));
 	
 	private JButton leftBtn = new JButton(leftBtnImg);
 	private JButton rightBtn = new JButton(rightBtnImg);

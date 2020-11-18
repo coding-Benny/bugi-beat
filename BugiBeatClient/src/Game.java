@@ -1,4 +1,4 @@
-package client;
+
 
 import java.awt.Color;
 import java.awt.Font;
@@ -10,19 +10,19 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 public class Game extends Thread {
-	private Image judgementLineImg = new ImageIcon(Main.class.getResource("../images/judgement-line.png")).getImage();
-	private Image noteRouteSImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
-	private Image noteRouteDImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
-	private Image noteRouteFImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
-	private Image noteRouteJImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
-	private Image noteRouteKImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
-	private Image noteRouteLImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
-	private Image lifeBar_bg = new ImageIcon(Main.class.getResource("../images/life-bar-bg.png")).getImage();
-	private Image feverBar_bg = new ImageIcon(Main.class.getResource("../images/fever-bar-bg.png")).getImage();
-	private Image line4_Pressed = new ImageIcon(Main.class.getResource("../images/4line-p.png")).getImage();
-	private Image fever_line4_Pressed = new ImageIcon(Main.class.getResource("../images/fever-4line-p.png")).getImage();
-	private Image line6_Pressed = new ImageIcon(Main.class.getResource("../images/6line-p.png")).getImage();
-	private Image fever_line6_Pressed = new ImageIcon(Main.class.getResource("../images/fever-6line-p.png")).getImage();
+	private Image judgementLineImg = new ImageIcon(Main.class.getResource("/images/judgement-line.png")).getImage();
+	private Image noteRouteSImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	private Image noteRouteDImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	private Image noteRouteFImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	private Image noteRouteJImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	private Image noteRouteKImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	private Image noteRouteLImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	private Image lifeBar_bg = new ImageIcon(Main.class.getResource("/images/life-bar-bg.png")).getImage();
+	private Image feverBar_bg = new ImageIcon(Main.class.getResource("/images/fever-bar-bg.png")).getImage();
+	private Image line4_Pressed = new ImageIcon(Main.class.getResource("/images/4line-p.png")).getImage();
+	private Image fever_line4_Pressed = new ImageIcon(Main.class.getResource("/images/fever-4line-p.png")).getImage();
+	private Image line6_Pressed = new ImageIcon(Main.class.getResource("/images/6line-p.png")).getImage();
+	private Image fever_line6_Pressed = new ImageIcon(Main.class.getResource("/images/fever-6line-p.png")).getImage();
 	private Image linePressedImg;
 	private Image judgeImg;
 
@@ -58,7 +58,7 @@ public class Game extends Thread {
 			for (int i = 0; i < noteList.size(); i++) {
 				Note note = noteList.get(i);
 				if (note.getY() > 500)
-					judgeImg = new ImageIcon(Main.class.getResource("../images/miss.png")).getImage();
+					judgeImg = new ImageIcon(Main.class.getResource("/images/miss.png")).getImage();
 				if (!note.isProceeded()) { /* 사용하지 않는 노트는 화면에서 삭제 */
 					noteList.remove(i);
 					i--;
@@ -99,7 +99,7 @@ public class Game extends Thread {
 			for (int i = 0; i < noteList.size(); i++) {
 				Note note = noteList.get(i);
 				if (note.getY() > 500)
-					judgeImg = new ImageIcon(Main.class.getResource("../images/miss.png")).getImage();
+					judgeImg = new ImageIcon(Main.class.getResource("/images/miss.png")).getImage();
 				if (!note.isProceeded()) { /* 사용하지 않는 노트는 화면에서 삭제 */
 					noteList.remove(i);
 					i--;
@@ -147,7 +147,7 @@ public class Game extends Thread {
 	}
 
 	public void releaseS() {
-		noteRouteSImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
+		noteRouteSImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	}
 
 	public void pressD() {
@@ -157,7 +157,7 @@ public class Game extends Thread {
 	}
 
 	public void releaseD() {
-		noteRouteDImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
+		noteRouteDImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	}
 
 	public void pressF() {
@@ -167,7 +167,7 @@ public class Game extends Thread {
 	}
 
 	public void releaseF() {
-		noteRouteFImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
+		noteRouteFImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	}
 
 	public void pressSpace() {
@@ -186,7 +186,7 @@ public class Game extends Thread {
 	}
 
 	public void releaseJ() {
-		noteRouteJImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
+		noteRouteJImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	}
 
 	public void pressK() {
@@ -196,7 +196,7 @@ public class Game extends Thread {
 	}
 
 	public void releaseK() {
-		noteRouteKImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
+		noteRouteKImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	}
 
 	public void pressL() {
@@ -206,7 +206,7 @@ public class Game extends Thread {
 	}
 
 	public void releaseL() {
-		noteRouteLImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
+		noteRouteLImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	}
 
 	@Override
@@ -296,12 +296,12 @@ public class Game extends Thread {
 		/* if (!judge.equals("None"))
 			// blueFlareImg 설정 */
 		if (judge.equals("Miss"))
-			judgeImg = new ImageIcon(Main.class.getResource("../images/miss.png")).getImage();
+			judgeImg = new ImageIcon(Main.class.getResource("/images/miss.png")).getImage();
 		else if (judge.equals("Good"))
-			judgeImg = new ImageIcon(Main.class.getResource("../images/good.png")).getImage();
+			judgeImg = new ImageIcon(Main.class.getResource("/images/good.png")).getImage();
 		else if (judge.equals("Great"))
-			judgeImg = new ImageIcon(Main.class.getResource("../images/great.png")).getImage();
+			judgeImg = new ImageIcon(Main.class.getResource("/images/great.png")).getImage();
 		else if (judge.equals("Perfect"))
-			judgeImg = new ImageIcon(Main.class.getResource("../images/perfect.png")).getImage();
+			judgeImg = new ImageIcon(Main.class.getResource("/images/perfect.png")).getImage();
 	}
 }

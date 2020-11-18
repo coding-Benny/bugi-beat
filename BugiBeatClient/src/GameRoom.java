@@ -1,4 +1,4 @@
-package client;
+
 
 import java.awt.*;
 import java.awt.event.*;
@@ -16,9 +16,9 @@ public class GameRoom extends JFrame {
 
 	private Image background;
 
-	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/bar.png")));
-	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/exit1.png"));
-	private ImageIcon exitBtnImg = new ImageIcon(Main.class.getResource("../images/exit0.png"));
+	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("/images/bar.png")));
+	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/exit1.png"));
+	private ImageIcon exitBtnImg = new ImageIcon(Main.class.getResource("/images/exit0.png"));
 	private JButton exitBtn = new JButton(exitBtnImg);
 	
 	private GamePanel gamePanel = new GamePanel();

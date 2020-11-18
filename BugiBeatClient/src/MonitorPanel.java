@@ -1,4 +1,4 @@
-package client;
+
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -13,8 +13,8 @@ public class MonitorPanel extends JPanel {
 	
 	private Image background;
 
-	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("../images/room-bg2.png"));
-	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("../images/room2-bg2.png"));
+	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("/images/room-bg2.png"));
+	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("/images/room2-bg2.png"));
 	
 	private RoomSetting roomSetPanel = new RoomSetting();
 	

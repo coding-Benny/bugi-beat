@@ -1,4 +1,4 @@
-package client;
+
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -9,8 +9,8 @@ public class RoomChat extends JPanel {
 	private Image background1;
 	private Image background2;
 	
-	private ImageIcon roomchatImg = new ImageIcon(Main.class.getResource("../images/roomchat-bg.png"));
-	private ImageIcon roomchattingImg = new ImageIcon(Main.class.getResource("../images/roomchatting-bg.png"));
+	private ImageIcon roomchatImg = new ImageIcon(Main.class.getResource("/images/roomchat-bg.png"));
+	private ImageIcon roomchattingImg = new ImageIcon(Main.class.getResource("/images/roomchatting-bg.png"));
 	
 	public void paint(Graphics g) {
 		g.drawImage(background1, 0, 0, null);

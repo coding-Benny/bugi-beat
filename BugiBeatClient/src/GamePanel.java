@@ -1,4 +1,4 @@
-package client;
+
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -21,19 +21,19 @@ public class GamePanel extends JPanel {
 	private Image background;
 	private Image gameScreenBg;
 
-	private ImageIcon gameScreenBgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png"));
-	private ImageIcon line6_bg_Img = new ImageIcon(Main.class.getResource("../images/6line-bg.png"));
-	private ImageIcon fever_line6_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-6line-bg.png"));
-	private ImageIcon line4_bg_Img = new ImageIcon(Main.class.getResource("../images/4line-bg.png"));
-	private ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-4line-bg.png"));
-	private ImageIcon startBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/start1.png"));
-	private ImageIcon startBtnImg = new ImageIcon(Main.class.getResource("../images/start0.png"));
-	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/roomquit1.png"));
-	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("../images/roomquit0.png"));
-	private ImageIcon roomSetEnteredImg = new ImageIcon(Main.class.getResource("../images/roomsetting1.png"));
-	private ImageIcon roomSetImg = new ImageIcon(Main.class.getResource("../images/roomsetting0.png"));
-	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("../images/room-bg1.png"));
-	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("../images/room2-bg1.png"));
+	private ImageIcon gameScreenBgImg = new ImageIcon(Main.class.getResource("/images/game-bg0.png"));
+	private ImageIcon line6_bg_Img = new ImageIcon(Main.class.getResource("/images/6line-bg.png"));
+	private ImageIcon fever_line6_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-6line-bg.png"));
+	private ImageIcon line4_bg_Img = new ImageIcon(Main.class.getResource("/images/4line-bg.png"));
+	private ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-4line-bg.png"));
+	private ImageIcon startBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/start1.png"));
+	private ImageIcon startBtnImg = new ImageIcon(Main.class.getResource("/images/start0.png"));
+	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/roomquit1.png"));
+	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("/images/roomquit0.png"));
+	private ImageIcon roomSetEnteredImg = new ImageIcon(Main.class.getResource("/images/roomsetting1.png"));
+	private ImageIcon roomSetImg = new ImageIcon(Main.class.getResource("/images/roomsetting0.png"));
+	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("/images/room-bg1.png"));
+	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("/images/room2-bg1.png"));
 	
 	private JButton startBtn = new JButton(startBtnImg);
 	private JButton roomSetBtn = new JButton(roomSetImg);
