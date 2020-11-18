@@ -21,7 +21,7 @@ public class AnteRoom extends JFrame {
 	}
 	
 	public AnteRoom() {
-		super("게임 방");
+		super("대기실");
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
