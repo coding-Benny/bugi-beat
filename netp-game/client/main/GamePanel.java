@@ -187,9 +187,6 @@ public class GamePanel extends JPanel {
 			}
 		});
 		add(quitBtn);
-		
-		// 대기상태, 방설정 game-bg0.png
-		// 게임시작 game-bg1.png
 
 	}
 

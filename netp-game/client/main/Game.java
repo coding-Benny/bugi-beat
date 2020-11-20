@@ -58,7 +58,7 @@ public class Game extends Thread {
 			
 			for (int i = 0; i < noteList.size(); i++) {
 				Note note = noteList.get(i);
-				if (note.getY() > 500)
+				if (note.getY() > 560)
 					judgeImg = new ImageIcon(Main.class.getResource("../images/miss.png")).getImage();
 				if (!note.isProceeded()) { /* 사용하지 않는 노트는 화면에서 삭제 */
 					noteList.remove(i);
@@ -99,7 +99,7 @@ public class Game extends Thread {
 			
 			for (int i = 0; i < noteList.size(); i++) {
 				Note note = noteList.get(i);
-				if (note.getY() > 500)
+				if (note.getY() > 560)
 					judgeImg = new ImageIcon(Main.class.getResource("../images/miss.png")).getImage();
 				if (!note.isProceeded()) { /* 사용하지 않는 노트는 화면에서 삭제 */
 					noteList.remove(i);
@@ -225,23 +225,42 @@ public class Game extends Thread {
 
 	public void dropNotes(String titleName) {
 		Beat[] beats = null;
-		if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Easy") && line == 4) {
-			int startTime = 6884 - Main.REACH_TIME * 1000;
+		if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Easy") && line == 4) {  //s d k l
+			int startTime = 1000 - Main.REACH_TIME * 1000;
 			int gap = 128; /* 박자 계산 */
 			beats = new Beat[] { 
-					new Beat(startTime, "J"),
-					new Beat(startTime + gap * 4, "F"),
-					new Beat(startTime + gap * 8, "K"),
-					new Beat(startTime + gap * 12, "D"),
-					new Beat(startTime + gap * 16, "J"),
+					new Beat(startTime + gap * 10, "S"),
 					new Beat(startTime + gap * 20, "D"),
-					new Beat(startTime + gap * 24, "F"),
-					new Beat(startTime + gap * 28, "K"),
-					new Beat(startTime + gap * 32, "K"),
-					new Beat(startTime + gap * 36, "J"),
+					new Beat(startTime + gap * 30, "K"),
+					new Beat(startTime + gap * 40, "L"),
+					new Beat(startTime + gap * 50, "S"),
+					new Beat(startTime + gap * 60, "D"),
+					new Beat(startTime + gap * 70, "K"),
+					new Beat(startTime + gap * 80, "L"),
+					new Beat(startTime + gap * 90, "S"),
+					new Beat(startTime + gap * 100, "D"),
+					new Beat(startTime + gap * 110, "L"),
 			};
-		} else if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Hard") && line == 6) {
-			int startTime = 6884 - Main.REACH_TIME * 1000;
+		} 
+		else if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Hard") && line == 4) {
+			int startTime = 1000 - Main.REACH_TIME * 1000;
+			int gap = 128; /* 박자 계산 */
+			beats = new Beat[] { 
+					new Beat(startTime + gap * 10, "S"),
+					new Beat(startTime + gap * 20, "D"),
+					new Beat(startTime + gap * 30, "K"),
+					new Beat(startTime + gap * 40, "L"),
+					new Beat(startTime + gap * 50, "S"),
+					new Beat(startTime + gap * 60, "D"),
+					new Beat(startTime + gap * 70, "K"),
+					new Beat(startTime + gap * 80, "L"),
+					new Beat(startTime + gap * 90, "S"),
+					new Beat(startTime + gap * 100, "D"),
+					new Beat(startTime + gap * 110, "L"),
+			};
+		}
+		else if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Easy") && line == 6) {//s d f j k l
+			int startTime = 1000 - Main.REACH_TIME * 1000;
 			int gap = 128; /* 박자 계산 */
 			beats = new Beat[] {
 					new Beat(startTime, "S"),
@@ -255,19 +274,35 @@ public class Game extends Thread {
 					new Beat(startTime + gap * 32, "K"),
 					new Beat(startTime + gap * 36, "J"),
 			};
-		} else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Easy")) {
+		}
+		else if (titleName.equals("Alien - Lee SuHyun") && difficulty.equals("Hard") && line == 6) {
+			int startTime = 1000 - Main.REACH_TIME * 1000;
+			int gap = 128; /* 박자 계산 */
+			beats = new Beat[] {
+					new Beat(startTime, "S"),
+					new Beat(startTime + gap * 4, "F"),
+					new Beat(startTime + gap * 8, "K"),
+					new Beat(startTime + gap * 12, "D"),
+					new Beat(startTime + gap * 16, "L"),
+					new Beat(startTime + gap * 20, "D"),
+					new Beat(startTime + gap * 24, "F"),
+					new Beat(startTime + gap * 28, "K"),
+					new Beat(startTime + gap * 32, "K"),
+					new Beat(startTime + gap * 36, "J"),
+			};
+		}else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Easy")) {
 			int startTime = 1000;
-			beats = new Beat[] { new Beat(startTime, "J"), };
+			beats = new Beat[] { new Beat(startTime, "S"), };
 		} else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Hard")) {
 			int startTime = 1000;
-			beats = new Beat[] { new Beat(startTime, "J"), };
+			beats = new Beat[] { new Beat(startTime, "S"), };
 		}
 		int i = 0;
 		gameMusic.start();
 		while (i < beats.length && !isInterrupted()) {
 			boolean dropped = false;
 			if (beats[i].getTime() <= gameMusic.getTime()) {
-				Note note = new Note(beats[i].getNoteName(), difficulty);
+				Note note = new Note(beats[i].getNoteName(), line);
 				note.start();
 				noteList.add(note);
 				i++;
@@ -297,8 +332,8 @@ public class Game extends Thread {
 	}
 
 	public void judgeEvent(String judge) {
-		//if (!judge.equals("None"))
-		//	blueFlareImg = new ImageIcon(Main.class.getResource("../images/blueFlare.png")).getImage();
+		if (!judge.equals("None"))
+			judgeImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
 		if (judge.equals("Miss"))
 			judgeImg = new ImageIcon(Main.class.getResource("../images/miss.png")).getImage();
 		else if (judge.equals("Good"))
