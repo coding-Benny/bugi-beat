@@ -242,12 +242,11 @@ public class WaitingRoom extends JFrame {
 							member.add(newUser);
 							userList.setListData(member);
 						}
-						if (user.equals(cm.getId()))
-							AppendText(msg);
-						else if ("SERVER".equals(cm.getId()))
-							AppendText(msg);
-						else
-							AppendText(msg);
+						AppendText(msg);
+						break;
+					case "300": // Image 첨부
+						AppendText("[" + cm.getId() + "]");
+						AppendImage(cm.img);
 						break;
 					case "800": // OldUser
 						String[] oldUserInfo = msg.split(" ");
@@ -255,6 +254,16 @@ public class WaitingRoom extends JFrame {
 						if (!oldUserName.equals(user)) {
 							member.add(oldUserName);
 							userList.setListData(member);
+						}
+						break;
+					case "900": // emoji
+						if (user.equals(cm.getId())) {
+							AppendEmoji(msg);
+						}
+						else {
+							AppendText("[" + cm.getId() + "]");
+							AppendEmoji(msg);
+							AppendText("\n");
 						}
 						break;
 					}
@@ -291,14 +300,6 @@ public class WaitingRoom extends JFrame {
 		}
 	}
 	
-	public JList<String> getUserList() {
-		return userList;
-	}
-	
-	public Vector<String> getMember() {
-		return member;
-	}
-	
 	// 화면에 출력
 	public void AppendText(String msg) {
 		msg = msg.trim(); // 앞뒤 blank와 \n을 제거한다.
@@ -306,6 +307,47 @@ public class WaitingRoom extends JFrame {
 		// 끝으로 이동
 		textArea.setCaretPosition(len);
 		textArea.replaceSelection(msg + "\n");
+	}
+	
+	public void AppendEmoji(String msg) {
+		msg = msg.trim();
+		int len = textArea.getDocument().getLength();
+		String emojiMsg = msg.split(" ")[1];
+		String emojiName = emojiMsg.substring(1, emojiMsg.length()-1);
+		ImageIcon emoji = new ImageIcon("src/emoji/" + emojiName + ".png");
+		
+		ChatMsg obcm = new ChatMsg(user, "300", "EMOJI");
+		obcm.setImg(emoji);
+		SendObject(obcm);
+	}
+	
+	public void AppendImage(ImageIcon ori_icon) {
+		int len = textArea.getDocument().getLength();
+		textArea.setCaretPosition(len); // place caret at the end (with no selection)
+		Image ori_img = ori_icon.getImage();
+		int width, height;
+		double ratio;
+		width = ori_icon.getIconWidth();
+		height = ori_icon.getIconHeight();
+		// Image가 너무 크면 최대 가로 또는 세로 200 기준으로 축소시킨다.
+		if (width > 200 || height > 200) {
+			if (width > height) { // 가로 사진
+				ratio = (double) height / width;
+				width = 200;
+				height = (int) (width * ratio);
+			} else { // 세로 사진
+				ratio = (double) width / height;
+				height = 200;
+				width = (int) (height * ratio);
+			}
+			Image new_img = ori_img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+			ImageIcon new_icon = new ImageIcon(new_img);
+			textArea.insertIcon(new_icon);
+		} else
+			textArea.insertIcon(ori_icon);
+		len = textArea.getDocument().getLength();
+		textArea.setCaretPosition(len);
+		textArea.replaceSelection("\n");
 	}
 	
 	// Windows 처럼 message 제외한 나머지 부분은 NULL 로 만들기 위한 함수
