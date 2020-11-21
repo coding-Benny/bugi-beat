@@ -75,6 +75,19 @@ public class Note extends Thread {
 	}
 
 	public void screenDraw(Graphics2D g) {
+		if (line == 6 && !Main.isFever) {
+			Game.gameScreenBg = line6_bg_Img.getImage();
+			note_Img = line6_noteImg;
+		} else if (line == 6 && Main.isFever) {
+			Game.gameScreenBg = fever_line6_bg_Img.getImage();
+			note_Img = fever_line6_noteImg;
+		} else if (line == 4 && !Main.isFever) {
+			Game.gameScreenBg = line4_bg_Img.getImage();
+			note_Img = line4_noteImg;
+		} else if (line == 4 && Main.isFever) {
+			Game.gameScreenBg = fever_line4_bg_Img.getImage();
+			note_Img = fever_line4_noteImg;
+		}
 		if (!noteType.equals("Space")) {
 			if (line == 4)
 				g.drawImage(note_Img, x, y, null);
@@ -110,20 +123,7 @@ public class Note extends Thread {
 				drop();
 				GamePanel.lifeBar.setValue(Main.life);
 				GamePanel.feverBar.setValue(Main.fever);
-				if (line == 6 && !Main.isFever) {
-					Game.gameScreenBg = line6_bg_Img.getImage();
-					note_Img = line6_noteImg;
-				} else if (line == 6 && Main.isFever) {
-					Game.gameScreenBg = fever_line6_bg_Img.getImage();
-					note_Img = fever_line6_noteImg;
-				} else if (line == 4 && !Main.isFever) {
-					Game.gameScreenBg = line4_bg_Img.getImage();
-					note_Img = line4_noteImg;
-				} else if (line == 4 && Main.isFever) {
-					Game.gameScreenBg = fever_line4_bg_Img.getImage();
-					note_Img = fever_line4_noteImg;
-				}
-
+				
 				if (Main.combo >= Main.maxCombo) // 맥스콤보 갱신
 					Main.maxCombo = Main.combo;
 				if (Main.combo != 0 && Main.combo % 10 == 0) { // 10콤보마다 life 회복
