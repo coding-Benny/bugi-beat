@@ -29,7 +29,7 @@ public class Main extends JFrame {
 	private JTextField txtPortNumber;
 
 	public static void main(String[] args) {
-		new GameRoom();
+		//new GameRoom();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
