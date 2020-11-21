@@ -15,6 +15,12 @@ public class Main extends JFrame {
 	public static final int SLEEP_TIME = 10;
 	public static final int REACH_TIME = 2; /* 노트 생성 후 판정 바에 도달하는데 걸리는 시간 */
 	public static final boolean SOUND_EFFECT = true; // 기본 on
+	public static int score = 0;
+	public static int combo = 0;
+	public static int maxCombo = 0;
+	public static int life = 10;
+	public static int fever = 0;
+	public static boolean isFever = false;
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -97,5 +103,33 @@ public class Main extends JFrame {
 			WaitingRoom waitingRoom = new WaitingRoom(username, ip_addr, port_no);
 			setVisible(false);
 		}
+	}
+	public int getScore() {
+		return score;
+	}
+	public int getMaxCombo() {
+		return maxCombo;
+	}
+	public int getLife() {
+		return life;
+	}
+	public int getFever() {
+		return fever;
+	}
+	public int setScore(int score) {
+		this.score += score;
+		return score;
+	}
+	public int setMaxCombo(int maxCombo) {
+		this.maxCombo += maxCombo;
+		return maxCombo;
+	}
+	public int setLife(int life) {
+		this.life = life;
+		return life;
+	}
+	public int setFever(int fever) {
+		this.fever = fever;
+		return fever;
 	}
 }

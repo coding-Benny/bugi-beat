@@ -7,11 +7,16 @@ import javax.swing.ImageIcon;
 
 
 public class Note extends Thread {
+	private Image note_Img;
 	private Image line6_noteImg = new ImageIcon(Main.class.getResource("../images/6line-note.png")).getImage();
 	private Image line4_noteImg = new ImageIcon(Main.class.getResource("../images/4line-note.png")).getImage();
 	private Image fever_line6_noteImg = new ImageIcon(Main.class.getResource("../images/6line-note.png")).getImage();
 	private Image fever_line4_noteImg = new ImageIcon(Main.class.getResource("../images/4line-note.png")).getImage();
-	
+	private ImageIcon line6_bg_Img = new ImageIcon(Main.class.getResource("../images/6line-bg.png"));
+	private ImageIcon fever_line6_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-6line-bg.png"));
+	private ImageIcon line4_bg_Img = new ImageIcon(Main.class.getResource("../images/4line-bg.png"));
+	private ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-4line-bg.png"));
+
 	private RoomSetting roomSetting = new RoomSetting();
 	
 	private int x, y = 560 - (1000 / Main.SLEEP_TIME * Main.NOTE_SPEED) * Main.REACH_TIME;	/* Note 생성 후 1초 뒤에 판정 라인에 다다름 */
@@ -34,7 +39,7 @@ public class Note extends Thread {
 		proceeded = false;
 	}
 	
-	public Note(String noteType, int line) {
+	public Note(String noteType, int line, Image img) {
 		if (line==4) {
 			if (noteType.equals("S")) {
 				x = 48;
@@ -71,14 +76,17 @@ public class Note extends Thread {
 		}
 		this.noteType = noteType;
 		this.line = line;
+		this.note_Img = img;
 	}
 	
 	public void screenDraw(Graphics2D g) {
 		if (!noteType.equals("Space")) {
-			if (line==4)
-				g.drawImage(line4_noteImg, x, y, null);
-			else if (line==6) {
-				g.drawImage(line6_noteImg, x, y, null);
+			if (!noteType.equals("Space")) {
+				if (line==4)
+					g.drawImage(note_Img, x, y, null);
+				else if (line==6) {
+					g.drawImage(note_Img, x, y, null);
+				}
 			}
 		}
 		else {
@@ -89,7 +97,15 @@ public class Note extends Thread {
 	public void drop() {
 		y += Main.NOTE_SPEED;
 		if (y > 560) {	/* 판정바를 지나친 경우 */
-			//System.out.println("Miss");
+			Main.combo=0;
+			Main.life--;
+			Main.isFever=false;
+			if(Main.fever>1)
+				Main.fever-= Math.ceil(Main.fever/2);
+			if(Main.life<0) //게임오버 나중에 구현
+				Main.life=0;
+				
+			System.out.println(Main.life + " " +Main.fever);
 			close();
 		}
 	}
@@ -99,6 +115,35 @@ public class Note extends Thread {
 		try {
 			while (true) {	/* 1초에 100번 실행 = 1초에 700px만큼 note가 떨어짐 */
 				drop();
+
+				if(line==6 && !Main.isFever) {
+					Game.gameScreenBg = line6_bg_Img.getImage();
+					note_Img = line6_noteImg;
+				}
+				else if(line==6 && Main.isFever) {
+					Game.gameScreenBg = fever_line6_bg_Img.getImage();
+					note_Img = fever_line6_noteImg;
+				}
+				else if(line==4 && !Main.isFever) {
+					Game.gameScreenBg = line4_bg_Img.getImage();
+					note_Img = line4_noteImg;
+				}
+				else if(line==4 && Main.isFever) {
+					Game.gameScreenBg = fever_line4_bg_Img.getImage();
+					note_Img = fever_line4_noteImg;
+				}
+				
+				if(Main.combo>=Main.maxCombo)
+					Main.maxCombo=Main.combo;
+				
+				if(Main.fever!=0 && Main.fever%10==0)
+					Main.isFever=true;
+				else if(Main.fever!=0 && Main.fever%20==0)
+					Main.isFever=false;
+				
+				GamePanel.scoreLabel.setText(Main.score+"");
+				GamePanel.maxComboLabel.setText(Main.maxCombo+"");
+				
 				if (proceeded) {
 					Thread.sleep(Main.SLEEP_TIME);
 				}
@@ -113,28 +158,38 @@ public class Note extends Thread {
 	}
 
 	public String judge() {  //500을 기준
-		if (y >= 525) {
-			//System.out.println("Good");
+		if (y >= 525) {  //Good
+			Main.score += 5;
+			Main.combo++;
+			Main.fever++;
 			close();
 			return "Good";
 		}
-		else if (y >= 510) {
-			//System.out.println("Great");
+		else if (y >= 510) {  //Great
+			Main.score += 10;
+			Main.combo++;
+			Main.fever++;
 			close();
 			return "Great";
 		}
-		else if (y >= 495) {
-			//System.out.println("Perfect");
+		else if (y >= 495) {  //Perfect
+			Main.score += 20;
+			Main.combo++;
+			Main.fever++;
 			close();
 			return "Perfect";
 		}
-		else if (y >= 480) {
-			//System.out.println("Great");
+		else if (y >= 480) {  //Great
+			Main.score += 10;
+			Main.combo++;
+			Main.fever++;
 			close();
 			return "Great";
 		}
-		else if (y >= 465) {
-			//System.out.println("Good");
+		else if (y >= 465) {  //Good
+			Main.score += 5;
+			Main.combo++;
+			Main.fever++;
 			close();
 			return "Good";
 		}

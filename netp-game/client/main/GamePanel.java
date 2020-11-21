@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.border.LineBorder;
 
 public class GamePanel extends JPanel {
 	private Image screenImage;
@@ -19,7 +20,7 @@ public class GamePanel extends JPanel {
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private RoomChat roomChatPanel = new RoomChat();
 	private Image background;
-	private Image gameScreenBg;
+	public static Image gameScreenBg;
 
 	private ImageIcon gamescreenbgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png"));
 	private ImageIcon line6_bg_Img = new ImageIcon(Main.class.getResource("../images/6line-bg.png"));
@@ -34,10 +35,15 @@ public class GamePanel extends JPanel {
 	private ImageIcon roomsetImg = new ImageIcon(Main.class.getResource("../images/roomsetting0.png"));
 	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("../images/room-bg1.png"));
 	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("../images/room2-bg1.png"));
+	private Image feverBar_bg = new ImageIcon(Main.class.getResource("../images/fever-bar-bg.png")).getImage();
 	
 	private JButton startBtn = new JButton(startBtnImg);
 	private JButton roomsetBtn = new JButton(roomsetImg);
 	private JButton quitBtn = new JButton(quitBtnImg);
+	private JProgressBar feverBar= new JProgressBar();
+	private JProgressBar lifeBar= new JProgressBar();
+	public static JLabel scoreLabel = new JLabel();
+	public static JLabel maxComboLabel = new JLabel();
 	private boolean isMainScreen = true;
 	private boolean isGameScreen = false;
 	private String musicTitle;
@@ -188,6 +194,39 @@ public class GamePanel extends JPanel {
 		});
 		add(quitBtn);
 
+		feverBar.setBackground(new Color(255, 230, 153));
+		feverBar.setForeground(new Color(255, 192, 0));
+		feverBar.setBorder(new LineBorder(new Color(255, 255, 255), 0, true));
+		feverBar.setFont(new Font("산돌수필B", Font.PLAIN, 12));
+		feverBar.setBounds(594, 21, 153, 19);
+		feverBar.setVisible(false);
+		add(feverBar);
+		
+		lifeBar.setBackground(new Color(246, 160, 160));
+		lifeBar.setForeground(new Color(234, 46, 46));
+		lifeBar.setBorder(new LineBorder(new Color(255, 255, 255), 0, true));
+		lifeBar.setFont(new Font("산돌수필B", Font.PLAIN, 12));
+		lifeBar.setBounds(594, 61, 153, 19);
+		lifeBar.setVisible(false);
+		lifeBar.setValue(Main.life);
+		lifeBar.setMaximum(10);
+		add(lifeBar);
+		
+		scoreLabel.setFont(new Font("산돌수필B", Font.PLAIN, 30));
+		scoreLabel.setForeground(Color.YELLOW);
+		scoreLabel.setText(Main.score+"");
+		scoreLabel.setBounds(130, 43, 100, 40);
+		scoreLabel.setVisible(false);
+		scoreLabel.setFocusable(false);
+		add(scoreLabel);
+		
+		maxComboLabel.setFont(new Font("산돌수필B", Font.PLAIN, 28));
+		maxComboLabel.setForeground(Color.ORANGE);
+		maxComboLabel.setText(Main.maxCombo+"");
+		maxComboLabel.setBounds(170, 75, 100, 35);
+		maxComboLabel.setVisible(false);
+		maxComboLabel.setFocusable(false);
+		add(maxComboLabel);
 	}
 
 	public void gameStart(int nowSelected, String difficulty) {
@@ -203,10 +242,14 @@ public class GamePanel extends JPanel {
 		startBtn.setVisible(false);
 		roomsetBtn.setVisible(false);
 		roomSetPanel.setVisible(false);
+		feverBar.setVisible(true);
+		lifeBar.setVisible(true);
+		scoreLabel.setVisible(true);
+		maxComboLabel.setVisible(true);
 		
 		if(roomSetPanel.getLine()==6)
 			gameScreenBg = line6_bg_Img.getImage();
-		if(roomSetPanel.getLine()==4)
+		else if(roomSetPanel.getLine()==4)
 			gameScreenBg = line4_bg_Img.getImage();
 		standbyMusic.close();
 		
