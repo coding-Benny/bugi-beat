@@ -1,5 +1,3 @@
-
-
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
@@ -9,19 +7,19 @@ public class AnteRoom extends JFrame {
 
 	private Image background;
 	
-	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("../images/anteroom1-bg.png"));
-	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("../images/anteroom2-bg.png"));
-	
+	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("/images/anteroom1-bg.png"));
+	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("/images/anteroom2-bg.png"));
+
 	private RoomSetting roomSetPanel = new RoomSetting();
 	
-	public void paint(Graphics g) {
+	public void paint(Graphics g) {//그리는 함수
 		g.drawImage(background, 0, 0, null);
 		
 		paintComponents(g);
 	}
 	
 	public AnteRoom() {
-		super("게임 방");
+		super("대기실");
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);

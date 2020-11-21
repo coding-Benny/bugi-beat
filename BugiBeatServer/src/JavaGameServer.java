@@ -136,7 +136,7 @@ public class JavaGameServer extends JFrame {
 
 	public void AppendObject(ChatMsg msg) {
 		textArea.append("code = " + msg.code + "\n");
-		textArea.append("id = " + msg.UserName + "\n");
+		textArea.append("id = " + msg.id + "\n");
 		textArea.append("data = " + msg.data + "\n");
 		textArea.setCaretPosition(textArea.getText().length());
 	}
@@ -305,11 +305,11 @@ public class JavaGameServer extends JFrame {
 					} else
 						continue;
 					if (cm.code.matches("100")) {
-						UserName = cm.UserName;
+						UserName = cm.id;
 						UserStatus = "O"; // Online 상태
 						Login();
 					} else if (cm.code.matches("200")) {
-						msg = String.format("[%s] %s", cm.UserName, cm.data);
+						msg = String.format("[%s] %s", cm.id, cm.data);
 						AppendText(msg); // server 화면에 출력
 						String[] args = msg.split(" "); // 단어들을 분리한다.
 						if (args.length == 1) { // Enter key 만 들어온 경우 Wakeup 처리만 한다.

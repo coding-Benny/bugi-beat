@@ -1,5 +1,4 @@
 
-
 public class Beat {
 	private int time;
 	private String noteName;

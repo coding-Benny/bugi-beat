@@ -1,5 +1,4 @@
 
-
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,27 +17,20 @@ public class MonitorPanel extends JPanel {
 	
 	private RoomSetting roomSetPanel = new RoomSetting();
 	
-	public void paintComponent(Graphics g) {  // 컴포넌트 본인만 paint
+	public void paint(Graphics g) {  //컴포넌트 본인만 paint
 		screenImage = createImage(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
 		screenGraphic = screenImage.getGraphics();
 		screenDraw((Graphics2D) screenGraphic);
 		g.drawImage(screenImage, 0, 0, null);
 	}
 	
+	
 	public void screenDraw(Graphics2D g) {
 		g.drawImage(background, 0, 0, null);
-		setOpaque(false); 
-		/*
-		if(isMainScreen)
-		{
-			g.drawImage(selectedImage, 340, 100, null);
-			g.drawImage(titleImage, 340, 70, null);
-		}
-		if(isGameScreen)
-		{
-			game.screenDraw(g);
-		}
-		*/
+		setOpaque(false);
+		
+		g.drawImage(screenImage, 0, 0, null);
+		this.repaint();
 		paintComponents(g);
 	}
 	

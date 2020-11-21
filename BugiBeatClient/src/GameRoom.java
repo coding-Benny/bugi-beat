@@ -1,5 +1,4 @@
 
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
@@ -11,11 +10,6 @@ import java.util.Set;
 import javax.swing.*;
 
 public class GameRoom extends JFrame {
-	private Image screenImage;
-	private Graphics screenGraphic;
-
-	private Image background;
-
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("/images/bar.png")));
 	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/exit1.png"));
 	private ImageIcon exitBtnImg = new ImageIcon(Main.class.getResource("/images/exit0.png"));
@@ -34,8 +28,7 @@ public class GameRoom extends JFrame {
 		setShape(new RoundRectangle2D.Double(0, 0, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, 40, 40));
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setVisible(true);
-		getContentPane().setLayout(null);;
+		setLayout(null);;
 		
 		menuBar.setBounds(0, 0, 1220, 30);
 		menuBar.addMouseListener(new MouseAdapter() {
@@ -53,7 +46,7 @@ public class GameRoom extends JFrame {
 				setLocation(x - mouseX, y - mouseY);	
 			}
 		});
-		getContentPane().add(menuBar);
+		add(menuBar);
 
 
 		exitBtn.setBounds(1238, 12, 30, 27);
@@ -84,20 +77,22 @@ public class GameRoom extends JFrame {
 					btnPressedMusic.start();
 				}
 				try {
-					Thread.sleep(500);	// 효과음이 정상적으로 나타날 수 있도록 sleep
+					Thread.sleep(500);	//효과음이 정상적으로 나타날 수 있도록 sleep
 				} catch (InterruptedException ex) {
 					ex.printStackTrace();
 				}
 				System.exit(0);
 			}
 		});
-		getContentPane().add(exitBtn);
+		add(exitBtn);
 		
-		gamePanel.setBounds(0, 0, 800, 720);
-		getContentPane().add(gamePanel);
+		gamePanel.setBounds(0, 0, 800, 720); // 가로위치, 세로위치, 가로길이, 세로길이
+		add(gamePanel);
 		
 		monitorPanel.setBounds(800, 0, 480, 720);
-		getContentPane().add(monitorPanel);
+		add(monitorPanel);
+		
+		setVisible(true);
 
 	}
 }

@@ -1,5 +1,4 @@
 
-
 import java.awt.Graphics2D;
 import java.awt.Image;
 
@@ -7,12 +6,10 @@ import javax.swing.ImageIcon;
 
 
 public class Note extends Thread {
-	private Image line6_noteImg = new ImageIcon(Main.class.getResource("../images/6line-note.png")).getImage();
-	private Image line4_noteImg = new ImageIcon(Main.class.getResource("../images/4line-note.png")).getImage();
-	private Image fever_line6_noteImg = new ImageIcon(Main.class.getResource("../images/6line-note.png")).getImage();
-	private Image fever_line4_noteImg = new ImageIcon(Main.class.getResource("../images/4line-note.png")).getImage();
-	
-	private RoomSetting roomSetting = new RoomSetting();
+	private Image line6_noteImg = new ImageIcon(Main.class.getResource("/images/6line-note.png")).getImage();
+	private Image line4_noteImg = new ImageIcon(Main.class.getResource("/images/4line-note.png")).getImage();
+	private Image fever_line6_noteImg = new ImageIcon(Main.class.getResource("/images/6line-note.png")).getImage();
+	private Image fever_line4_noteImg = new ImageIcon(Main.class.getResource("/images/4line-note.png")).getImage();
 	
 	private int x, y = 500 - (1000 / Main.SLEEP_TIME * Main.NOTE_SPEED) * Main.REACH_TIME;	/* Note 생성 후 1초 뒤에 판정 라인에 다다름 */
 	private String noteType;

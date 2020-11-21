@@ -1,5 +1,4 @@
 
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -23,6 +22,7 @@ public class Game extends Thread {
 	private Image fever_line4_Pressed = new ImageIcon(Main.class.getResource("/images/fever-4line-p.png")).getImage();
 	private Image line6_Pressed = new ImageIcon(Main.class.getResource("/images/6line-p.png")).getImage();
 	private Image fever_line6_Pressed = new ImageIcon(Main.class.getResource("/images/fever-6line-p.png")).getImage();
+	private Image blueFlareImg;
 	private Image linePressedImg;
 	private Image judgeImg;
 
@@ -67,7 +67,6 @@ public class Game extends Thread {
 				}
 			}
 			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 24));
 			g.setColor(Color.WHITE);
 			g.drawString(titleName, 40, 38);
@@ -80,21 +79,19 @@ public class Game extends Thread {
 
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 			g.setColor(Color.WHITE);
-			g.drawString("S", 106, 540);
-			g.drawString("D", 217, 540);
-			g.drawString("F", 336, 540);
-			g.drawString("J", 451, 540);
-			g.drawString("K", 566, 540);
-			g.drawString("L", 682, 540);
-			
-			g.drawImage(judgeImg, 190, 270, null);
+			g.drawString("S", 110, 536);
+			g.drawString("D", 225, 536);
+			g.drawString("F", 340, 536);
+			g.drawString("J", 455, 536);
+			g.drawString("K", 570, 536);
+			g.drawString("L", 690, 536);
 		}
 		
 		else if (line == 4) {
-			g.drawImage(noteRouteDImg, 48, 80, null);
-			g.drawImage(noteRouteFImg, 221, 80, null);
-			g.drawImage(noteRouteJImg, 392, 80, null);
-			g.drawImage(noteRouteKImg, 566, 80, null);
+			g.drawImage(noteRouteSImg, 48, 80, null);
+			g.drawImage(noteRouteDImg, 221, 80, null);
+			g.drawImage(noteRouteKImg, 392, 80, null);
+			g.drawImage(noteRouteLImg, 566, 80, null);
 			
 			for (int i = 0; i < noteList.size(); i++) {
 				Note note = noteList.get(i);
@@ -120,12 +117,12 @@ public class Game extends Thread {
 
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 			g.setColor(Color.WHITE);
-			g.drawString("D", 136, 540);
-			g.drawString("F", 309, 540);
-			g.drawString("J", 479, 540);
-			g.drawString("K", 656, 540);
+			g.drawString("S", 140, 536);
+			g.drawString("D", 315, 536);
+			g.drawString("K", 485, 536);
+			g.drawString("L", 660, 536);
 		}
-		g.drawImage(judgeImg, 190, 270, null);
+		g.drawImage(judgeImg, 220, 250, null);
 	}
 
 	public Image setPressNoteRoute() {
@@ -293,8 +290,8 @@ public class Game extends Thread {
 	}
 
 	public void judgeEvent(String judge) {
-		/* if (!judge.equals("None"))
-			// blueFlareImg 설정 */
+		//if (!judge.equals("None"))
+		//	blueFlareImg = new ImageIcon(Main.class.getResource("../images/blueFlare.png")).getImage();
 		if (judge.equals("Miss"))
 			judgeImg = new ImageIcon(Main.class.getResource("/images/miss.png")).getImage();
 		else if (judge.equals("Good"))
