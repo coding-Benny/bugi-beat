@@ -1,6 +1,4 @@
 import java.awt.Cursor;
-import java.awt.FileDialog;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -37,8 +35,6 @@ public class WaitingRoom extends JFrame {
 	private String user;
 
 	private Image background;
-	private Image screenImage;
-	private Graphics screenGraphic;
 	
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("/images/bar.png")));
 	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/exit1.png"));
@@ -59,8 +55,8 @@ public class WaitingRoom extends JFrame {
 	private JButton gameSetBtn;
 	private JButton createRoomBtn;
 	
-	static JList<String> userList = new JList<String>();
-	static Vector<String> member = new Vector<String>();
+	private JList<String> userList = new JList<String>();
+	public static Vector<String> member = new Vector<String>();
 
 	private int mouseX, mouseY;
 	
@@ -253,6 +249,14 @@ public class WaitingRoom extends JFrame {
 						else
 							AppendText(msg);
 						break;
+					case "800": // OldUser
+						String[] oldUserInfo = msg.split(" ");
+						String oldUserName = oldUserInfo[2];
+						if (!oldUserName.equals(user)) {
+							member.add(oldUserName);
+							userList.setListData(member);
+						}
+						break;
 					}
 				} catch (IOException e) {
 					AppendText("ois.readObject() error");
@@ -286,7 +290,15 @@ public class WaitingRoom extends JFrame {
 			}
 		}
 	}
-
+	
+	public JList<String> getUserList() {
+		return userList;
+	}
+	
+	public Vector<String> getMember() {
+		return member;
+	}
+	
 	// 화면에 출력
 	public void AppendText(String msg) {
 		msg = msg.trim(); // 앞뒤 blank와 \n을 제거한다.

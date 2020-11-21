@@ -307,6 +307,11 @@ public class JavaGameServer extends JFrame {
 					if (cm.code.matches("100")) {
 						UserName = cm.id;
 						UserStatus = "O"; // Online 상태
+						for(int i=0; i < UserVec.size(); i++) {
+							UserService user = (UserService) UserVec.elementAt(i);
+							obcm = new ChatMsg("기존 접속자", "800", user.UserName);
+							oos.writeObject(obcm);
+						}
 						Login();
 					} else if (cm.code.matches("200")) {
 						msg = String.format("[%s] %s", cm.id, cm.data);
