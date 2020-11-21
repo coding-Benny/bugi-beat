@@ -197,7 +197,6 @@ public class GamePanel extends JPanel {
 		feverBar.setBackground(new Color(255, 230, 153));
 		feverBar.setForeground(new Color(255, 192, 0));
 		feverBar.setBorder(new LineBorder(new Color(255, 255, 255), 0, true));
-		feverBar.setFont(new Font("산돌수필B", Font.PLAIN, 12));
 		feverBar.setBounds(594, 21, 153, 19);
 		feverBar.setVisible(false);
 		feverBar.setValue(Main.fever);
@@ -207,7 +206,6 @@ public class GamePanel extends JPanel {
 		lifeBar.setBackground(new Color(246, 160, 160));
 		lifeBar.setForeground(new Color(234, 46, 46));
 		lifeBar.setBorder(new LineBorder(new Color(255, 255, 255), 0, true));
-		lifeBar.setFont(new Font("산돌수필B", Font.PLAIN, 12));
 		lifeBar.setBounds(594, 61, 153, 19);
 		lifeBar.setVisible(false);
 		lifeBar.setValue(Main.life);

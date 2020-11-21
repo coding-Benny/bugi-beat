@@ -11,7 +11,8 @@ import javax.swing.ImageIcon;
 
 public class Game extends Thread {
 	private Image judgementLineImg = new ImageIcon(Main.class.getResource("../images/judgement-line.png")).getImage();
-	private Image fever_judgementLineImg = new ImageIcon(Main.class.getResource("../images/fever-judgement-line.png")).getImage();
+	private Image fever_judgementLineImg = new ImageIcon(Main.class.getResource("../images/fever-judgement-line.png"))
+			.getImage();
 	private Image noteRouteSImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
 	private Image noteRouteDImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
 	private Image noteRouteFImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
@@ -32,7 +33,7 @@ public class Game extends Thread {
 	public static Image gameScreenBg;
 	private Image linePressedImg;
 	private Image judgeImg;
-	
+
 	private String titleName;
 	private String difficulty;
 	private String musicTitle;
@@ -53,11 +54,11 @@ public class Game extends Thread {
 		g.drawImage(gameScreenBg, 12, 100, null);
 		g.drawImage(feverBar_bg, 570, 10, null);
 		g.drawImage(lifeBar_bg, 570, 50, null);
-		if(!Main.isFever)
+		if (!Main.isFever)
 			g.drawImage(judgementLineImg, 11, 500, null);
 		else
 			g.drawImage(fever_judgementLineImg, 11, 500, null);
-		
+
 		if (line == 6) {
 			g.drawImage(noteRouteSImg, 45, 80, null);
 			g.drawImage(noteRouteDImg, 160, 80, null);
@@ -97,9 +98,6 @@ public class Game extends Thread {
 			g.drawString("J", 455, 536);
 			g.drawString("K", 570, 536);
 			g.drawString("L", 690, 536);
-
-			// g.drawImage(blueFlareImg, 150, 200, null);
-			// g.drawImage(judgeImg, 220, 250, null);
 		}
 
 		else if (line == 4) {
@@ -136,11 +134,11 @@ public class Game extends Thread {
 			g.drawString("D", 315, 536);
 			g.drawString("K", 485, 536);
 			g.drawString("L", 660, 536);
-
-			// g.drawImage(blueFlareImg, 150, 200, null);
-			// g.drawImage(judgeImg, 220, 250, null);
 		}
 		if (Main.combo != 0) {
+			g.setFont(new Font("산돌수필B", Font.PLAIN, 80));
+			g.setColor(Color.BLACK);
+			g.drawString(Main.combo + "", 380, 402);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 70));
 			g.setColor(Color.WHITE);
 			g.drawString(Main.combo + "", 380, 400);
@@ -244,6 +242,15 @@ public class Game extends Thread {
 		if (titleName.equals("미행 - f(x)") && difficulty.equals("Easy") && line == 4) { // s d k l
 			int startTime = 0; // 1000 - Main.REACH_TIME * 1000;
 			int gap = 114; /* 박자 계산 */
+			if (line == 6 && !Main.isFever) {
+				note_Img = line6_noteImg;
+			} else if (line == 6 && Main.isFever) {
+				note_Img = fever_line6_noteImg;
+			} else if (line == 4 && !Main.isFever) {
+				note_Img = line4_noteImg;
+			} else if (line == 4 && Main.isFever) {
+				note_Img = fever_line4_noteImg;
+			}
 			beats = new Beat[] { new Beat(startTime + gap * 12, "L"), new Beat(startTime + gap * 13, "K"),
 					new Beat(startTime + gap * 15, "D"), new Beat(startTime + gap * 25, "S"),
 					new Beat(startTime + gap * 27, "D"), new Beat(startTime + gap * 29, "K"),
@@ -331,18 +338,7 @@ public class Game extends Thread {
 		int i = 0;
 		gameMusic.start();
 		while (i < beats.length && !isInterrupted()) {
-			if(line==6 && !Main.isFever) {
-				note_Img = line6_noteImg;
-			}
-			else if(line==6 && Main.isFever) {
-				note_Img = fever_line6_noteImg;
-			}
-			else if(line==4 && !Main.isFever) {
-				note_Img = line4_noteImg;
-			}
-			else if(line==4 && Main.isFever) {
-				note_Img = fever_line4_noteImg;
-			}
+			//
 			boolean dropped = false;
 			if (beats[i].getTime() <= gameMusic.getTime()) {
 				Note note = new Note(beats[i].getNoteName(), line, note_Img);
@@ -371,6 +367,7 @@ public class Game extends Thread {
 				judgeEvent(note.judge());
 				break;
 			}
+			// note.getNoteImg()
 		}
 	}
 
