@@ -101,7 +101,10 @@ public class Note extends Thread {
 			Main.life--;
 			Main.isFever=false;
 			if(Main.fever>1)
-				Main.fever-= Math.ceil(Main.fever/2);
+				Main.fever -= 5;
+			else
+				Main.fever = 0;
+			
 			if(Main.life<0) //게임오버 나중에 구현
 				Main.life=0;
 				
@@ -115,7 +118,8 @@ public class Note extends Thread {
 		try {
 			while (true) {	/* 1초에 100번 실행 = 1초에 700px만큼 note가 떨어짐 */
 				drop();
-
+				GamePanel.lifeBar.setValue(Main.life);
+				GamePanel.feverBar.setValue(Main.fever);
 				if(line==6 && !Main.isFever) {
 					Game.gameScreenBg = line6_bg_Img.getImage();
 					note_Img = line6_noteImg;
@@ -133,13 +137,16 @@ public class Note extends Thread {
 					note_Img = fever_line4_noteImg;
 				}
 				
-				if(Main.combo>=Main.maxCombo)
+				if(Main.combo>=Main.maxCombo)  //맥스콤보 갱신
 					Main.maxCombo=Main.combo;
-				
-				if(Main.fever!=0 && Main.fever%10==0)
+				if(Main.combo!=0 && Main.combo%10==0)  //10콤보시 life 회복
+					Main.life++;
+				if(Main.fever!=0 && Main.fever%10==0)  //10배수마다 피버타임 on
 					Main.isFever=true;
-				else if(Main.fever!=0 && Main.fever%20==0)
+				else if(Main.fever!=0 && Main.fever%20==0) {  //20배수에 피버타임 off
 					Main.isFever=false;
+					Main.fever=0;
+				}
 				
 				GamePanel.scoreLabel.setText(Main.score+"");
 				GamePanel.maxComboLabel.setText(Main.maxCombo+"");
@@ -159,35 +166,50 @@ public class Note extends Thread {
 
 	public String judge() {  //500을 기준
 		if (y >= 525) {  //Good
-			Main.score += 5;
+			if(!Main.isFever)
+				Main.score += 5;
+			else
+				Main.score += 10;
 			Main.combo++;
 			Main.fever++;
 			close();
 			return "Good";
 		}
 		else if (y >= 510) {  //Great
-			Main.score += 10;
+			if(!Main.isFever)
+				Main.score += 10;
+			else
+				Main.score += 20;
 			Main.combo++;
 			Main.fever++;
 			close();
 			return "Great";
 		}
 		else if (y >= 495) {  //Perfect
-			Main.score += 20;
+			if(!Main.isFever)
+				Main.score += 20;
+			else
+				Main.score += 40;
 			Main.combo++;
 			Main.fever++;
 			close();
 			return "Perfect";
 		}
 		else if (y >= 480) {  //Great
-			Main.score += 10;
+			if(!Main.isFever)
+				Main.score += 10;
+			else
+				Main.score += 20;
 			Main.combo++;
 			Main.fever++;
 			close();
 			return "Great";
 		}
 		else if (y >= 465) {  //Good
-			Main.score += 5;
+			if(!Main.isFever)
+				Main.score += 5;
+			else
+				Main.score += 10;
 			Main.combo++;
 			Main.fever++;
 			close();

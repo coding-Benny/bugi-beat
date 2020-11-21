@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 
 public class Game extends Thread {
 	private Image judgementLineImg = new ImageIcon(Main.class.getResource("../images/judgement-line.png")).getImage();
+	private Image fever_judgementLineImg = new ImageIcon(Main.class.getResource("../images/fever-judgement-line.png")).getImage();
 	private Image noteRouteSImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
 	private Image noteRouteDImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
 	private Image noteRouteFImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
@@ -52,7 +53,11 @@ public class Game extends Thread {
 		g.drawImage(gameScreenBg, 12, 100, null);
 		g.drawImage(feverBar_bg, 570, 10, null);
 		g.drawImage(lifeBar_bg, 570, 50, null);
-		g.drawImage(judgementLineImg, 11, 500, null);
+		if(!Main.isFever)
+			g.drawImage(judgementLineImg, 11, 500, null);
+		else
+			g.drawImage(fever_judgementLineImg, 11, 500, null);
+		
 		if (line == 6) {
 			g.drawImage(noteRouteSImg, 45, 80, null);
 			g.drawImage(noteRouteDImg, 160, 80, null);

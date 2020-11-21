@@ -40,8 +40,8 @@ public class GamePanel extends JPanel {
 	private JButton startBtn = new JButton(startBtnImg);
 	private JButton roomsetBtn = new JButton(roomsetImg);
 	private JButton quitBtn = new JButton(quitBtnImg);
-	private JProgressBar feverBar= new JProgressBar();
-	private JProgressBar lifeBar= new JProgressBar();
+	public static JProgressBar feverBar= new JProgressBar();
+	public static JProgressBar lifeBar= new JProgressBar();
 	public static JLabel scoreLabel = new JLabel();
 	public static JLabel maxComboLabel = new JLabel();
 	private boolean isMainScreen = true;
@@ -200,6 +200,8 @@ public class GamePanel extends JPanel {
 		feverBar.setFont(new Font("산돌수필B", Font.PLAIN, 12));
 		feverBar.setBounds(594, 21, 153, 19);
 		feverBar.setVisible(false);
+		feverBar.setValue(Main.fever);
+		feverBar.setMaximum(10);
 		add(feverBar);
 		
 		lifeBar.setBackground(new Color(246, 160, 160));
