@@ -89,7 +89,7 @@ public class Note extends Thread {
 	public void drop() {
 		y += Main.NOTE_SPEED;
 		if (y > 560) {	/* 판정바를 지나친 경우 */
-			System.out.println("Miss");
+			//System.out.println("Miss");
 			close();
 		}
 	}
@@ -114,27 +114,27 @@ public class Note extends Thread {
 
 	public String judge() {  //500을 기준
 		if (y >= 525) {
-			System.out.println("Good");
+			//System.out.println("Good");
 			close();
 			return "Good";
 		}
 		else if (y >= 510) {
-			System.out.println("Great");
+			//System.out.println("Great");
 			close();
 			return "Great";
 		}
 		else if (y >= 495) {
-			System.out.println("Perfect");
+			//System.out.println("Perfect");
 			close();
 			return "Perfect";
 		}
 		else if (y >= 480) {
-			System.out.println("Great");
+			//System.out.println("Great");
 			close();
 			return "Great";
 		}
 		else if (y >= 465) {
-			System.out.println("Good");
+			//System.out.println("Good");
 			close();
 			return "Good";
 		}
