@@ -79,10 +79,7 @@ public class GamePanel extends JPanel {
 	public GamePanel() {
 		setSize(800, 720);
 		setLayout(null);
-		if(roomSetPanel.getBgSet() == 1)
-			background = bg1Img.getImage();
-		else
-			background = bg2Img.getImage();
+		setGamePanelBg();
 		gameScreenBg = gamescreenbgImg.getImage();
 		
 		standbyMusic.start();
@@ -260,5 +257,12 @@ public class GamePanel extends JPanel {
 		game = new Game(musicTitle, difficulty, roomSetPanel.getTrackList().get(nowSelected).getGameMusic(), roomSetPanel.getLine());
 		game.start();
 		setFocusable(true);
+	}
+	
+	public void setGamePanelBg() {
+		if(roomSetPanel.getBgSet() == 1)
+			background = bg1Img.getImage();
+		else
+			background = bg2Img.getImage();
 	}
 }
