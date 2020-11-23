@@ -12,7 +12,6 @@ public class RankingPanel extends JPanel {
 	}
 	public RankingPanel() {
 		setSize(450, 335);
-		setOpaque(true);
 		setLayout(null);
 	}
 }

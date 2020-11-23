@@ -12,7 +12,6 @@ public class RoomListPanel extends JPanel {
 	}
 	public RoomListPanel() {
 		setSize(390, 615);
-		setOpaque(true);
 		setLayout(null);
 	}
 }

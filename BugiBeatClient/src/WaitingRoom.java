@@ -1,5 +1,6 @@
+
+import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +24,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 
 public class WaitingRoom extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -35,13 +40,12 @@ public class WaitingRoom extends JFrame {
 	private String user;
 
 	private Image background;
-	
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("/images/bar.png")));
 	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/exit1.png"));
 	private ImageIcon exitBtnImg = new ImageIcon(Main.class.getResource("/images/exit0.png"));
 	private Image bg1Img = new ImageIcon(Main.class.getResource("/images/anteroom1-bg.png")).getImage();
 	private Image bg2Img = new ImageIcon(Main.class.getResource("/images/anteroom2-bg.png")).getImage();
-	
+
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private JPanel userListPanel = new UserListPanel();
 	private JPanel roomListPanel = new RoomListPanel();
@@ -97,6 +101,31 @@ public class WaitingRoom extends JFrame {
 		
 		createRoomBtn = new JButton("방생성");
 		createRoomBtn.setBounds(1010, 70, 160, 56);
+		createRoomBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// createRoomBtn.setIcon(createRoomEnteredImg);  //이미지 만들면 수정
+				createRoomBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				if (Main.SOUND_EFFECT) {
+					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+					btnEnteredMusic.start();
+				}
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// createRoomBtn.setIcon(gamesetImg);
+				createRoomBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (Main.SOUND_EFFECT) {
+					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+					btnPressedMusic.start();
+					// 방 설정 다이얼로그 띄우기
+					new GameRoom();
+				}
+			}
+		});
 		add(createRoomBtn);
 		
 		gameSetBtn = new JButton("게임설정");
@@ -106,10 +135,10 @@ public class WaitingRoom extends JFrame {
 			public void mouseEntered(MouseEvent e) {
 				//gameSetBtn.setIcon(gamesetEnteredImg);  //이미지 만들면 수정
 				gameSetBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-					if (Main.SOUND_EFFECT) {
-						Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
-						btnEnteredMusic.start();
-					}
+				if (Main.SOUND_EFFECT) {
+					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+					btnEnteredMusic.start();
+				}
 			}
 
 			@Override
@@ -120,11 +149,11 @@ public class WaitingRoom extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-					if (Main.SOUND_EFFECT) {
-						Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
-						btnPressedMusic.start();
-						//gameSetPanel.setVisible(true);  //나중에 추가
-					}
+				if (Main.SOUND_EFFECT) {
+					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+					btnPressedMusic.start();
+					//gameSetPanel.setVisible(true);  //나중에 추가
+				}
 			}
 		});
 		add(gameSetBtn);
@@ -242,11 +271,19 @@ public class WaitingRoom extends JFrame {
 							member.add(newUser);
 							userList.setListData(member);
 						}
-						AppendText(msg);
+						if (user.equals(cm.getId())) {
+							AppendMyText(msg);
+						}
+						else {
+							AppendText(msg);
+						}
 						break;
 					case "300": // Image 첨부
 						AppendText("[" + cm.getId() + "]");
 						AppendImage(cm.img);
+						break;
+					case "400":	// 로그아웃
+						// 접속자 명단에서 지우기 구현 예정
 						break;
 					case "800": // OldUser
 						String[] oldUserInfo = msg.split(" ");
@@ -303,9 +340,25 @@ public class WaitingRoom extends JFrame {
 	// 화면에 출력
 	public void AppendText(String msg) {
 		msg = msg.trim(); // 앞뒤 blank와 \n을 제거한다.
+		StyleContext sc = StyleContext.getDefaultStyleContext();
+		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.BLACK);
+		
 		int len = textArea.getDocument().getLength();
 		// 끝으로 이동
 		textArea.setCaretPosition(len);
+		textArea.setCharacterAttributes(aset, false);
+		textArea.replaceSelection(msg + "\n");
+	}
+	
+	public void AppendMyText(String msg) {
+		msg = msg.trim(); // 앞뒤 blank와 \n을 제거한다.
+		StyleContext sc = StyleContext.getDefaultStyleContext();
+		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.RED);
+		
+		int len = textArea.getDocument().getLength();
+		// 끝으로 이동
+		textArea.setCaretPosition(len);
+		textArea.setCharacterAttributes(aset, false);
 		textArea.replaceSelection(msg + "\n");
 	}
 	
@@ -314,7 +367,7 @@ public class WaitingRoom extends JFrame {
 		int len = textArea.getDocument().getLength();
 		String emojiMsg = msg.split(" ")[1];
 		String emojiName = emojiMsg.substring(1, emojiMsg.length()-1);
-		ImageIcon emoji = new ImageIcon("src/emoji/" + emojiName + ".png");
+		ImageIcon emoji = new ImageIcon("/emoji/" + emojiName + ".png");
 		
 		ChatMsg obcm = new ChatMsg(user, "300", "EMOJI");
 		obcm.setImg(emoji);

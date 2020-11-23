@@ -11,6 +11,7 @@ import javax.swing.*;
 public class RoomSetting extends JPanel {
 
 	private Image background;
+	private Image bgImg = new ImageIcon(Main.class.getResource("/images/game-bg0.png")).getImage();
 	private ImageIcon leftBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/leftBtn0.png"));
 	private ImageIcon leftBtnImg = new ImageIcon(Main.class.getResource("/images/leftBtn1.png"));
 	private ImageIcon rightBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/rightBtn0.png"));
@@ -21,26 +22,30 @@ public class RoomSetting extends JPanel {
 	private ImageIcon hardBtnImg = new ImageIcon(Main.class.getResource("/images/hardBtn.png"));
 	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/quitBtnEntered.png"));
 	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("/images/quitBtn.png"));
-	private ImageIcon bgImg = new ImageIcon(Main.class.getResource("/images/game-bg0.png"));
+	private ImageIcon setbg11Img = new ImageIcon(Main.class.getResource("/images/roomset_bg1-1.png"));
+	private ImageIcon setbg12Img = new ImageIcon(Main.class.getResource("/images/roomset_bg1-2.png"));
+	private ImageIcon setbg21Img = new ImageIcon(Main.class.getResource("/images/roomset_bg2-1.png"));
+	private ImageIcon setbg22Img = new ImageIcon(Main.class.getResource("/images/roomset_bg2-2.png"));
 	
-	private JButton leftBtn = new JButton(leftBtnImg);
-	private JButton rightBtn = new JButton(rightBtnImg);
 	private JButton easyBtn;
 	private JButton hardBtn;
+	private JButton leftBtn = new JButton(leftBtnImg);
+	private JButton rightBtn = new JButton(rightBtnImg);
 	private JButton quitBtn = new JButton(quitBtnImg);
+	private JButton setBg1Btn= new JButton(setbg11Img);
+	private JButton setBg2Btn= new JButton(setbg21Img);
 
-	private static ArrayList<Track> trackList = new ArrayList<Track>();
+	private ArrayList<Track> trackList = new ArrayList<Track>();
 	
 	private String difficulty = "Easy";
 	private Music selectedMusic;
 	private Image selectedImg;
-	public int nowSelected = 0;
-	public int line = 4;	// 기본(easy) 칸 수 
-	public int bgSet = 2;	// 배경 이미지 번호
+	private int nowSelected = 0;
+	private int line = 4;	// 기본(easy) 칸 수 
+	private int bgSet = 2;	// 배경 이미지 번호
 	
 	public void paint(Graphics g) { //그리는 함수
 		g.drawImage(background, 0, 0, null);
-		
 		g.drawImage(selectedImg, 70, 40, null);
 		paintComponents(g);
 	}
@@ -48,13 +53,14 @@ public class RoomSetting extends JPanel {
 	public RoomSetting() {
 		setSize(780, 442);
 		setLayout(null);
-		background = bgImg.getImage();
+		background = bgImg;
 
 		trackList.add(new Track("onion-start-image.png", "onion-highlight.mp3", "Onion.mp3", "Onion - Lukrembo"));
 		trackList.add(new Track("alien-start-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3", "Alien - Lee SuHyun"));
+		trackList.add(new Track("shadow-start-image.png", "shadow - f(x).mp3", "shadow - f(x).mp3", "미행 - f(x)"));
 
 		selectedImg = new ImageIcon(Main.class.getResource("/images/" + trackList.get(0).getStartImage())).getImage();
-
+		
 		rightBtn.setBounds(500, 100, 45, 75);
 		rightBtn.setBorderPainted(false);
 		rightBtn.setContentAreaFilled(false);
@@ -121,7 +127,6 @@ public class RoomSetting extends JPanel {
 			hardBtn = new JButton(hardBtnImg);
 		}
 		
-		//easyBtn.setVisible(false);
 		easyBtn.setBounds(110, 340, 150, 66);
 		easyBtn.setBorderPainted(false);
 		easyBtn.setContentAreaFilled(false);
@@ -150,7 +155,6 @@ public class RoomSetting extends JPanel {
 		});
 		add(easyBtn);
 		
-		//hardBtn.setVisible(false);
 		hardBtn.setBounds(305, 340, 150, 66);
 		hardBtn.setBorderPainted(false);
 		hardBtn.setContentAreaFilled(false);
@@ -179,7 +183,6 @@ public class RoomSetting extends JPanel {
 		});
 		add(hardBtn);
 		
-		//quitBtn.setVisible(false);
 		quitBtn.setBounds(678, 10, 90, 66);
 		quitBtn.setBorderPainted(false);
 		quitBtn.setContentAreaFilled(false);
@@ -208,18 +211,89 @@ public class RoomSetting extends JPanel {
 					btnPressedMusic.start();
 					setVisible(false);
 				}
+				// standbyMusic 볼륨 키우는 코드 추가 예정
+				if (selectedMusic != null)
+					selectedMusic.close();
 			}
 		});
 		add(quitBtn);
 		
+		if(bgSet==1) {
+			setBg1Btn.setIcon(setbg12Img);
+			setBg2Btn.setIcon(setbg21Img);
+		}
+		else {
+			setBg1Btn.setIcon(setbg11Img);
+			setBg2Btn.setIcon(setbg22Img);
+		}
+		
+		setBg1Btn.setBounds(556, 86, 192, 167);
+		setBg1Btn.setBorderPainted(false);
+		setBg1Btn.setContentAreaFilled(false);
+		setBg1Btn.setFocusPainted(false);
+		setBg1Btn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				setBg1Btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+				btnEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				setBg1Btn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+				btnPressedMusic.start();
+				setBg1Btn.setIcon(setbg12Img);
+				setBg2Btn.setIcon(setbg21Img);
+				bgSet=1;
+				//setGamePanelBg();
+			}
+		});
+		add(setBg1Btn);
+		
+		setBg2Btn.setBounds(556, 252, 192, 167);
+		setBg2Btn.setBorderPainted(false);
+		setBg2Btn.setContentAreaFilled(false);
+		setBg2Btn.setFocusPainted(false);
+		setBg2Btn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				setBg2Btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+				btnEnteredMusic.start();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				setBg2Btn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+				btnPressedMusic.start();
+				setBg1Btn.setIcon(setbg11Img);
+				setBg2Btn.setIcon(setbg22Img);
+				bgSet=2;
+				//setGamePanelBg();
+			}
+		});
+		add(setBg2Btn);
+		
 	}
-	
 
 	public void selectTrack(int nowSelected) {
 		if (selectedMusic != null)
 			selectedMusic.close();
+		// standByMusic 볼륨 줄이기 코드 추가 예정
 		selectedImg = new ImageIcon(Main.class.getResource("/images/" + trackList.get(nowSelected).getStartImage())).getImage();
 		selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true);
+		//selectedMusic.start();
 	}
 	
 	public void selectLeft() {

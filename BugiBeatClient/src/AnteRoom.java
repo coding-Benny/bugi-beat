@@ -12,7 +12,7 @@ public class AnteRoom extends JFrame {
 
 	private RoomSetting roomSetPanel = new RoomSetting();
 	
-	public void paint(Graphics g) {//그리는 함수
+	public void paint(Graphics g) {
 		g.drawImage(background, 0, 0, null);
 		
 		paintComponents(g);

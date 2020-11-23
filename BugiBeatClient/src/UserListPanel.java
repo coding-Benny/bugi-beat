@@ -1,15 +1,8 @@
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.image.CropImageFilter;
-import java.awt.image.FilteredImageSource;
+import java.awt.*;
+import java.awt.image.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class UserListPanel extends JPanel {
 	private Image screenImage;

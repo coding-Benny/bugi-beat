@@ -21,6 +21,19 @@ public class Main extends JFrame {
 	private JTextField txtIpAddress;
 	private JTextField txtPortNumber;
 
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Main frame = new Main();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 254, 321);
@@ -70,19 +83,6 @@ public class Main extends JFrame {
 		txtIpAddress.addActionListener(action);
 		txtPortNumber.addActionListener(action);
 	}
-	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Main frame = new Main();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	class Myaction implements ActionListener // 내부클래스로 액션 이벤트 처리 클래스
 	{
@@ -91,8 +91,8 @@ public class Main extends JFrame {
 			String username = txtUserName.getText().trim();
 			String ip_addr = txtIpAddress.getText().trim();
 			String port_no = txtPortNumber.getText().trim();
-
 			new WaitingRoom(username, ip_addr, port_no);
+			//new GameRoom();
 			setVisible(false);
 		}
 	}
