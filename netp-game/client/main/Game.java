@@ -6,13 +6,13 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.ImageIcon;
 
 public class Game extends Thread {
 	private Image judgementLineImg = new ImageIcon(Main.class.getResource("../images/judgement-line.png")).getImage();
-	private Image fever_judgementLineImg = new ImageIcon(Main.class.getResource("../images/fever-judgement-line.png"))
-			.getImage();
+	private Image fever_judgementLineImg = new ImageIcon(Main.class.getResource("../images/fever-judgement-line.png")).getImage();
 	private Image noteRouteSImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
 	private Image noteRouteDImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
 	private Image noteRouteFImg = new ImageIcon(Main.class.getResource("../images/noteRoute.png")).getImage();
@@ -23,7 +23,6 @@ public class Game extends Thread {
 	private Image line4_noteImg = new ImageIcon(Main.class.getResource("../images/4line-note.png")).getImage();
 	private Image fever_line6_noteImg = new ImageIcon(Main.class.getResource("../images/6line-note.png")).getImage();
 	private Image fever_line4_noteImg = new ImageIcon(Main.class.getResource("../images/4line-note.png")).getImage();
-	private Image note_Img;
 	private Image lifeBar_bg = new ImageIcon(Main.class.getResource("../images/life-bar-bg.png")).getImage();
 	private Image feverBar_bg = new ImageIcon(Main.class.getResource("../images/fever-bar-bg.png")).getImage();
 	private Image line4_Pressed = new ImageIcon(Main.class.getResource("../images/4line-p.png")).getImage();
@@ -33,6 +32,7 @@ public class Game extends Thread {
 	public static Image gameScreenBg;
 	private Image linePressedImg;
 	private Image judgeImg;
+	private Image note_Img;
 
 	private String titleName;
 	private String difficulty;
@@ -54,7 +54,7 @@ public class Game extends Thread {
 		g.drawImage(gameScreenBg, 12, 100, null);
 		g.drawImage(feverBar_bg, 570, 10, null);
 		g.drawImage(lifeBar_bg, 570, 50, null);
-		if (!Main.isFever)
+		if (!Note.isFever)
 			g.drawImage(judgementLineImg, 11, 500, null);
 		else
 			g.drawImage(fever_judgementLineImg, 11, 500, null);
@@ -123,10 +123,10 @@ public class Game extends Thread {
 			g.drawString(titleName, 40, 38);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 			g.setColor(Color.YELLOW);
-			g.drawString("Score : ", 40, 70); // 92, 70
+			g.drawString("Score : " + Note.score, 40, 70); // 92, 70
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 28));
 			g.setColor(Color.ORANGE);
-			g.drawString("Max Combo: ", 40, 100);
+			g.drawString("Max Combo: " + Note.maxCombo, 40, 100);
 
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 			g.setColor(Color.WHITE);
@@ -135,25 +135,25 @@ public class Game extends Thread {
 			g.drawString("K", 485, 536);
 			g.drawString("L", 660, 536);
 		}
-		if (Main.combo != 0) {
+		if (Note.combo != 0) {
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 80));
 			g.setColor(Color.BLACK);
-			g.drawString(Main.combo + "", 380, 402);
+			g.drawString(Note.combo + "", 380, 402);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 70));
 			g.setColor(Color.WHITE);
-			g.drawString(Main.combo + "", 380, 400);
+			g.drawString(Note.combo + "", 380, 400);
 		}
 		g.drawImage(judgeImg, 220, 250, null);
 	}
 
 	public Image setPressNoteRoute() {
-		if (line == 6 && !Main.isFever)
+		if (line == 6 && !Note.isFever)
 			linePressedImg = line6_Pressed;
-		else if (line == 6 && Main.isFever)
+		else if (line == 6 && Note.isFever)
 			linePressedImg = fever_line6_Pressed;
-		else if (line == 4 && !Main.isFever)
+		else if (line == 4 && !Note.isFever)
 			linePressedImg = line4_Pressed;
-		else if (line == 4 && Main.isFever)
+		else if (line == 4 && Note.isFever)
 			linePressedImg = fever_line4_Pressed;
 		return linePressedImg;
 	}
@@ -240,15 +240,15 @@ public class Game extends Thread {
 	public void dropNotes(String titleName) {
 		Beat[] beats = null;
 		if (titleName.equals("미행 - f(x)") && difficulty.equals("Easy") && line == 4) { // s d k l
-			int startTime = 0; // 1000 - Main.REACH_TIME * 1000;
+			int startTime = 0;
 			int gap = 114; /* 박자 계산 */
-			if (line == 6 && !Main.isFever) {
+			if (line == 6 && !Note.isFever) {
 				note_Img = line6_noteImg;
-			} else if (line == 6 && Main.isFever) {
+			} else if (line == 6 && Note.isFever) {
 				note_Img = fever_line6_noteImg;
-			} else if (line == 4 && !Main.isFever) {
+			} else if (line == 4 && !Note.isFever) {
 				note_Img = line4_noteImg;
-			} else if (line == 4 && Main.isFever) {
+			} else if (line == 4 && Note.isFever) {
 				note_Img = fever_line4_noteImg;
 			}
 			beats = new Beat[] { new Beat(startTime + gap * 12, "L"), new Beat(startTime + gap * 13, "K"),

@@ -12,6 +12,7 @@ import javax.swing.*;
 public class RoomSetting extends JPanel {
 
 	private Image background;
+	private Image bgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png")).getImage();
 	private ImageIcon leftBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/leftBtn0.png"));
 	private ImageIcon leftBtnImg = new ImageIcon(Main.class.getResource("../images/leftBtn1.png"));
 	private ImageIcon rightBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/rightBtn0.png"));
@@ -22,7 +23,6 @@ public class RoomSetting extends JPanel {
 	private ImageIcon hardBtnImg = new ImageIcon(Main.class.getResource("../images/hardBtn.png"));
 	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/quitBtnEntered.png"));
 	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("../images/quitBtn.png"));
-	private ImageIcon bgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png"));
 	private ImageIcon setbg11Img = new ImageIcon(Main.class.getResource("../images/roomset_bg1-1.png"));
 	private ImageIcon setbg12Img = new ImageIcon(Main.class.getResource("../images/roomset_bg1-2.png"));
 	private ImageIcon setbg21Img = new ImageIcon(Main.class.getResource("../images/roomset_bg2-1.png"));
@@ -55,7 +55,7 @@ public class RoomSetting extends JPanel {
 	public RoomSetting() {
 		setSize(780, 442);
 		setLayout(null);
-		background = bgImg.getImage();
+		background = bgImg;
 
 		trackList.add(new Track("onion-start-image.png", "onion-highlight.mp3", "Onion.mp3", "Onion - Lukrembo"));
 		trackList.add(new Track("alien-start-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3", "Alien - Lee SuHyun"));
@@ -129,7 +129,6 @@ public class RoomSetting extends JPanel {
 			hardBtn = new JButton(hardBtnImg);
 		}
 		
-		//easyBtn.setVisible(false);
 		easyBtn.setBounds(110, 340, 150, 66);
 		easyBtn.setBorderPainted(false);
 		easyBtn.setContentAreaFilled(false);
@@ -158,7 +157,6 @@ public class RoomSetting extends JPanel {
 		});
 		add(easyBtn);
 		
-		//hardBtn.setVisible(false);
 		hardBtn.setBounds(305, 340, 150, 66);
 		hardBtn.setBorderPainted(false);
 		hardBtn.setContentAreaFilled(false);
@@ -187,7 +185,6 @@ public class RoomSetting extends JPanel {
 		});
 		add(hardBtn);
 		
-		//quitBtn.setVisible(false);
 		quitBtn.setBounds(678, 10, 90, 66);
 		quitBtn.setBorderPainted(false);
 		quitBtn.setContentAreaFilled(false);
@@ -293,8 +290,10 @@ public class RoomSetting extends JPanel {
 	public void selectTrack(int nowSelected) {
 		if (selectedMusic != null)
 			selectedMusic.close();
+		// standByMusic 볼륨 줄이기 코드 추가 예정
 		selectedImg = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getStartImage())).getImage();
 		selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true);
+		//selectedMusic.start();
 	}
 	
 	public void selectLeft() {

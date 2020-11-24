@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.swing.*;
 
@@ -23,10 +26,6 @@ public class GamePanel extends JPanel {
 	public static Image gameScreenBg;
 
 	private ImageIcon gamescreenbgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png"));
-	private ImageIcon line6_bg_Img = new ImageIcon(Main.class.getResource("../images/6line-bg.png"));
-	private ImageIcon fever_line6_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-6line-bg.png"));
-	private ImageIcon line4_bg_Img = new ImageIcon(Main.class.getResource("../images/4line-bg.png"));
-	private ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-4line-bg.png"));
 	private ImageIcon startBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/start1.png"));
 	private ImageIcon startBtnImg = new ImageIcon(Main.class.getResource("../images/start0.png"));
 	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("../images/roomquit1.png"));
@@ -36,6 +35,10 @@ public class GamePanel extends JPanel {
 	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("../images/room-bg1.png"));
 	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("../images/room2-bg1.png"));
 	private Image feverBar_bg = new ImageIcon(Main.class.getResource("../images/fever-bar-bg.png")).getImage();
+	private Image line6_bg_Img = new ImageIcon(Main.class.getResource("../images/6line-bg.png")).getImage();
+	private Image fever_line6_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-6line-bg.png")).getImage();
+	private Image line4_bg_Img = new ImageIcon(Main.class.getResource("../images/4line-bg.png")).getImage();
+	private Image fever_line4_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-4line-bg.png")).getImage();
 	
 	private JButton startBtn = new JButton(startBtnImg);
 	private JButton roomsetBtn = new JButton(roomsetImg);
@@ -187,47 +190,11 @@ public class GamePanel extends JPanel {
 					btnPressedMusic.start();
 				}
 				// 방나가기
+				//game.close();
 			}
 		});
 		add(quitBtn);
 
-		feverBar.setBackground(new Color(255, 230, 153));
-		feverBar.setForeground(new Color(255, 192, 0));
-		lifeBar.setFont(new Font("산돌수필B", Font.PLAIN, 20));
-		lifeBar.setString("Fever");
-		feverBar.setBorder(new LineBorder(new Color(255, 255, 255), 0, true));
-		feverBar.setBounds(594, 21, 153, 19);
-		feverBar.setVisible(false);
-		feverBar.setValue(Main.fever);
-		feverBar.setMaximum(10);
-		add(feverBar);
-		
-		lifeBar.setBackground(new Color(246, 160, 160));
-		lifeBar.setForeground(new Color(234, 46, 46));
-		lifeBar.setFont(new Font("산돌수필B", Font.PLAIN, 20));
-		lifeBar.setString("Life");
-		lifeBar.setBorder(new LineBorder(new Color(255, 255, 255), 0, true));
-		lifeBar.setBounds(594, 61, 153, 19);
-		lifeBar.setVisible(false);
-		lifeBar.setValue(Main.life);
-		lifeBar.setMaximum(10);
-		add(lifeBar);
-		
-		scoreLabel.setFont(new Font("산돌수필B", Font.PLAIN, 30));
-		scoreLabel.setForeground(Color.YELLOW);
-		scoreLabel.setText(Main.score+"");
-		scoreLabel.setBounds(130, 43, 100, 40);
-		scoreLabel.setVisible(false);
-		scoreLabel.setFocusable(false);
-		add(scoreLabel);
-		
-		maxComboLabel.setFont(new Font("산돌수필B", Font.PLAIN, 28));
-		maxComboLabel.setForeground(Color.ORANGE);
-		maxComboLabel.setText(Main.maxCombo+"");
-		maxComboLabel.setBounds(170, 75, 100, 35);
-		maxComboLabel.setVisible(false);
-		maxComboLabel.setFocusable(false);
-		add(maxComboLabel);
 	}
 
 	public void gameStart(int nowSelected, String difficulty) {
@@ -245,13 +212,11 @@ public class GamePanel extends JPanel {
 		roomSetPanel.setVisible(false);
 		feverBar.setVisible(true);
 		lifeBar.setVisible(true);
-		scoreLabel.setVisible(true);
-		maxComboLabel.setVisible(true);
 		
 		if(roomSetPanel.getLine()==6)
-			gameScreenBg = line6_bg_Img.getImage();
+			gameScreenBg = line6_bg_Img;
 		else if(roomSetPanel.getLine()==4)
-			gameScreenBg = line4_bg_Img.getImage();
+			gameScreenBg = line4_bg_Img;
 		standbyMusic.close();
 		
 		game = new Game(musicTitle, difficulty, roomSetPanel.getTrackList().get(nowSelected).getGameMusic(), roomSetPanel.getLine());
@@ -264,5 +229,9 @@ public class GamePanel extends JPanel {
 			background = bg1Img.getImage();
 		else
 			background = bg2Img.getImage();
+	}
+	
+	public Music getBackgroundMusic() {
+		return standbyMusic;
 	}
 }

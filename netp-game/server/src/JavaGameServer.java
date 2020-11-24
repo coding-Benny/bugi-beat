@@ -1,31 +1,18 @@
+package main;
 
 //JavaObjServer.java ObjectStream 기반 채팅 Server
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import javax.swing.*;
+import java.awt.event.*;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 public class JavaGameServer extends JFrame {
 
@@ -41,7 +28,7 @@ public class JavaGameServer extends JFrame {
 	private Socket client_socket; // accept() 에서 생성된 client 소켓
 	private Vector UserVec = new Vector(); // 연결된 사용자를 저장할 벡터
 	private static final int BUF_LEN = 128; // Windows 처럼 BUF_LEN 을 정의
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -136,7 +123,7 @@ public class JavaGameServer extends JFrame {
 
 	public void AppendObject(ChatMsg msg) {
 		textArea.append("code = " + msg.code + "\n");
-		textArea.append("id = " + msg.UserName + "\n");
+		textArea.append("id = " + msg.id + "\n");
 		textArea.append("data = " + msg.data + "\n");
 		textArea.setCaretPosition(textArea.getText().length());
 	}
@@ -305,11 +292,16 @@ public class JavaGameServer extends JFrame {
 					} else
 						continue;
 					if (cm.code.matches("100")) {
-						UserName = cm.UserName;
+						UserName = cm.id;
 						UserStatus = "O"; // Online 상태
+						for(int i=0; i < UserVec.size(); i++) {
+							UserService user = (UserService) UserVec.elementAt(i);
+							obcm = new ChatMsg("기존 접속자", "120", user.UserName);
+							oos.writeObject(obcm);
+						}
 						Login();
 					} else if (cm.code.matches("200")) {
-						msg = String.format("[%s] %s", cm.UserName, cm.data);
+						msg = String.format("[%s] %s", cm.id, cm.data);
 						AppendText(msg); // server 화면에 출력
 						String[] args = msg.split(" "); // 단어들을 분리한다.
 						if (args.length == 1) { // Enter key 만 들어온 경우 Wakeup 처리만 한다.
@@ -326,10 +318,6 @@ public class JavaGameServer extends JFrame {
 								WriteOne(user.UserName + "\t" + user.UserStatus + "\n");
 							}
 							WriteOne("-----------------------------\n");
-						} else if (args[1].matches("/sleep")) {
-							UserStatus = "S";
-						} else if (args[1].matches("/wakeup")) {
-							UserStatus = "O";
 						} else if (args[1].matches("/to")) { // 귓속말
 							for (int i = 0; i < user_vc.size(); i++) {
 								UserService user = (UserService) user_vc.elementAt(i);
@@ -345,13 +333,25 @@ public class JavaGameServer extends JFrame {
 									break;
 								}
 							}
+						} else if (args[1].startsWith("(") && args[1].endsWith(")")) {
+							obcm = new ChatMsg(UserName, "310", args[1]);
+							oos.writeObject(obcm);
 						} else { // 일반 채팅 메시지
 							UserStatus = "O";
 							WriteAllObject(cm);
 						}
-					} else if (cm.code.matches("400")) { // logout message 처리
+					} else if (cm.code.matches("110")) { // logout message 처리
 						Logout();
+						obcm = new ChatMsg("로그아웃", "110", UserName);
+						oos.writeObject(obcm);
 						break;
+					} else if (cm.code.matches("420")) {	// create room
+						String title = cm.data.split(":")[0];
+						GameRoom newGameRoom = RoomManager.createRoom(new GameUser(cm.id), title);
+						String gameRoomInfo = String.format("%d:%s", newGameRoom.getId(), newGameRoom.getRoomTitle());
+						System.out.println(gameRoomInfo);
+						obcm = new ChatMsg(UserName, "420", gameRoomInfo);
+						oos.writeObject(obcm);
 					} else { // 300, 500, ... 기타 object는 모두 방송한다.
 						WriteAllObject(cm);
 					} 

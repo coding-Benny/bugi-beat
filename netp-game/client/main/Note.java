@@ -16,7 +16,12 @@ public class Note extends Thread {
 	private ImageIcon line4_bg_Img = new ImageIcon(Main.class.getResource("../images/4line-bg.png"));
 	private ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-4line-bg.png"));
 
-	private RoomSetting roomSetting = new RoomSetting();
+	public static boolean isFever = false;
+	public static int fever = 0;
+	public static int score = 0;
+	public static int combo = 0;
+	public static int maxCombo = 0;
+	public static int life = 10;
 
 	private int x,
 			y = 560 - (1000 / Main.SLEEP_TIME * Main.NOTE_SPEED) * Main.REACH_TIME; /* Note 생성 후 1초 뒤에 판정 라인에 다다름 */
@@ -75,16 +80,16 @@ public class Note extends Thread {
 	}
 
 	public void screenDraw(Graphics2D g) {
-		if (line == 6 && !Main.isFever) {
+		if (line == 6 && !isFever) {
 			Game.gameScreenBg = line6_bg_Img.getImage();
 			note_Img = line6_noteImg;
-		} else if (line == 6 && Main.isFever) {
+		} else if (line == 6 && isFever) {
 			Game.gameScreenBg = fever_line6_bg_Img.getImage();
 			note_Img = fever_line6_noteImg;
-		} else if (line == 4 && !Main.isFever) {
+		} else if (line == 4 && !isFever) {
 			Game.gameScreenBg = line4_bg_Img.getImage();
 			note_Img = line4_noteImg;
-		} else if (line == 4 && Main.isFever) {
+		} else if (line == 4 && isFever) {
 			Game.gameScreenBg = fever_line4_bg_Img.getImage();
 			note_Img = fever_line4_noteImg;
 		}
@@ -102,16 +107,16 @@ public class Note extends Thread {
 	public void drop() {
 		y += Main.NOTE_SPEED;
 		if (y > 560) { /* 판정바를 지나친 경우 */
-			Main.combo = 0;
-			Main.life--;
-			Main.isFever = false;
-			if (Main.fever >= 1)
-				Main.fever -= 10;
+			combo = 0;
+			life--;
+			isFever = false;
+			if (fever >= 1)
+				fever -= 10;
 			else
-				Main.fever = 0;
+				fever = 0;
 
-			if (Main.life < 0) // 게임오버 나중에 구현
-				Main.life = 0;
+			if (life < 0) // 게임오버 나중에 구현
+				life = 0;
 			close();
 		}
 	}
@@ -121,26 +126,26 @@ public class Note extends Thread {
 		try {
 			while (true) { /* 1초에 100번 실행 = 1초에 700px만큼 note가 떨어짐 */
 				drop();
-				GamePanel.lifeBar.setValue(Main.life);
-				GamePanel.feverBar.setValue(Main.fever);
+				GamePanel.lifeBar.setValue(life);
+				GamePanel.feverBar.setValue(fever);
 				
-				if (Main.combo >= Main.maxCombo) // 맥스콤보 갱신
-					Main.maxCombo = Main.combo;
-				if (Main.combo != 0 && Main.combo % 10 == 0) { // 10콤보마다 life 회복
-					if(Main.life>=10)
-						Main.life=10;
+				if (combo >= maxCombo) // 맥스콤보 갱신
+					maxCombo = combo;
+				if (combo != 0 && combo % 10 == 0) { // 10콤보마다 life 회복
+					if(life>=10)
+						life=10;
 					else
-						Main.life++;
+						life++;
 				}
-				if (Main.fever != 0 && Main.fever % 10 == 0) // 10배수마다 피버타임 on
-					Main.isFever = true;
-				else if (Main.fever != 0 && Main.fever % 20 == 0) { // 20배수에 피버타임 off
-					Main.isFever = false;
-					Main.fever = 0;
+				if (fever != 0 && fever % 10 == 0) // 10배수마다 피버타임 on
+					isFever = true;
+				else if (fever != 0 && fever % 20 == 0) { // 20배수에 피버타임 off
+					isFever = false;
+					fever = 0;
 				}
 
-				GamePanel.scoreLabel.setText(Main.score + "");
-				GamePanel.maxComboLabel.setText(Main.maxCombo + "");
+				GamePanel.scoreLabel.setText(score + "");
+				GamePanel.maxComboLabel.setText(maxCombo + "");
 
 				if (proceeded) {
 					Thread.sleep(Main.SLEEP_TIME);
@@ -156,48 +161,48 @@ public class Note extends Thread {
 
 	public String judge() { // 500을 기준
 		if (y >= 525) { // Good
-			if (!Main.isFever)
-				Main.score += 5;
+			if (!isFever)
+				score += 5;
 			else
-				Main.score += 10;
-			Main.combo++;
-			Main.fever++;
+				score += 10;
+			combo++;
+			fever++;
 			close();
 			return "Good";
 		} else if (y >= 510) { // Great
-			if (!Main.isFever)
-				Main.score += 10;
+			if (!isFever)
+				score += 10;
 			else
-				Main.score += 20;
-			Main.combo++;
-			Main.fever++;
+				score += 20;
+			combo++;
+			fever++;
 			close();
 			return "Great";
 		} else if (y >= 495) { // Perfect
-			if (!Main.isFever)
-				Main.score += 20;
+			if (!isFever)
+				score += 20;
 			else
-				Main.score += 40;
-			Main.combo++;
-			Main.fever++;
+				score += 40;
+			combo++;
+			fever++;
 			close();
 			return "Perfect";
 		} else if (y >= 480) { // Great
-			if (!Main.isFever)
-				Main.score += 10;
+			if (!isFever)
+				score += 10;
 			else
-				Main.score += 20;
-			Main.combo++;
-			Main.fever++;
+				score += 20;
+			combo++;
+			fever++;
 			close();
 			return "Great";
 		} else if (y >= 465) { // Good
-			if (!Main.isFever)
-				Main.score += 5;
+			if (!isFever)
+				score += 5;
 			else
-				Main.score += 10;
-			Main.combo++;
-			Main.fever++;
+				score += 10;
+			combo++;
+			fever++;
 			close();
 			return "Good";
 		}
