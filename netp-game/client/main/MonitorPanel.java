@@ -11,10 +11,8 @@ public class MonitorPanel extends JPanel {
 	private Image screenImage;
 	private Graphics screenGraphic;
 	
-	private Image background;
+	public static Image background;
 
-	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("../images/room-bg2.png"));
-	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("../images/room2-bg2.png"));
 	private ImageIcon sendItemImg = new ImageIcon(Main.class.getResource("../images/item-send.png"));
 	private ImageIcon recvItemImg = new ImageIcon(Main.class.getResource("../images/item-recv.png"));
 	
@@ -44,11 +42,7 @@ public class MonitorPanel extends JPanel {
 	public MonitorPanel() {
 		setSize(480, 720);
 		setLayout(null);
-		
-		if(roomSetPanel.getBgSet() == 1)
-			background = bg1Img.getImage();
-		else
-			background = bg2Img.getImage();
+		background = roomSetPanel.setMonitorPanelBg();
 		
 		p2Panel = new JPanel();
 		p2Panel.setBackground(new Color(0, 0, 0));

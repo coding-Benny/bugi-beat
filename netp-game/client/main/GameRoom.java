@@ -99,4 +99,8 @@ public class GameRoom extends JFrame {
 		getContentPane().add(monitorPanel);
 
 	}
+	public void closeGameRoom() {
+		dispose();
+		Main.waitingRoom.setVisible(true);
+	}
 }

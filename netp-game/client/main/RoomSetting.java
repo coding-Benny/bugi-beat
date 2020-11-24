@@ -8,6 +8,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class RoomSetting extends JPanel {
 
@@ -27,6 +29,10 @@ public class RoomSetting extends JPanel {
 	private ImageIcon setbg12Img = new ImageIcon(Main.class.getResource("../images/roomset_bg1-2.png"));
 	private ImageIcon setbg21Img = new ImageIcon(Main.class.getResource("../images/roomset_bg2-1.png"));
 	private ImageIcon setbg22Img = new ImageIcon(Main.class.getResource("../images/roomset_bg2-2.png"));
+	private Image gmbg1Img = new ImageIcon(Main.class.getResource("../images/room-bg1.png")).getImage();
+	private Image gmbg2Img = new ImageIcon(Main.class.getResource("../images/room2-bg1.png")).getImage();
+	private Image mnbg1Img = new ImageIcon(Main.class.getResource("../images/room-bg2.png")).getImage();
+	private Image mnbg2Img = new ImageIcon(Main.class.getResource("../images/room2-bg2.png")).getImage();
 	
 	private JButton leftBtn = new JButton(leftBtnImg);
 	private JButton rightBtn = new JButton(rightBtnImg);
@@ -250,7 +256,8 @@ public class RoomSetting extends JPanel {
 				setBg1Btn.setIcon(setbg12Img);
 				setBg2Btn.setIcon(setbg21Img);
 				bgSet=1;
-				//setGamePanelBg();
+				GamePanel.background = setGamePanelBg();
+				MonitorPanel.background = setMonitorPanelBg();
 			}
 		});
 		add(setBg1Btn);
@@ -279,7 +286,8 @@ public class RoomSetting extends JPanel {
 				setBg1Btn.setIcon(setbg11Img);
 				setBg2Btn.setIcon(setbg22Img);
 				bgSet=2;
-				//setGamePanelBg();
+				GamePanel.background = setGamePanelBg();
+				MonitorPanel.background = setMonitorPanelBg();
 			}
 		});
 		add(setBg2Btn);
@@ -334,5 +342,22 @@ public class RoomSetting extends JPanel {
 	
 	public String getDifficulty() {
 		return difficulty;
+	}
+	
+
+	public Image setGamePanelBg() {
+		if(bgSet==1) {
+			return gmbg1Img;
+		}
+		else
+			return gmbg2Img;
+	}
+	
+	public Image setMonitorPanelBg() {
+		if(bgSet==1) {
+			return mnbg1Img;
+		}
+		else
+			return mnbg2Img;
 	}
 }

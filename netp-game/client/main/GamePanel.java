@@ -22,7 +22,7 @@ public class GamePanel extends JPanel {
 
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private RoomChat roomChatPanel = new RoomChat();
-	private Image background;
+	public static Image background;
 	public static Image gameScreenBg;
 
 	private ImageIcon gamescreenbgImg = new ImageIcon(Main.class.getResource("../images/game-bg0.png"));
@@ -32,8 +32,6 @@ public class GamePanel extends JPanel {
 	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("../images/roomquit0.png"));
 	private ImageIcon roomsetEnteredImg = new ImageIcon(Main.class.getResource("../images/roomsetting1.png"));
 	private ImageIcon roomsetImg = new ImageIcon(Main.class.getResource("../images/roomsetting0.png"));
-	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("../images/room-bg1.png"));
-	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("../images/room2-bg1.png"));
 	private Image feverBar_bg = new ImageIcon(Main.class.getResource("../images/fever-bar-bg.png")).getImage();
 	private Image line6_bg_Img = new ImageIcon(Main.class.getResource("../images/6line-bg.png")).getImage();
 	private Image fever_line6_bg_Img = new ImageIcon(Main.class.getResource("../images/fever-6line-bg.png")).getImage();
@@ -47,6 +45,7 @@ public class GamePanel extends JPanel {
 	public static JProgressBar lifeBar= new JProgressBar();
 	public static JLabel scoreLabel = new JLabel();
 	public static JLabel maxComboLabel = new JLabel();
+	public JLabel roomInfo;  //방 이름, 인원 수
 	private boolean isMainScreen = true;
 	private boolean isGameScreen = false;
 	private String musicTitle;
@@ -82,7 +81,7 @@ public class GamePanel extends JPanel {
 	public GamePanel() {
 		setSize(800, 720);
 		setLayout(null);
-		setGamePanelBg();
+		background = roomSetPanel.setGamePanelBg();
 		gameScreenBg = gamescreenbgImg.getImage();
 		
 		standbyMusic.start();
@@ -190,10 +189,16 @@ public class GamePanel extends JPanel {
 					btnPressedMusic.start();
 				}
 				// 방나가기
-				//game.close();
+				//dispose();
 			}
 		});
 		add(quitBtn);
+		
+		roomInfo = new JLabel("");  // 방이름 (인원수/4)
+		roomInfo.setBounds(35, 30, 200, 30);
+		roomInfo.setForeground(Color.WHITE);
+		roomInfo.setFont(new Font("산돌수필B", Font.PLAIN, 28));
+		add(roomInfo);
 
 	}
 
@@ -210,6 +215,7 @@ public class GamePanel extends JPanel {
 		startBtn.setVisible(false);
 		roomsetBtn.setVisible(false);
 		roomSetPanel.setVisible(false);
+		roomInfo.setVisible(false);
 		feverBar.setVisible(true);
 		lifeBar.setVisible(true);
 		
@@ -222,13 +228,6 @@ public class GamePanel extends JPanel {
 		game = new Game(musicTitle, difficulty, roomSetPanel.getTrackList().get(nowSelected).getGameMusic(), roomSetPanel.getLine());
 		game.start();
 		setFocusable(true);
-	}
-	
-	public void setGamePanelBg() {
-		if(roomSetPanel.getBgSet() == 1)
-			background = bg1Img.getImage();
-		else
-			background = bg2Img.getImage();
 	}
 	
 	public Music getBackgroundMusic() {

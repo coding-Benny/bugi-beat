@@ -20,7 +20,7 @@ public class CreateRoom extends JFrame {
 	private JCheckBox roomSecret;
 	
 	public CreateRoom() {
-		setTitle("\uBC29 \uB9CC\uB4E4\uAE30");
+		setTitle("방 생성");
 		setSize(400, 300);
 		setLocation(400, 400);
 		
@@ -39,12 +39,12 @@ public class CreateRoom extends JFrame {
 		c.add(roomPwd);
 		
 		// 방만들기 완료 버튼
-		createBtn = new JButton("\uBC29 \uC0DD\uC131");
+		createBtn = new JButton("방 생성");
 		createBtn.setBounds(140, 197, 97, 23);
 		c.add(createBtn);
 		
 		// 비밀번호 방 설정 체크 버튼
-		roomSecret = new JCheckBox("\uBE44\uBC00\uBC29");
+		roomSecret = new JCheckBox("비밀방");
 		roomSecret.setBounds(159, 157, 121, 23);
 		c.add(roomSecret);
 		roomSecret.setFocusable(false);
@@ -64,17 +64,17 @@ public class CreateRoom extends JFrame {
         });
 		
 		// 기타 라벨
-		JLabel label = new JLabel("\uCC38\uC5EC \uC778\uC6D0 : ");
+		JLabel label = new JLabel("참여 인원 : ");
         label.setHorizontalAlignment(SwingConstants.RIGHT);
         label.setBounds(92, 44, 67, 15);
         getContentPane().add(label);
         
-        JLabel lblNewLabel = new JLabel("\uBC29 \uC774\uB984 : ");
+        JLabel lblNewLabel = new JLabel("방 이름 : ");
         lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         lblNewLabel.setBounds(102, 82, 57, 15);
         getContentPane().add(lblNewLabel);
         
-        JLabel lblNewLabel_1 = new JLabel("\uBE44\uBC00\uBC88\uD638 : ");
+        JLabel lblNewLabel_1 = new JLabel("비밀번호 : ");
         lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
         lblNewLabel_1.setBounds(92, 121, 67, 15);
         getContentPane().add(lblNewLabel_1);
