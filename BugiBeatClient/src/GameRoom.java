@@ -12,9 +12,8 @@ import javax.swing.*;
 public class GameRoom extends JFrame {
 	private Image screenImage;
 	private Graphics screenGraphic;
-
 	private Image background;
-
+	
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("/images/bar.png")));
 	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/exit1.png"));
 	private ImageIcon exitBtnImg = new ImageIcon(Main.class.getResource("/images/exit0.png"));
@@ -25,7 +24,7 @@ public class GameRoom extends JFrame {
 	
 	private int mouseX, mouseY;
 	
-	public GameRoom() {
+	public GameRoom(int id, String title) {
 		super("게임 방");
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,7 +86,8 @@ public class GameRoom extends JFrame {
 				} catch (InterruptedException ex) {
 					ex.printStackTrace();
 				}
-				System.exit(0);
+				gamePanel.getBackgroundMusic().close();
+				setVisible(false);
 			}
 		});
 		getContentPane().add(exitBtn);

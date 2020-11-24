@@ -41,7 +41,7 @@ public class JavaGameServer extends JFrame {
 	private Socket client_socket; // accept() 에서 생성된 client 소켓
 	private Vector UserVec = new Vector(); // 연결된 사용자를 저장할 벡터
 	private static final int BUF_LEN = 128; // Windows 처럼 BUF_LEN 을 정의
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -309,7 +309,7 @@ public class JavaGameServer extends JFrame {
 						UserStatus = "O"; // Online 상태
 						for(int i=0; i < UserVec.size(); i++) {
 							UserService user = (UserService) UserVec.elementAt(i);
-							obcm = new ChatMsg("기존 접속자", "800", user.UserName);
+							obcm = new ChatMsg("기존 접속자", "120", user.UserName);
 							oos.writeObject(obcm);
 						}
 						Login();
@@ -331,10 +331,6 @@ public class JavaGameServer extends JFrame {
 								WriteOne(user.UserName + "\t" + user.UserStatus + "\n");
 							}
 							WriteOne("-----------------------------\n");
-						} else if (args[1].matches("/sleep")) {
-							UserStatus = "S";
-						} else if (args[1].matches("/wakeup")) {
-							UserStatus = "O";
 						} else if (args[1].matches("/to")) { // 귓속말
 							for (int i = 0; i < user_vc.size(); i++) {
 								UserService user = (UserService) user_vc.elementAt(i);
@@ -351,15 +347,24 @@ public class JavaGameServer extends JFrame {
 								}
 							}
 						} else if (args[1].startsWith("(") && args[1].endsWith(")")) {
-							obcm = new ChatMsg(UserName, "900", args[1]);
+							obcm = new ChatMsg(UserName, "310", args[1]);
 							oos.writeObject(obcm);
 						} else { // 일반 채팅 메시지
 							UserStatus = "O";
 							WriteAllObject(cm);
 						}
-					} else if (cm.code.matches("400")) { // logout message 처리
+					} else if (cm.code.matches("110")) { // logout message 처리
 						Logout();
+						obcm = new ChatMsg("로그아웃", "110", UserName);
+						oos.writeObject(obcm);
 						break;
+					} else if (cm.code.matches("420")) {	// create room
+						String title = cm.data.split(":")[0];
+						GameRoom newGameRoom = RoomManager.createRoom(new GameUser(cm.id), title);
+						String gameRoomInfo = String.format("%d:%s", newGameRoom.getId(), newGameRoom.getRoomTitle());
+						System.out.println(gameRoomInfo);
+						obcm = new ChatMsg(UserName, "420", gameRoomInfo);
+						oos.writeObject(obcm);
 					} else { // 300, 500, ... 기타 object는 모두 방송한다.
 						WriteAllObject(cm);
 					} 

@@ -129,10 +129,10 @@ public class Game extends Thread {
 
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 			g.setColor(Color.WHITE);
-			g.drawString("S", 135, 540);
-			g.drawString("D", 305, 540);
-			g.drawString("K", 480, 540);
-			g.drawString("L", 650, 540);
+			g.drawString("S", 140, 536);
+			g.drawString("D", 315, 536);
+			g.drawString("K", 485, 536);
+			g.drawString("L", 660, 536);
 		}
 		if (Note.combo != 0) {
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 80));

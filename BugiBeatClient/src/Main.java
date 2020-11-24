@@ -14,8 +14,10 @@ public class Main extends JFrame {
 	public static final int SLEEP_TIME = 10;
 	public static final int REACH_TIME = 2; /* 노트 생성 후 판정 바에 도달하는데 걸리는 시간 */
 	public static final boolean SOUND_EFFECT = true; // 기본 on
-
+	
 	private static final long serialVersionUID = 1L;
+	
+
 	private JPanel contentPane;
 	private JTextField txtUserName;
 	private JTextField txtIpAddress;
@@ -88,11 +90,10 @@ public class Main extends JFrame {
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String username = txtUserName.getText().trim();
-			String ip_addr = txtIpAddress.getText().trim();
-			String port_no = txtPortNumber.getText().trim();
-			new WaitingRoom(username, ip_addr, port_no);
-			//new GameRoom();
+			String userName = txtUserName.getText().trim();
+			String ipAddress = txtIpAddress.getText().trim();
+			String portNo = txtPortNumber.getText().trim();
+			new WaitingRoom(userName, ipAddress, portNo);
 			setVisible(false);
 		}
 	}

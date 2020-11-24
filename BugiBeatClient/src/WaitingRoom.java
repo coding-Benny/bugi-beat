@@ -4,6 +4,7 @@ import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -17,10 +18,13 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -122,7 +126,78 @@ public class WaitingRoom extends JFrame {
 					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 					btnPressedMusic.start();
 					// 방 설정 다이얼로그 띄우기
-					new GameRoom();
+					JDialog dialog = new JDialog();
+					dialog.setLayout(null);
+					dialog.setLocationRelativeTo(null);
+					dialog.setModal(true);
+					dialog.setSize(400, 250);
+					
+					JLabel roomTitleLabel = new JLabel("방제 : ");
+					roomTitleLabel.setBounds(dialog.getWidth()/2-100, 50, 100, 20);
+					dialog.add(roomTitleLabel);
+					
+					JTextField roomTitle = new JTextField(15);
+					roomTitle.setBounds(dialog.getWidth()/2-50, 50, 100, 20);
+					roomTitle.addKeyListener(new KeyListener() {	// 엔터 누르면 방 만들기 버튼 자동 클릭
+						@Override
+						public void keyReleased(KeyEvent e) {
+							if (e.getKeyCode() == 10) {
+								createRoomBtn.doClick();
+							}
+						}
+					});
+					dialog.add(roomTitle);
+					
+					JLabel roomPwdLabel = new JLabel("비번 : ");
+					roomPwdLabel.setBounds(dialog.getWidth()/2-100, 100, 100, 20);
+					dialog.add(roomPwdLabel);
+					
+					JPasswordField roomPwd = new JPasswordField(15);
+					roomPwd.setBounds(dialog.getWidth()/2-50, 100, 100, 20);
+					roomPwd.setEnabled(false);
+					roomPwd.setEditable(false);
+					roomPwd.addKeyListener(new KeyListener() {	// 엔터 누르면 방 만들기 버튼 자동 클릭
+						@Override
+						public void keyReleased(KeyEvent e) {
+							if (e.getKeyCode() == 10) {
+								createRoomBtn.doClick();
+							}
+						}
+					});
+					dialog.add(roomPwd);
+					
+					JCheckBox roomSecret = new JCheckBox("비밀방");
+					roomSecret.setBounds(dialog.getWidth()/2+75, 100, 100, 20);
+					roomSecret.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							if (roomSecret.isSelected()) {
+								roomPwd.setEditable(true);
+								roomPwd.setEnabled(true);
+							}
+							else {
+								roomPwd.setEditable(false);
+								roomPwd.setEnabled(false);
+							}
+						}
+					});
+					dialog.add(roomSecret);
+					
+					JButton createBtn = new JButton("Create");
+					createBtn.setBounds(dialog.getWidth()/2-40, 160, 80, 20);
+					createBtn.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							String roomInfo = String.format("%s:%s", roomTitle.getText(), roomPwd.getPassword());
+							ChatMsg obcm = new ChatMsg(userName, "420", roomInfo);
+							SendObject(obcm);
+							dialog.setVisible(false);
+						}
+					});
+					dialog.add(createBtn);
+					
+					dialog.setVisible(true);
+					//new GameRoom();
 				}
 			}
 		});
@@ -264,6 +339,17 @@ public class WaitingRoom extends JFrame {
 					} else
 						continue;
 					switch (cm.code) {
+					case "110":	// 로그아웃
+						// 접속자 명단에서 지우기 구현 예정
+						break;
+					case "120": // OldUser
+						String[] oldUserInfo = msg.split(" ");
+						String oldUserName = oldUserInfo[2];
+						if (!oldUserName.equals(user)) {
+							member.add(oldUserName);
+							userList.setListData(member);
+						}
+						break;
 					case "200": // chat message
 						if (msg.contains("입장")) {
 							String[] welcomeMsg = cm.getData().split("]");
@@ -282,18 +368,7 @@ public class WaitingRoom extends JFrame {
 						AppendText("[" + cm.getId() + "]");
 						AppendImage(cm.img);
 						break;
-					case "400":	// 로그아웃
-						// 접속자 명단에서 지우기 구현 예정
-						break;
-					case "800": // OldUser
-						String[] oldUserInfo = msg.split(" ");
-						String oldUserName = oldUserInfo[2];
-						if (!oldUserName.equals(user)) {
-							member.add(oldUserName);
-							userList.setListData(member);
-						}
-						break;
-					case "900": // emoji
+					case "310": // emoji
 						if (user.equals(cm.getId())) {
 							AppendEmoji(msg);
 						}
@@ -302,6 +377,12 @@ public class WaitingRoom extends JFrame {
 							AppendEmoji(msg);
 							AppendText("\n");
 						}
+						break;
+					case "420":	// create room
+						String roomID = cm.data.split(":")[0];
+						String roomTitle = cm.data.split(":")[1];
+						System.out.println(roomID + ":" + roomTitle);
+						new GameRoom(Integer.parseInt(roomID), roomTitle);
 						break;
 					}
 				} catch (IOException e) {
