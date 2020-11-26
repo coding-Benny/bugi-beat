@@ -39,7 +39,6 @@ public class Game extends Thread {
 	private Music gameMusic;
 
 	ArrayList<Note> noteList = new ArrayList<Note>();
-	
 
 	public Game(String titleName, String difficulty, String musicTitle, int line) {
 		this.titleName = titleName;

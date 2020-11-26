@@ -12,6 +12,10 @@ public class RoomSetting extends JPanel {
 
 	private Image background;
 	private Image bgImg = new ImageIcon(Main.class.getResource("/images/game-bg0.png")).getImage();
+	private Image gmbg1Img = new ImageIcon(Main.class.getResource("/images/room-bg1.png")).getImage();
+	private Image gmbg2Img = new ImageIcon(Main.class.getResource("/images/room2-bg1.png")).getImage();
+	private Image mnbg1Img = new ImageIcon(Main.class.getResource("/images/room-bg2.png")).getImage();
+	private Image mnbg2Img = new ImageIcon(Main.class.getResource("/images/room2-bg2.png")).getImage();
 	private ImageIcon leftBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/leftBtn0.png"));
 	private ImageIcon leftBtnImg = new ImageIcon(Main.class.getResource("/images/leftBtn1.png"));
 	private ImageIcon rightBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/rightBtn0.png"));
@@ -334,5 +338,19 @@ public class RoomSetting extends JPanel {
 	
 	public String getDifficulty() {
 		return difficulty;
+	}
+	
+	public Image setGamePanelBg() {
+		if (bgSet == 1)
+			return gmbg1Img;
+		else
+			return gmbg2Img;
+	}
+	
+	public Image setMonitorPanelBg() {
+		if (bgSet == 1)
+			return mnbg1Img;
+		else
+			return mnbg2Img;
 	}
 }

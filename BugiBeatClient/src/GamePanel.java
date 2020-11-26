@@ -76,13 +76,14 @@ public class GamePanel extends JPanel {
 	}
 
 	public GamePanel() {
-		setSize(800, 720);
-		setLayout(null);
-		setGamePanelBg();
+		background = roomSetPanel.setGamePanelBg();
 		gameScreenBg = gamescreenbgImg.getImage();
 		
 		standbyMusic.start();
 
+		setSize(800, 720);
+		setLayout(null);
+		
 		roomSetPanel.setBounds(12, 100, 780, 442); // 가로위치, 세로위치, 가로길이, 세로길이
 		roomSetPanel.setVisible(false);
 		add(roomSetPanel);
@@ -186,6 +187,7 @@ public class GamePanel extends JPanel {
 					btnPressedMusic.start();
 				}
 				// 방나가기
+				// dispose();
 			}
 		});
 		add(quitBtn);

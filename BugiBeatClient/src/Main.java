@@ -44,9 +44,9 @@ public class Main extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("User Name");
-		lblNewLabel.setBounds(12, 39, 82, 33);
-		contentPane.add(lblNewLabel);
+		JLabel lblUserName = new JLabel("User Name");
+		lblUserName.setBounds(12, 39, 82, 33);
+		contentPane.add(lblUserName);
 
 		txtUserName = new JTextField();
 		txtUserName.setHorizontalAlignment(SwingConstants.CENTER);

@@ -91,13 +91,14 @@ public class Note extends Thread {
 			Game.gameScreenBg = fever_line4_bg_Img.getImage();
 			note_Img = fever_line4_noteImg;
 		}
-		if (!noteType.equals("Space")) {
+		/*if (!noteType.equals("Space")) {
 			if (line == 4)
 				g.drawImage(note_Img, x, y, null);
 			else if (line == 6) {
 				g.drawImage(note_Img, x, y, null);
 			}
-		} else {
+		}*/
+		else {
 			// 아이템 시각 효과 그리기
 		}
 	}
@@ -135,6 +136,7 @@ public class Note extends Thread {
 					else
 						life++;
 				}
+				
 				if (fever != 0 && fever % 10 == 0) // 10배수마다 피버타임 on
 					isFever = true;
 				else if (fever != 0 && fever % 20 == 0) { // 20배수에 피버타임 off
