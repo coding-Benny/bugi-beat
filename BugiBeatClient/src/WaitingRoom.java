@@ -45,15 +45,15 @@ public class WaitingRoom extends JFrame {
 	private String user;
 
 	private Image background;
-	private Image bg1Img = new ImageIcon(Main.class.getResource("/images/anteroom1-bg.png")).getImage();
-	private Image bg2Img = new ImageIcon(Main.class.getResource("/images/anteroom2-bg.png")).getImage();
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("/images/bar.png")));
 	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/exit1.png"));
 	private ImageIcon exitBtnImg = new ImageIcon(Main.class.getResource("/images/exit0.png"));
 	private ImageIcon createBtnImg = new ImageIcon(Main.class.getResource("/images/wait-create-btn0.png"));
 	private ImageIcon createBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/wait-create-btn1.png"));
-	private ImageIcon setBtnImg = new ImageIcon(Main.class.getResource("/images/wait-set-btn0.png"));
-	private ImageIcon setEnteredBtnImg = new ImageIcon(Main.class.getResource("/images/wait-set-btn0.png"));
+	private ImageIcon gameSetBtnImg = new ImageIcon(Main.class.getResource("/images/wait-set-btn0.png"));
+	private ImageIcon gameSetBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/wait-set-btn1.png"));
+	private Image bg1Img = new ImageIcon(Main.class.getResource("/images/anteroom1-bg.png")).getImage();
+	private Image bg2Img = new ImageIcon(Main.class.getResource("/images/anteroom2-bg.png")).getImage();
 
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private JPanel userListPanel = new UserListPanel();
@@ -65,8 +65,8 @@ public class WaitingRoom extends JFrame {
 	private JTextPane textArea = new JTextPane();
 	private JTextField inputField = new JTextField();
 	private JButton exitBtn = new JButton(exitBtnImg);
-	private JButton gameSetBtn = new JButton(setBtnImg);
 	private JButton createRoomBtn = new JButton(createBtnImg);
+	private JButton gameSetBtn = new JButton(gameSetBtnImg);
 	
 	private Music waitingMusic = new Music("waiting beat.mp3", true);
 	
@@ -78,7 +78,7 @@ public class WaitingRoom extends JFrame {
 	public WaitingRoom(String userName, String ipAddress, String portNo) {
 		super("대기실");
 		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);	// JFrame을 숨기지만 응용 프로그램은 계속 실행됨
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
 		setShape(new RoundRectangle2D.Double(0, 0, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, 40, 40));
 		setResizable(false);
@@ -92,7 +92,6 @@ public class WaitingRoom extends JFrame {
 			background = bg2Img;
 		
 		setContentPane(new JLabel(new ImageIcon(background)));
-		
 		Container c = getContentPane();
 		c.setLayout(null);
 		
@@ -114,7 +113,7 @@ public class WaitingRoom extends JFrame {
 		userListPanel.setBounds(915, 230, 340, 420);
 		c.add(userListPanel);
 		
-		createRoomBtn.setBounds(1010, 70, 160, 70);
+		createRoomBtn.setBounds(1010, 50, 160, 70);
 		createRoomBtn.setBorderPainted(false);
 		createRoomBtn.setContentAreaFilled(false);
 		createRoomBtn.setFocusPainted(false);
@@ -140,7 +139,7 @@ public class WaitingRoom extends JFrame {
 					btnPressedMusic.start();
 					// 방 설정 다이얼로그 띄우기
 					JDialog dialog = new JDialog();
-					dialog.getContentPane().setLayout(null);
+					dialog.setLayout(null);
 					dialog.setLocationRelativeTo(null);
 					dialog.setModal(true);
 					dialog.setSize(400, 250);
@@ -223,7 +222,7 @@ public class WaitingRoom extends JFrame {
 		gameSetBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				gameSetBtn.setIcon(setEnteredBtnImg);  //이미지 만들면 수정
+				gameSetBtn.setIcon(gameSetBtnEnteredImg);  //이미지 만들면 수정
 				gameSetBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				if (Main.SOUND_EFFECT) {
 					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
@@ -233,7 +232,7 @@ public class WaitingRoom extends JFrame {
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				gameSetBtn.setIcon(setBtnImg);
+				gameSetBtn.setIcon(gameSetBtnImg);
 				gameSetBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 
@@ -383,15 +382,7 @@ public class WaitingRoom extends JFrame {
 						AppendText("[" + cm.getId() + "]");
 						AppendImage(cm.img);
 						break;
-					case "420":	// create room
-						String roomID = cm.data.split(":")[0];
-						String roomTitle = cm.data.split(":")[1];
-						System.out.println(roomID + ":" + roomTitle);
-						GameRoom gameRoom = new GameRoom(Integer.parseInt(roomID), roomTitle);
-						RoomListPanel.room.add(gameRoom.getRoomTitle());
-						RoomListPanel.roomList.setListData(RoomListPanel.room);
-						break;
-					case "900": // emoji
+					case "310": // emoji
 						if (user.equals(cm.getId())) {
 							AppendEmoji(msg);
 						}
@@ -400,6 +391,13 @@ public class WaitingRoom extends JFrame {
 							AppendEmoji(msg);
 							AppendText("\n");
 						}
+						break;
+					case "420":	// create room
+						String roomID = cm.data.split(":")[0];
+						String roomTitle = cm.data.split(":")[1];
+						System.out.println(roomID + ":" + roomTitle);
+						new GameRoom(Integer.parseInt(roomID), roomTitle);
+						waitingMusic.close();
 						break;
 					}
 				} catch (IOException e) {
@@ -462,9 +460,10 @@ public class WaitingRoom extends JFrame {
 	
 	public void AppendEmoji(String msg) {
 		msg = msg.trim();
+		int len = textArea.getDocument().getLength();
 		String emojiMsg = msg.split(" ")[1];
 		String emojiName = emojiMsg.substring(1, emojiMsg.length()-1);
-		ImageIcon emoji = new ImageIcon("src/emoji/" + emojiName + ".png");
+		ImageIcon emoji = new ImageIcon("/emoji/" + emojiName + ".png");
 		
 		ChatMsg obcm = new ChatMsg(user, "300", "EMOJI");
 		obcm.setImg(emoji);

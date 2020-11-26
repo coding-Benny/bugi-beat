@@ -39,7 +39,7 @@ public class Game extends Thread {
 	private Music gameMusic;
 
 	ArrayList<Note> noteList = new ArrayList<Note>();
-
+	
 	public Game(String titleName, String difficulty, String musicTitle, int line) {
 		this.titleName = titleName;
 		this.difficulty = difficulty;
@@ -144,7 +144,7 @@ public class Game extends Thread {
 		g.drawImage(judgeImg, 220, 250, null);
 	}
 
-	public Image setPressNoteRoute() {
+	public Image getPressNoteRoute() {
 		if (line == 6 && !Note.isFever)
 			linePressedImg = line6_Pressed;
 		else if (line == 6 && Note.isFever)
@@ -158,7 +158,7 @@ public class Game extends Thread {
 
 	public void pressS() {
 		judge("S");
-		noteRouteSImg = setPressNoteRoute();
+		noteRouteSImg = getPressNoteRoute();
 		new Music("drumSmall1.mp3", false).start();
 	}
 
@@ -168,7 +168,7 @@ public class Game extends Thread {
 
 	public void pressD() {
 		judge("D");
-		noteRouteDImg = setPressNoteRoute();
+		noteRouteDImg = getPressNoteRoute();
 		new Music("drumSmall1.mp3", false).start();
 	}
 
@@ -178,7 +178,7 @@ public class Game extends Thread {
 
 	public void pressF() {
 		judge("F");
-		noteRouteFImg = setPressNoteRoute();
+		noteRouteFImg = getPressNoteRoute();
 		new Music("drumSmall1.mp3", false).start();
 	}
 
@@ -197,7 +197,7 @@ public class Game extends Thread {
 
 	public void pressJ() {
 		judge("J");
-		noteRouteJImg = setPressNoteRoute();
+		noteRouteJImg = getPressNoteRoute();
 		new Music("drumSmall1.mp3", false).start();
 	}
 
@@ -207,7 +207,7 @@ public class Game extends Thread {
 
 	public void pressK() {
 		judge("K");
-		noteRouteKImg = setPressNoteRoute();
+		noteRouteKImg = getPressNoteRoute();
 		new Music("drumSmall1.mp3", false).start();
 	}
 
@@ -217,7 +217,7 @@ public class Game extends Thread {
 
 	public void pressL() {
 		judge("L");
-		noteRouteLImg = setPressNoteRoute();
+		noteRouteLImg = getPressNoteRoute();
 		new Music("drumSmall1.mp3", false).start();
 	}
 

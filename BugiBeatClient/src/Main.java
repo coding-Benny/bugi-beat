@@ -16,7 +16,6 @@ public class Main extends JFrame {
 	public static final boolean SOUND_EFFECT = true; // 기본 on
 	
 	private static final long serialVersionUID = 1L;
-	
 
 	private JPanel contentPane;
 	private JTextField txtUserName;

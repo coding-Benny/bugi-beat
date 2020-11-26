@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,12 +17,15 @@ public class GamePanel extends JPanel {
 
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private RoomChat roomChatPanel = new RoomChat();
-	private Image background;
+	public static Image background;
 	public static Image gameScreenBg;
 
 	private Image line4_bg_Img = new ImageIcon(Main.class.getResource("/images/4line-bg.png")).getImage();
 	private Image line6_bg_Img = new ImageIcon(Main.class.getResource("/images/6line-bg.png")).getImage();
-	private ImageIcon gamescreenbgImg = new ImageIcon(Main.class.getResource("/images/game-bg0.png"));
+	private Image bg1Img = new ImageIcon(Main.class.getResource("/images/room-bg1.png")).getImage();
+	private Image bg2Img = new ImageIcon(Main.class.getResource("/images/room2-bg1.png")).getImage();
+	private Image feverBar_bg = new ImageIcon(Main.class.getResource("/images/fever-bar-bg.png")).getImage();
+	private Image gamescreenbgImg = new ImageIcon(Main.class.getResource("/images/game-bg0.png")).getImage();
 	private ImageIcon fever_line6_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-6line-bg.png"));
 	private ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-4line-bg.png"));
 	private ImageIcon startBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/start1.png"));
@@ -32,17 +34,13 @@ public class GamePanel extends JPanel {
 	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("/images/roomquit0.png"));
 	private ImageIcon roomsetEnteredImg = new ImageIcon(Main.class.getResource("/images/roomsetting1.png"));
 	private ImageIcon roomsetImg = new ImageIcon(Main.class.getResource("/images/roomsetting0.png"));
-	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("/images/room-bg1.png"));
-	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("/images/room2-bg1.png"));
-	private Image feverBar_bg = new ImageIcon(Main.class.getResource("/images/fever-bar-bg.png")).getImage();
 	
 	private JButton startBtn = new JButton(startBtnImg);
 	private JButton roomsetBtn = new JButton(roomsetImg);
 	private JButton quitBtn = new JButton(quitBtnImg);
+	private JLabel roomInfo = new JLabel("");
 	public static JProgressBar feverBar= new JProgressBar();
 	public static JProgressBar lifeBar= new JProgressBar();
-	public static JLabel scoreLabel = new JLabel();
-	public static JLabel maxComboLabel = new JLabel();
 	private boolean isMainScreen = true;
 	private boolean isGameScreen = false;
 	private String musicTitle;
@@ -76,14 +74,13 @@ public class GamePanel extends JPanel {
 	}
 
 	public GamePanel() {
-		background = roomSetPanel.setGamePanelBg();
-		gameScreenBg = gamescreenbgImg.getImage();
+		setSize(800, 720);
+		setLayout(null);
+		background = roomSetPanel.getGamePanelBg();
+		gameScreenBg = gamescreenbgImg;
 		
 		standbyMusic.start();
 
-		setSize(800, 720);
-		setLayout(null);
-		
 		roomSetPanel.setBounds(12, 100, 780, 442); // 가로위치, 세로위치, 가로길이, 세로길이
 		roomSetPanel.setVisible(false);
 		add(roomSetPanel);
@@ -194,8 +191,6 @@ public class GamePanel extends JPanel {
 
 		feverBar.setBackground(new Color(255, 230, 153));
 		feverBar.setForeground(new Color(255, 192, 0));
-		feverBar.setFont(new Font("산돌수필B", Font.PLAIN, 20));
-		feverBar.setString("Fever");
 		feverBar.setBorder(new LineBorder(new Color(255, 255, 255), 0, true));
 		feverBar.setBounds(594, 21, 153, 19);
 		feverBar.setVisible(false);
@@ -205,14 +200,17 @@ public class GamePanel extends JPanel {
 		
 		lifeBar.setBackground(new Color(246, 160, 160));
 		lifeBar.setForeground(new Color(234, 46, 46));
-		lifeBar.setFont(new Font("산돌수필B", Font.PLAIN, 20));
-		lifeBar.setString("Life");
 		lifeBar.setBorder(new LineBorder(new Color(255, 255, 255), 0, true));
 		lifeBar.setBounds(594, 61, 153, 19);
 		lifeBar.setVisible(false);
 		lifeBar.setValue(Note.life);
 		lifeBar.setMaximum(10);
 		add(lifeBar);
+		
+		roomInfo.setBounds(35, 30, 200, 30);
+		roomInfo.setForeground(Color.WHITE);
+		roomInfo.setFont(new Font("산돌수필B", Font.PLAIN, 28));
+		add(roomInfo);
 	}
 
 	public void gameStart(int nowSelected, String difficulty) {
@@ -231,22 +229,15 @@ public class GamePanel extends JPanel {
 		feverBar.setVisible(true);
 		lifeBar.setVisible(true);
 		
-		if(roomSetPanel.getLine()==6)
+		if(roomSetPanel.getLine() == 6)
 			gameScreenBg = line6_bg_Img;
-		else if(roomSetPanel.getLine()==4)
+		else if(roomSetPanel.getLine() == 4)
 			gameScreenBg = line4_bg_Img;
 		standbyMusic.close();
 		
 		game = new Game(musicTitle, difficulty, roomSetPanel.getTrackList().get(nowSelected).getGameMusic(), roomSetPanel.getLine());
 		game.start();
 		setFocusable(true);
-	}
-	
-	public void setGamePanelBg() {
-		if(roomSetPanel.getBgSet() == 1)
-			background = bg1Img.getImage();
-		else
-			background = bg2Img.getImage();
 	}
 	
 	public Music getBackgroundMusic() {

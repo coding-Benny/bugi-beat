@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -222,7 +221,7 @@ public class RoomSetting extends JPanel {
 		});
 		add(quitBtn);
 		
-		if(bgSet==1) {
+		if(bgSet == 1) {
 			setBg1Btn.setIcon(setbg12Img);
 			setBg2Btn.setIcon(setbg21Img);
 		}
@@ -255,7 +254,8 @@ public class RoomSetting extends JPanel {
 				setBg1Btn.setIcon(setbg12Img);
 				setBg2Btn.setIcon(setbg21Img);
 				bgSet=1;
-				//setGamePanelBg();
+				GamePanel.background = getGamePanelBg();
+				MonitorPanel.background = getMonitorPanelBg();
 			}
 		});
 		add(setBg1Btn);
@@ -284,7 +284,8 @@ public class RoomSetting extends JPanel {
 				setBg1Btn.setIcon(setbg11Img);
 				setBg2Btn.setIcon(setbg22Img);
 				bgSet=2;
-				//setGamePanelBg();
+				GamePanel.background = getGamePanelBg();
+				MonitorPanel.background = getMonitorPanelBg();
 			}
 		});
 		add(setBg2Btn);
@@ -340,14 +341,14 @@ public class RoomSetting extends JPanel {
 		return difficulty;
 	}
 	
-	public Image setGamePanelBg() {
+	public Image getGamePanelBg() {
 		if (bgSet == 1)
 			return gmbg1Img;
 		else
 			return gmbg2Img;
 	}
 	
-	public Image setMonitorPanelBg() {
+	public Image getMonitorPanelBg() {
 		if (bgSet == 1)
 			return mnbg1Img;
 		else

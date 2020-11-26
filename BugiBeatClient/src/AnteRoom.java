@@ -7,14 +7,13 @@ public class AnteRoom extends JFrame {
 
 	private Image background;
 	
-	private ImageIcon bg1Img = new ImageIcon(Main.class.getResource("/images/anteroom1-bg.png"));
-	private ImageIcon bg2Img = new ImageIcon(Main.class.getResource("/images/anteroom2-bg.png"));
+	private Image bg1Img = new ImageIcon(Main.class.getResource("/images/anteroom1-bg.png")).getImage();
+	private Image bg2Img = new ImageIcon(Main.class.getResource("/images/anteroom2-bg.png")).getImage();
 
 	private RoomSetting roomSetPanel = new RoomSetting();
 	
 	public void paint(Graphics g) {
 		g.drawImage(background, 0, 0, null);
-		
 		paintComponents(g);
 	}
 	
@@ -26,14 +25,15 @@ public class AnteRoom extends JFrame {
 		setShape(new RoundRectangle2D.Double(0, 0, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, 40, 40));
 		setResizable(false);
 		setLocationRelativeTo(null);
+		setVisible(true);
 		
 		Container c = getContentPane();
 		c.setLayout(null);
 
 		if(roomSetPanel.getBgSet() == 1)
-			background = bg1Img.getImage();
+			background = bg1Img;
 		else
-			background = bg2Img.getImage();
+			background = bg2Img;
 		
 		JScrollPane accessListPanel = new JScrollPane();
 		accessListPanel.setBounds(915, 230, 340, 420);
@@ -53,13 +53,11 @@ public class AnteRoom extends JFrame {
 		
 		JButton createRoomBtn = new JButton("방 생성");
 		createRoomBtn.setBounds(1010, 70, 160, 56);
-		getContentPane().add(createRoomBtn);
+		c.add(createRoomBtn);
 		
 		JButton gameSetBtn = new JButton("게임 설정");
 		gameSetBtn.setBounds(1010, 140, 160, 56);
-		getContentPane().add(gameSetBtn);
-		
-		setVisible(true);
+		c.add(gameSetBtn);
 		
 	}
 }

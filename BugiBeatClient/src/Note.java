@@ -1,4 +1,3 @@
-
 import java.awt.Graphics2D;
 import java.awt.Image;
 
@@ -10,10 +9,10 @@ public class Note extends Thread {
 	private Image line4_noteImg = new ImageIcon(Main.class.getResource("/images/4line-note.png")).getImage();
 	private Image fever_line6_noteImg = new ImageIcon(Main.class.getResource("/images/6line-note.png")).getImage();
 	private Image fever_line4_noteImg = new ImageIcon(Main.class.getResource("/images/4line-note.png")).getImage();
-	private ImageIcon line6_bg_Img = new ImageIcon(Main.class.getResource("/images/6line-bg.png"));
-	private ImageIcon fever_line6_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-6line-bg.png"));
-	private ImageIcon line4_bg_Img = new ImageIcon(Main.class.getResource("/images/4line-bg.png"));
-	private ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-4line-bg.png"));
+	private Image line6_bg_Img = new ImageIcon(Main.class.getResource("/images/6line-bg.png")).getImage();
+	private Image fever_line6_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-6line-bg.png")).getImage();
+	private Image line4_bg_Img = new ImageIcon(Main.class.getResource("/images/4line-bg.png")).getImage();
+	private Image fever_line4_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-4line-bg.png")).getImage();
 	
 	public static boolean isFever = false;
 	public static int fever = 0;
@@ -79,26 +78,25 @@ public class Note extends Thread {
 
 	public void screenDraw(Graphics2D g) {
 		if (line == 6 && !isFever) {
-			Game.gameScreenBg = line6_bg_Img.getImage();
+			Game.gameScreenBg = line6_bg_Img;
 			note_Img = line6_noteImg;
 		} else if (line == 6 && isFever) {
-			Game.gameScreenBg = fever_line6_bg_Img.getImage();
+			Game.gameScreenBg = fever_line6_bg_Img;
 			note_Img = fever_line6_noteImg;
 		} else if (line == 4 && !isFever) {
-			Game.gameScreenBg = line4_bg_Img.getImage();
+			Game.gameScreenBg = line4_bg_Img;
 			note_Img = line4_noteImg;
 		} else if (line == 4 && isFever) {
-			Game.gameScreenBg = fever_line4_bg_Img.getImage();
+			Game.gameScreenBg = fever_line4_bg_Img;
 			note_Img = fever_line4_noteImg;
 		}
-		/*if (!noteType.equals("Space")) {
+		if (!noteType.equals("Space")) {
 			if (line == 4)
 				g.drawImage(note_Img, x, y, null);
 			else if (line == 6) {
 				g.drawImage(note_Img, x, y, null);
 			}
-		}*/
-		else {
+		} else {
 			// 아이템 시각 효과 그리기
 		}
 	}
@@ -136,16 +134,12 @@ public class Note extends Thread {
 					else
 						life++;
 				}
-				
 				if (fever != 0 && fever % 10 == 0) // 10배수마다 피버타임 on
 					isFever = true;
 				else if (fever != 0 && fever % 20 == 0) { // 20배수에 피버타임 off
 					isFever = false;
 					fever = 0;
 				}
-
-				GamePanel.scoreLabel.setText(score + "");
-				GamePanel.maxComboLabel.setText(maxCombo + "");
 
 				if (proceeded) {
 					Thread.sleep(Main.SLEEP_TIME);
@@ -159,7 +153,7 @@ public class Note extends Thread {
 		}
 	}
 
-	public String judge() { // 500을 기준 -> 판정 기준 너무 빡빡한 것 같은데 수정한건지 물어보기
+	public String judge() { // 500을 기준
 		if (y >= 525) { // Good
 			if (!isFever)
 				score += 5;

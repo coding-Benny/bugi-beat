@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
@@ -22,21 +21,20 @@ public class GameRoom extends JFrame {
 	private GamePanel gamePanel = new GamePanel();
 	private MonitorPanel monitorPanel = new MonitorPanel();
 	
-	private String title;
 	private int mouseX, mouseY;
 	
 	public GameRoom(int id, String title) {
 		super("게임 방");
-		this.title = title;
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
 		setShape(new RoundRectangle2D.Double(0, 0, Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, 40, 40));
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setLayout(null);
+		setVisible(true);
 		
 		Container c = getContentPane();
+		c.setLayout(null);
 		
 		menuBar.setBounds(0, 0, 1220, 30);
 		menuBar.addMouseListener(new MouseAdapter() {
@@ -100,11 +98,5 @@ public class GameRoom extends JFrame {
 		
 		monitorPanel.setBounds(800, 0, 480, 720);
 		c.add(monitorPanel);
-		
-		setVisible(true);
-	}
-	
-	public String getRoomTitle() {
-		return title;
 	}
 }
