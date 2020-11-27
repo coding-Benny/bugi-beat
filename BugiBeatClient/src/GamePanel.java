@@ -185,6 +185,20 @@ public class GamePanel extends JPanel {
 				}
 				// 방나가기
 				// dispose();
+				if (isGameScreen) {
+					isGameScreen = false;
+					isMainScreen = true;
+					roomChatPanel.setVisible(true);
+					startBtn.setVisible(true);
+					roomsetBtn.setVisible(true);
+					roomSetPanel.setVisible(true);
+					feverBar.setVisible(false);
+					lifeBar.setVisible(false);
+					gameScreenBg = null;
+					game.close();
+				}
+			//	else if (isMainScreen)
+			//		대기실로 가도록 구현
 			}
 		});
 		add(quitBtn);
@@ -242,5 +256,9 @@ public class GamePanel extends JPanel {
 	
 	public Music getBackgroundMusic() {
 		return standbyMusic;
+	}
+	
+	public boolean isPlaying() {
+		return isGameScreen;
 	}
 }

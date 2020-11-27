@@ -70,6 +70,7 @@ public class RoomListPanel extends JPanel {
 		DefaultListCellRenderer renderer = new DefaultListCellRenderer();
 		renderer.setOpaque(false);
 		renderer.setForeground(Color.WHITE);
+		roomList.setSelectionForeground(Color.GRAY);
 		roomList.setCellRenderer(renderer);
 		roomScrollPane.setBounds(45, 95, 300, 500);
 		roomScrollPane.setBorder(null);

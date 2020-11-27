@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.Vector;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -68,11 +69,8 @@ public class WaitingRoom extends JFrame {
 	private JButton createRoomBtn = new JButton(createBtnImg);
 	private JButton gameSetBtn = new JButton(gameSetBtnImg);
 	
-	private Music waitingMusic = new Music("waiting beat.mp3", true);
+	public static Music waitingMusic = new Music("waiting beat.mp3", true);
 	
-	private JList<String> userList = new JList<String>();
-	public static Vector<String> member = new Vector<String>();
-
 	private int mouseX, mouseY;
 	
 	public WaitingRoom(String userName, String ipAddress, String portNo) {
@@ -297,6 +295,8 @@ public class WaitingRoom extends JFrame {
 				} catch (InterruptedException ex) {
 					ex.printStackTrace();
 				}
+				ChatMsg msg = new ChatMsg(user, "110", "Bye");
+				SendObject(msg);
 				System.exit(0);
 			}
 		});
@@ -315,8 +315,7 @@ public class WaitingRoom extends JFrame {
 			ois = new ObjectInputStream(socket.getInputStream());
 
 			ChatMsg obcm = new ChatMsg(userName, "100", "Hello");
-			member.add(user);
-			userList.setListData(member);
+			UserListPanel.member.addElement(userName);
 			SendObject(obcm);
 
 			ListenNetwork net = new ListenNetwork();
@@ -324,7 +323,6 @@ public class WaitingRoom extends JFrame {
 			TextSendAction textSendAction = new TextSendAction();
 			inputField.addActionListener(textSendAction);
 			inputField.requestFocus();
-
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 			AppendText("connect error");
@@ -353,23 +351,21 @@ public class WaitingRoom extends JFrame {
 					} else
 						continue;
 					switch (cm.code) {
-					case "110":	// 로그아웃
-						// 접속자 명단에서 지우기 구현 예정
+					case "110":	// logout
+						UserListPanel.member.removeElement(cm.id);
 						break;
 					case "120": // OldUser
 						String[] oldUserInfo = msg.split(" ");
 						String oldUserName = oldUserInfo[2];
 						if (!oldUserName.equals(user)) {
-							member.add(oldUserName);
-							userList.setListData(member);
+							UserListPanel.member.addElement(oldUserName);
 						}
 						break;
 					case "200": // chat message
 						if (msg.contains("입장")) {
 							String[] welcomeMsg = cm.getData().split("]");
 							String newUser = welcomeMsg[0].substring(1);
-							member.add(newUser);
-							userList.setListData(member);
+							UserListPanel.member.addElement(newUser);
 						}
 						if (user.equals(cm.getId())) {
 							AppendMyText(msg);
@@ -379,10 +375,20 @@ public class WaitingRoom extends JFrame {
 						}
 						break;
 					case "300": // Image 첨부
-						AppendText("[" + cm.getId() + "]");
+						if (user.equals(cm.getId()))
+							AppendMyText("[" + cm.getId() + "]");
+						else
+							AppendText("[" + cm.getId() + "]");
 						AppendImage(cm.img);
 						break;
-					case "310": // emoji
+					case "420":	// create room
+						String roomID = cm.data.split(":")[0];
+						String roomTitle = cm.data.split(":")[1];
+						System.out.println(roomID + ":" + roomTitle);
+						new GameRoom(Integer.parseInt(roomID), roomTitle);
+						waitingMusic.close();
+						break;
+					case "900": // emoji
 						if (user.equals(cm.getId())) {
 							AppendEmoji(msg);
 						}
@@ -391,13 +397,6 @@ public class WaitingRoom extends JFrame {
 							AppendEmoji(msg);
 							AppendText("\n");
 						}
-						break;
-					case "420":	// create room
-						String roomID = cm.data.split(":")[0];
-						String roomTitle = cm.data.split(":")[1];
-						System.out.println(roomID + ":" + roomTitle);
-						new GameRoom(Integer.parseInt(roomID), roomTitle);
-						waitingMusic.close();
 						break;
 					}
 				} catch (IOException e) {
@@ -460,10 +459,9 @@ public class WaitingRoom extends JFrame {
 	
 	public void AppendEmoji(String msg) {
 		msg = msg.trim();
-		int len = textArea.getDocument().getLength();
 		String emojiMsg = msg.split(" ")[1];
 		String emojiName = emojiMsg.substring(1, emojiMsg.length()-1);
-		ImageIcon emoji = new ImageIcon("/emoji/" + emojiName + ".png");
+		ImageIcon emoji = new ImageIcon("src/emoji/" + emojiName + ".png");
 		
 		ChatMsg obcm = new ChatMsg(user, "300", "EMOJI");
 		obcm.setImg(emoji);

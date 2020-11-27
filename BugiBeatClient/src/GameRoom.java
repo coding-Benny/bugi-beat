@@ -54,7 +54,6 @@ public class GameRoom extends JFrame {
 		});
 		c.add(menuBar);
 
-
 		exitBtn.setBounds(1238, 12, 30, 27);
 		exitBtn.setBorderPainted(false);
 		exitBtn.setContentAreaFilled(false);
@@ -87,8 +86,13 @@ public class GameRoom extends JFrame {
 				} catch (InterruptedException ex) {
 					ex.printStackTrace();
 				}
-				gamePanel.getBackgroundMusic().close();
-				setVisible(false);
+				if (gamePanel.isPlaying())	// 게임중에 나가면 대기실로 이동
+					GamePanel.game.close();
+				else {	// 게임방에서 나가기
+					gamePanel.getBackgroundMusic().close();	// 게임방 배경음악은 끄고
+					// 대기실 배경음악은 켜야 함
+				}
+				dispose();
 			}
 		});
 		c.add(exitBtn);
