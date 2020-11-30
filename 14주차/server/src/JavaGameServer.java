@@ -12,8 +12,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -322,9 +325,30 @@ public class JavaGameServer extends JFrame {
 							}
 						}
 						Login();
-					} else if (cm.getCode().matches("110")) { // logout message 처리
-						Logout();
-						WriteAllObject(cm);
+					} else if (cm.getCode().matches("110")) { // 방나가기 message 처리
+						FileWriter fw;
+						BufferedWriter writer;
+						UserName = cm.getId();
+						String[] args = msg.split("-"); // 단어들을 분리한다.
+						String dateStr = args[0];
+						String titleStr = args[1];
+						String scoreStr = args[2];
+						try {
+							fw = new FileWriter(new File("ScoreLog.txt"), true);
+							writer = new BufferedWriter(fw);
+							writer.write(dateStr + "\t\t");
+							writer.write(UserName+ "##");
+							writer.write(titleStr + "##");
+							writer.write(scoreStr);
+							writer.newLine();
+							writer.flush();
+							fw.close();
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						//Logout();
+						//WriteAllObject(cm);
 						break;
 					} else if (cm.getCode().matches("200")) {
 						msg = String.format("[%s] %s", cm.getId(), cm.getData());
