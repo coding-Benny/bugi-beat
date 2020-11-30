@@ -10,7 +10,8 @@ import javax.swing.ImageIcon;
 
 public class Game extends Thread {
 	private Image judgementLineImg = new ImageIcon(Main.class.getResource("/images/judgement-line.png")).getImage();
-	private Image fever_judgementLineImg = new ImageIcon(Main.class.getResource("/images/fever-judgement-line.png")).getImage();
+	private Image fever_judgementLineImg = new ImageIcon(Main.class.getResource("/images/fever-judgement-line.png"))
+			.getImage();
 	private Image noteRouteSImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	private Image noteRouteDImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	private Image noteRouteFImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
@@ -37,9 +38,11 @@ public class Game extends Thread {
 	private String musicTitle;
 	private int line;
 	private Music gameMusic;
+	private EndingResult ending;
+	public static boolean showingResult;
 
 	ArrayList<Note> noteList = new ArrayList<Note>();
-	
+
 	public Game(String titleName, String difficulty, String musicTitle, int line) {
 		this.titleName = titleName;
 		this.difficulty = difficulty;
@@ -83,10 +86,10 @@ public class Game extends Thread {
 			g.drawString(titleName, 40, 38);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 			g.setColor(Color.YELLOW);
-			g.drawString("Score : ", 40, 70); // 92, 70
+			g.drawString("Score : " + Note.score, 40, 70); // 92, 70
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 28));
 			g.setColor(Color.ORANGE);
-			g.drawString("Max Combo: ", 40, 100);
+			g.drawString("Max Combo: " + Note.maxCombo, 40, 100);
 
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 			g.setColor(Color.WHITE);
@@ -141,6 +144,12 @@ public class Game extends Thread {
 			g.setColor(Color.WHITE);
 			g.drawString(Note.combo + "", 380, 400);
 		}
+		// result
+		if (showingResult) {
+			judgeImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+			ending.draw(g);
+		}
+
 		g.drawImage(judgeImg, 220, 250, null);
 	}
 
@@ -193,6 +202,15 @@ public class Game extends Thread {
 
 	public void releaseSpace() {
 		// 스페이스바 뗐을때 이펙트
+	}
+	
+	public void releaseEnter() {
+		//엔터키
+	}
+
+	public void pressEnter() {
+		if(showingResult)  //결과창에서만 입력받음
+			GamePanel.game.close();  //방 나가기
 	}
 
 	public void pressJ() {
@@ -303,7 +321,7 @@ public class Game extends Thread {
 					new Beat(startTime + gap * 365, "D"), new Beat(startTime + gap * 369, "K"),
 					new Beat(startTime + gap * 374, "S"), new Beat(startTime + gap * 377, "D"),
 					new Beat(startTime + gap * 379, "K"), new Beat(startTime + gap * 381, "D"),
-					new Beat(startTime + gap * 383, "K"),
+					new Beat(startTime + gap * 383, "K"), new Beat(startTime + gap * 430, "end"),
 
 			};
 		} else if (titleName.equals("미행 - f(x)") && difficulty.equals("Hard") && line == 4) {
@@ -328,15 +346,19 @@ public class Game extends Thread {
 					new Beat(startTime + gap * 32, "K"), new Beat(startTime + gap * 36, "J"), };
 		} else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Easy")) {
 			int startTime = 1000;
-			beats = new Beat[] { new Beat(startTime, "S"), };
+			int gap = 114; /* 박자 계산 */
+			beats = new Beat[] { new Beat(startTime, "S"), new Beat(startTime + gap * 50, "end"),
+					//"end"노트는 +50
+			};
 		} else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Hard")) {
 			int startTime = 1000;
 			beats = new Beat[] { new Beat(startTime, "S"), };
 		}
 		int i = 0;
 		gameMusic.start();
+		showingResult = false;
+		ending = new EndingResult();
 		while (i < beats.length && !isInterrupted()) {
-			//
 			boolean dropped = false;
 			if (beats[i].getTime() <= gameMusic.getTime()) {
 				Note note = new Note(beats[i].getNoteName(), line, note_Img);
@@ -352,6 +374,14 @@ public class Game extends Thread {
 					e.printStackTrace();
 				}
 			}
+			if (showingResult) {
+				gameMusic.close();
+				ending.playBgm();
+				ending.takeScore(Note.score);
+				ending.calRank();
+				ending.writeScore();
+			}
+			ending.update();
 		}
 	}
 

@@ -55,6 +55,9 @@ public class Note extends Thread {
 				x = 392;
 			} else if (noteType.equals("L")) {
 				x = 566;
+			} else if (noteType.equals("end")) {
+				x = 900;  //안보이게
+				Game.showingResult=true;
 			}
 		} else if (line == 6) {
 			if (noteType.equals("S")) {
@@ -69,6 +72,9 @@ public class Note extends Thread {
 				x = 506;
 			} else if (noteType.equals("L")) {
 				x = 622;
+			} else if (noteType.equals("end")) {
+				x = 900;  //안보이게
+				Game.showingResult=true;
 			}
 		}
 		this.noteType = noteType;
@@ -105,15 +111,16 @@ public class Note extends Thread {
 		y += Main.NOTE_SPEED;
 		if (y > 560) { /* 판정바를 지나친 경우 */
 			combo = 0;
-			life--;
-			isFever = false;
-			if (fever >= 1)
-				fever -= 10;
-			else
+			if (!noteType.equals("end")) {
+				life--;
+				isFever = false;
 				fever = 0;
+			}
 
-			if (life < 0) // 게임오버 나중에 구현
+			if (life < 0) {  //게임오버
 				life = 0;
+				Game.showingResult=true;
+			}
 			close();
 		}
 	}
@@ -134,11 +141,12 @@ public class Note extends Thread {
 					else
 						life++;
 				}
-				if (fever != 0 && fever % 10 == 0) // 10배수마다 피버타임 on
-					isFever = true;
-				else if (fever != 0 && fever % 20 == 0) { // 20배수에 피버타임 off
+				if (fever != 0 && fever % 20 == 0) { // 20배수마다 피버타임 off
 					isFever = false;
 					fever = 0;
+				}
+				else if (fever != 0 && fever % 10 == 0) { // 10배수마다 피버타임 on
+					isFever = true;
 				}
 
 				if (proceeded) {
