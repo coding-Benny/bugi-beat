@@ -35,7 +35,7 @@ public class AnteRoom extends JFrame {
 		else
 			background = bg2Img;
 		
-		JScrollPane accessListPanel = new JScrollPane();
+		JPanel accessListPanel = new JPanel();
 		accessListPanel.setBounds(915, 230, 340, 420);
 		c.add(accessListPanel);
 		
@@ -49,15 +49,6 @@ public class AnteRoom extends JFrame {
 		
 		JPanel anteChatPanel = new JPanel();
 		anteChatPanel.setBounds(25, 380, 450, 270);
-		c.add(anteChatPanel);
-		
-		JButton createRoomBtn = new JButton("방 생성");
-		createRoomBtn.setBounds(1010, 70, 160, 56);
-		c.add(createRoomBtn);
-		
-		JButton gameSetBtn = new JButton("게임 설정");
-		gameSetBtn.setBounds(1010, 140, 160, 56);
-		c.add(gameSetBtn);
-		
+		c.add(anteChatPanel);		
 	}
 }

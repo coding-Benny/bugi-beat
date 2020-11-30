@@ -6,15 +6,19 @@ public class GameRoom {
 	private List<GameUser> userList;
 	private GameUser roomOwner;	// 방장
 	private String roomTitle;	// 방제
+	private String difficulty;	// 난이도
+	private int numOfLines;	// 칸 수
 	
 	public GameRoom(int roomID) {
 		this.id = roomID;
 		userList = new ArrayList<GameUser>();
 	}
 	
-	public GameRoom(int roomID, GameUser user, String title) {
+	public GameRoom(int roomID, GameUser user, String title, String difficulty, int numOfLines) {
 		this.id = roomID;
 		this.roomTitle = title;
+		this.difficulty = difficulty;
+		this.numOfLines = numOfLines;
 		userList = new ArrayList<GameUser>();
 		user.enterRoom(this);
 		userList.add(user);	// 유저를 추가
@@ -96,6 +100,14 @@ public class GameRoom {
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getDifficulty() {
+		return difficulty;
+	}
+	
+	public int getNumOfLines() {
+		return numOfLines;
 	}
 	
 }

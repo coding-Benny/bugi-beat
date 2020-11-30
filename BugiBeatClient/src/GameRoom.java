@@ -23,7 +23,7 @@ public class GameRoom extends JFrame {
 	
 	private int mouseX, mouseY;
 	
-	public GameRoom(int id, String title) {
+	public GameRoom(int id, String title, String difficulty, String numOfLines) {
 		super("게임 방");
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

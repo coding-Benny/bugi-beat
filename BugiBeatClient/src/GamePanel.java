@@ -67,9 +67,14 @@ public class GamePanel extends JPanel {
 			g.drawImage(screenImage, 0, 0, null);
 			game.screenDraw(g);
 		}
-
-		this.repaint();
 		paintComponents(g);
+		try {
+			Thread.sleep(5);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		this.repaint();
+		
 
 	}
 
