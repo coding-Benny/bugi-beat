@@ -28,6 +28,10 @@ public class Game extends Thread {
 	private Image fever_line4_Pressed = new ImageIcon(Main.class.getResource("/images/fever-4line-p.png")).getImage();
 	private Image line6_Pressed = new ImageIcon(Main.class.getResource("/images/6line-p.png")).getImage();
 	private Image fever_line6_Pressed = new ImageIcon(Main.class.getResource("/images/fever-6line-p.png")).getImage();
+	private Image cloudsendNoti0Img = new ImageIcon(Main.class.getResource("/images/cloouds-send0.png")).getImage();
+	private Image cloudsendNoti1Img = new ImageIcon(Main.class.getResource("/images/cloouds-send1.png")).getImage();
+	private Image cloudsendnothing = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	public static Image cloudNotiImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	public static Image gameScreenBg;
 	private Image linePressedImg;
 	private Image judgeImg;
@@ -38,6 +42,7 @@ public class Game extends Thread {
 	private String musicTitle;
 	private int line;
 	private Music gameMusic;
+	private Music itemcount = new Music("itemcount.mp3", false);
 	private EndingResult ending;
 	public static boolean showingResult;
 	public static int isSendItem = 0;
@@ -62,7 +67,9 @@ public class Game extends Thread {
 			g.drawImage(judgementLineImg, 11, 500, null);
 		else
 			g.drawImage(fever_judgementLineImg, 11, 500, null);
-
+		
+		g.drawImage(cloudNotiImg, 300, 0, null);
+			
 		if (line == 6) {
 			g.drawImage(noteRouteSImg, 45, 80, null);
 			g.drawImage(noteRouteDImg, 160, 80, null);
@@ -197,8 +204,12 @@ public class Game extends Thread {
 	}
 
 	public void pressSpace() {
-		judge("Space"); // 아이템
-		new Music("senditem.mp3", false).start();
+		if(isItemOn) {
+			// 아이템보내기
+			judge("space");
+			new Music("senditem.mp3", false).start();
+			itemcount.start();
+		}
 	}
 
 	public void releaseSpace() {
@@ -375,6 +386,21 @@ public class Game extends Thread {
 					e.printStackTrace();
 				}
 			}
+			System.out.println(gameMusic.getTime());
+			if(itemcount.getTime()>= 3000) {  //아이템 보내고 3초뒤에
+				cloudNotiImg = cloudsendnothing;
+				isSendItem=0;  //아이콘 지우기
+				isRecvItem=0;
+				isItemOn=false;
+			}
+			else if(!isItemOn && gameMusic.getTime()>10000 && Note.score>=100 || !isItemOn && gameMusic.getTime()>40000 && Note.score>=500 || !isItemOn && gameMusic.getTime()>70000 && Note.score>=1000) {
+				isItemOn=true;
+				if(i%2==0)
+					cloudNotiImg = cloudsendNoti0Img;
+				else
+					cloudNotiImg = cloudsendNoti1Img;
+			}
+			
 			if (showingResult) {
 				gameMusic.close();
 				ending.playBgm();
@@ -392,7 +418,13 @@ public class Game extends Thread {
 	public void judge(String input) {
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
-			if (input.equals(note.getNoteType())) {
+			if(input.equals("space")) {
+				isSendItem=2;   //다른 유저name
+				cloudNotiImg = cloudsendnothing;
+				isItemOn=false;
+				break;
+			}
+			else if (input.equals(note.getNoteType())) {
 				judgeEvent(note.judge());
 				break;
 			}

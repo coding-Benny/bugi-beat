@@ -13,6 +13,9 @@ public class Note extends Thread {
 	private Image fever_line6_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-6line-bg.png")).getImage();
 	private Image line4_bg_Img = new ImageIcon(Main.class.getResource("/images/4line-bg.png")).getImage();
 	private Image fever_line4_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-4line-bg.png")).getImage();
+	private Image cloudsendNoti0Img = new ImageIcon(Main.class.getResource("/images/cloouds-send0.png")).getImage();
+	private Image cloudsendNoti1Img = new ImageIcon(Main.class.getResource("/images/cloouds-send1.png")).getImage();
+	private Image nothing = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 
 	public static boolean isFever = false;
 	public static int fever = 0;
@@ -148,12 +151,16 @@ public class Note extends Thread {
 				} else if (fever != 0 && fever % 10 == 0) { // 10배수마다 피버타임 on
 					isFever = true;
 				}
-
-				if ((int) (Math.random() * 100) % 11 == 0) { // 난수가 33배수일때 마다 아이템
-					Game.isItemOn = true;
+/*
+				if (!Game.isItemOn) {
+					Game.cloudNotiImg = nothing;
 				} else {
-					Game.isItemOn = false;
+					if(cnt%11==0)
+						Game.cloudNotiImg = cloudsendNoti0Img;
+					else
+						Game.cloudNotiImg = cloudsendNoti1Img;
 				}
+				*/
 				
 				if (proceeded) {
 					Thread.sleep(Main.SLEEP_TIME);

@@ -2,6 +2,7 @@
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -31,7 +32,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -83,6 +86,7 @@ public class WaitingRoom extends JFrame {
 	};
 
 	public static Music waitingMusic = new Music("waiting beat.mp3", true);
+	public GameRoom gameRoom;
 
 	private int mouseX, mouseY;
 
@@ -111,11 +115,12 @@ public class WaitingRoom extends JFrame {
 		c.add(rankingPanel);
 
 		chatScrollPane.setBounds(50, 400, 400, 200);
+		chatScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER); // 스크롤바 숨기기
+		chatScrollPane.setBorder(null);
+		chatScrollPane.getViewport().setOpaque(false);
+		chatScrollPane.setOpaque(false);
 		textArea.setEditable(true);
 		textArea.setOpaque(false);
-		textArea.setBackground(new Color(0, 0, 0, 0));
-		chatScrollPane.setOpaque(false);
-		chatScrollPane.setBackground(new Color(0, 0, 0, 0));
 		chatScrollPane.setViewportView(textArea);
 		bgPanel.add(chatScrollPane);
 
@@ -499,7 +504,7 @@ public class WaitingRoom extends JFrame {
 	public void AppendText(String msg) {
 		msg = msg.trim(); // 앞뒤 blank와 \n을 제거한다.
 		StyleContext sc = StyleContext.getDefaultStyleContext();
-		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.BLACK);
+		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.WHITE);
 
 		int len = textArea.getDocument().getLength();
 		// 끝으로 이동
@@ -511,7 +516,7 @@ public class WaitingRoom extends JFrame {
 	public void AppendMyText(String msg) {
 		msg = msg.trim(); // 앞뒤 blank와 \n을 제거한다.
 		StyleContext sc = StyleContext.getDefaultStyleContext();
-		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.RED);
+		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.YELLOW);
 
 		int len = textArea.getDocument().getLength();
 		// 끝으로 이동

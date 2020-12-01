@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.*;
 
 public class RoomListPanel extends JPanel {
@@ -48,7 +49,7 @@ public class RoomListPanel extends JPanel {
 		roomScrollPane.setOpaque(false);
 		roomScrollPane.setViewportView(roomList);
 		roomScrollPane.getViewport().setOpaque(false);
-
+		roomScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		roomList.setBackground(new Color(0, 0, 0, 0));
 		roomList.setSelectionBackground(new Color(0, 0, 0, 0));
 		roomList.setOpaque(false);

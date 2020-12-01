@@ -43,11 +43,11 @@ public class EndingResult {
 	public void calRank() { // 점수 랭크 기준
 		if (score <= 200)
 			rank = "C";
-		else if (score <= 500)
+		else if (score <= 700)
 			rank = "B";
-		else if (score <= 1000)
+		else if (score <= 1500)
 			rank = "A";
-		else if (score <= 2000)
+		else if (score <= 3000)
 			rank = "S";
 	}
 
