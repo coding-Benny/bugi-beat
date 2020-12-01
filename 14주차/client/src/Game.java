@@ -41,6 +41,7 @@ public class Game extends Thread {
 	private String difficulty;
 	private String musicTitle;
 	private int line;
+	int cnt=0;
 	private Music gameMusic;
 	private Music itemcount = new Music("itemcount.mp3", false);
 	private EndingResult ending;
@@ -203,12 +204,19 @@ public class Game extends Thread {
 		noteRouteFImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	}
 
-	public void pressSpace() {
+	public void pressSpace() { // 아이템보내기
+		System.out.println(cnt);
 		if(isItemOn) {
-			// 아이템보내기
-			judge("space");
+			isSendItem=2;   //다른 유저 나중에 name같은걸로 변경
+			cloudNotiImg = cloudsendnothing;
+			isItemOn=false;
 			new Music("senditem.mp3", false).start();
+			if(cnt!=0) {
+				itemcount.stop();
+				itemcount = new Music("itemcount.mp3", false);
+			}
 			itemcount.start();
+			cnt++;
 		}
 	}
 
@@ -367,6 +375,7 @@ public class Game extends Thread {
 			beats = new Beat[] { new Beat(startTime, "S"), };
 		}
 		int i = 0;
+		int j = 0;
 		gameMusic.start();
 		showingResult = false;
 		ending = new EndingResult();
@@ -386,19 +395,30 @@ public class Game extends Thread {
 					e.printStackTrace();
 				}
 			}
-			System.out.println(gameMusic.getTime());
 			if(itemcount.getTime()>= 3000) {  //아이템 보내고 3초뒤에
 				cloudNotiImg = cloudsendnothing;
 				isSendItem=0;  //아이콘 지우기
 				isRecvItem=0;
+				j=0;
 				isItemOn=false;
 			}
+			else if(gameMusic.getTime()>71000) {
+				isItemOn=false;
+				cloudNotiImg = cloudsendnothing;
+				j++;
+			}
 			else if(!isItemOn && gameMusic.getTime()>10000 && Note.score>=100 || !isItemOn && gameMusic.getTime()>40000 && Note.score>=500 || !isItemOn && gameMusic.getTime()>70000 && Note.score>=1000) {
-				isItemOn=true;
-				if(i%2==0)
-					cloudNotiImg = cloudsendNoti0Img;
+				if(gameMusic.getTime()>71000)
+					break;
+				if(j==0)
+					isItemOn=true;
 				else
-					cloudNotiImg = cloudsendNoti1Img;
+					isItemOn=false;
+				if(isSendItem!=0)
+					cloudNotiImg = cloudsendnothing;
+				else
+					cloudNotiImg = cloudsendNoti0Img;
+				j++;
 			}
 			
 			if (showingResult) {
@@ -419,9 +439,6 @@ public class Game extends Thread {
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
 			if(input.equals("space")) {
-				isSendItem=2;   //다른 유저name
-				cloudNotiImg = cloudsendnothing;
-				isItemOn=false;
 				break;
 			}
 			else if (input.equals(note.getNoteType())) {
