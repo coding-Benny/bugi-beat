@@ -22,7 +22,6 @@ public class EndingResult {
 	private boolean step3On;
 	private boolean step4On;
 	private boolean nextgame;
-	private int angle;
 	Socket socket; // 연결소켓
 	ObjectOutputStream oos;
 
@@ -37,7 +36,6 @@ public class EndingResult {
 		step3On = false;
 		step4On = false;
 		nextgame = false;
-		angle = 155;
 
 		endingBgm = new Music("resultBgm.mp3", false);
 	}
@@ -64,13 +62,11 @@ public class EndingResult {
 
 		
 		//msg = dateStr + "-" + titleStr + "-" + scoreStr;
-		//SendMessage(msg); //서버에 110 End game전송
+		//SendMessage(msg); //서버에 410 Leave game room전송
 
 	}
 
 	public void update() {
-		angle += 3;
-
 		if (endingBgm.getTime() >= 6500) {
 			nextgame = true;
 		}
@@ -80,7 +76,7 @@ public class EndingResult {
 
 		// result
 		g.setColor(new Color(0, 0, 0, 150));
-		g.fillRect(200, 240, 400, 180);
+		g.fillRect(230, 200, 350, 220);
 
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
@@ -89,7 +85,7 @@ public class EndingResult {
 			step1On = true;
 			g.setColor(Color.YELLOW);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 60));
-			g.drawString("Game Over", 300, 300);
+			g.drawString("Game Over", 300, 260);
 		}
 
 		// 2
@@ -97,7 +93,7 @@ public class EndingResult {
 			step2On = true;
 			g.setColor(Color.ORANGE);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 32));
-			g.drawString("Score: " + String.valueOf(score), 340, 360);
+			g.drawString("Score: " + String.valueOf(score), 350, 300);
 		}
 
 		// 3
@@ -105,17 +101,15 @@ public class EndingResult {
 			step3On = true;
 			g.setColor(Color.ORANGE);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 120));
-			g.drawString(rank, 535, 375);
+			g.drawString(rank, 385, 395);
 			g.setColor(Color.WHITE);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 110));
-			g.drawString(rank, 530, 370);
+			g.drawString(rank, 380, 390);
 		}
 
 		// 4
 		if (endingBgm.getTime() >= 6500 || step4On == true) {
 			step4On = true;
-			if (angle >= 175)
-				angle = 0;
 			g.setColor(Color.BLACK);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 27));
 			g.drawString("- Press ENTER -", 332, 452);
@@ -125,7 +119,7 @@ public class EndingResult {
 		}
 
 	}
-	/*  //서버에 110 End game전송
+	/*  //서버에 410 Leave game room전송
 	public void SendMessage(String msg) {
 		try {
 			socket = new Socket(ipAddress, Integer.parseInt(portNo));

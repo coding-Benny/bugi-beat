@@ -21,63 +21,42 @@ public class UserListPanel extends JPanel {
 	private Graphics screenGraphic;
 	private Image background;
 	private Image accessListImg = new ImageIcon(Main.class.getResource("/images/accesslist-bg.png")).getImage();
-	private Image bg1Img = new ImageIcon(Main.class.getResource("/images/anteroom1-bg.png")).getImage();
-	private Image bg2Img = new ImageIcon(Main.class.getResource("/images/anteroom2-bg.png")).getImage();
-	private Image bg1Cropped = createImage(new FilteredImageSource(bg1Img.getSource(), new CropImageFilter(915, 230, 340, 420)));
-	private Image bg2Cropped = createImage(new FilteredImageSource(bg2Img.getSource(), new CropImageFilter(915, 230, 340, 420)));
-	
+
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private JScrollPane userScrollPane = new JScrollPane();
 	
 	public static DefaultListModel<String> member = new DefaultListModel<String>();
 	public static JList<String> userList = new JList<String>(member);
 	
-	public void paint(Graphics g) {
-		screenImage = createImage(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
-		screenGraphic = screenImage.getGraphics();
-		screenDraw((Graphics2D) screenGraphic);
-		g.drawImage(screenImage, 0, 0, null);
-	}
-
-	public void screenDraw(Graphics2D g) {
-		g.drawImage(background, 0, 0, null);
+	public void paintComponent(Graphics g) {
 		g.drawImage(accessListImg, 0, 0, null);
-		
-		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		paintComponents(g);
-		try {
-			Thread.sleep(5);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		this.repaint();
+		super.paintComponent(g);
 	}
 	
 	public UserListPanel() {
 		setSize(340, 420);
 		setLayout(null);
 		
-		if (roomSetPanel.getBgSet() == 1) {
-			background = bg1Cropped;
-		}
-		else
-			background = bg2Cropped;
+		setBackground(new Color(0, 0, 0, 0));
+		setOpaque(false);
 		
-		userScrollPane.setBounds(35, 85, 270, 310);
+		userScrollPane.setBounds(35, 95, 270, 310);
 		userScrollPane.setBorder(null);
 		userScrollPane.setOpaque(false);
 		userScrollPane.setViewportView(userList);
 		userScrollPane.getViewport().setOpaque(false);
 		
+		userList.setBackground(new Color(0, 0, 0, 0));
+		userList.setSelectionBackground(new Color(0, 0, 0, 0));
 		userList.setOpaque(false);
-		userList.setFixedCellHeight(50);
+		userList.setFixedCellHeight(40);
 		userList.setFont(new Font("산돌수필B", Font.BOLD, 25));
 		userList.setForeground(Color.WHITE);
 		userList.setModel(member);
 		userList.ensureIndexIsVisible(member.getSize());
 		
 		DefaultListCellRenderer renderer = new DefaultListCellRenderer();
-		renderer.setOpaque(false);
+		renderer.setBackground(new Color(0, 0, 0, 0));
 		renderer.setForeground(Color.WHITE);
 		userList.setSelectionForeground(Color.LIGHT_GRAY);
 		userList.setCellRenderer(renderer);

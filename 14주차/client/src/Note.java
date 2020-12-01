@@ -13,7 +13,7 @@ public class Note extends Thread {
 	private Image fever_line6_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-6line-bg.png")).getImage();
 	private Image line4_bg_Img = new ImageIcon(Main.class.getResource("/images/4line-bg.png")).getImage();
 	private Image fever_line4_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-4line-bg.png")).getImage();
-	
+
 	public static boolean isFever = false;
 	public static int fever = 0;
 	public static int score = 0;
@@ -21,7 +21,8 @@ public class Note extends Thread {
 	public static int maxCombo = 0;
 	public static int life = 10;
 
-	private int x, y = 560 - (1000 / Main.SLEEP_TIME * Main.NOTE_SPEED) * Main.REACH_TIME; /* Note 생성 후 1초 뒤에 판정 라인에 다다름 */
+	private int x,
+			y = 560 - (1000 / Main.SLEEP_TIME * Main.NOTE_SPEED) * Main.REACH_TIME; /* Note 생성 후 1초 뒤에 판정 라인에 다다름 */
 	private String noteType;
 	private int line;
 	private boolean proceeded = true;
@@ -56,8 +57,8 @@ public class Note extends Thread {
 			} else if (noteType.equals("L")) {
 				x = 566;
 			} else if (noteType.equals("end")) {
-				x = 900;  //안보이게
-				Game.showingResult=true;
+				x = 900; // 안보이게
+				Game.showingResult = true;
 			}
 		} else if (line == 6) {
 			if (noteType.equals("S")) {
@@ -73,8 +74,8 @@ public class Note extends Thread {
 			} else if (noteType.equals("L")) {
 				x = 622;
 			} else if (noteType.equals("end")) {
-				x = 900;  //안보이게
-				Game.showingResult=true;
+				x = 900; // 안보이게
+				Game.showingResult = true;
 			}
 		}
 		this.noteType = noteType;
@@ -102,7 +103,7 @@ public class Note extends Thread {
 			else if (line == 6) {
 				g.drawImage(note_Img, x, y, null);
 			}
-		} else {
+		} else { // 아이템 보내기
 			// 아이템 시각 효과 그리기
 		}
 	}
@@ -117,9 +118,9 @@ public class Note extends Thread {
 				fever = 0;
 			}
 
-			if (life < 0) {  //게임오버
+			if (life < 0) { // 게임오버
 				life = 0;
-				Game.showingResult=true;
+				Game.showingResult = true;
 			}
 			close();
 		}
@@ -132,23 +133,28 @@ public class Note extends Thread {
 				drop();
 				GamePanel.lifeBar.setValue(life);
 				GamePanel.feverBar.setValue(fever);
-				
+
 				if (combo >= maxCombo) // 맥스콤보 갱신
 					maxCombo = combo;
 				if (combo != 0 && combo % 10 == 0) { // 10콤보마다 life 회복
-					if(life>=10)
-						life=10;
+					if (life >= 10)
+						life = 10;
 					else
 						life++;
 				}
 				if (fever != 0 && fever % 20 == 0) { // 20배수마다 피버타임 off
 					isFever = false;
 					fever = 0;
-				}
-				else if (fever != 0 && fever % 10 == 0) { // 10배수마다 피버타임 on
+				} else if (fever != 0 && fever % 10 == 0) { // 10배수마다 피버타임 on
 					isFever = true;
 				}
 
+				if ((int) (Math.random() * 100) % 11 == 0) { // 난수가 33배수일때 마다 아이템
+					Game.isItemOn = true;
+				} else {
+					Game.isItemOn = false;
+				}
+				
 				if (proceeded) {
 					Thread.sleep(Main.SLEEP_TIME);
 				} else {

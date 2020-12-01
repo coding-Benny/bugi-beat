@@ -40,6 +40,9 @@ public class Game extends Thread {
 	private Music gameMusic;
 	private EndingResult ending;
 	public static boolean showingResult;
+	public static int isSendItem = 0;
+	public static int isRecvItem = 0;
+	public static boolean isItemOn = false;
 
 	ArrayList<Note> noteList = new ArrayList<Note>();
 
@@ -70,14 +73,13 @@ public class Game extends Thread {
 
 			for (int i = 0; i < noteList.size(); i++) {
 				Note note = noteList.get(i);
+				note.screenDraw(g);
 				if (note.getY() > 560)
 					judgeImg = new ImageIcon(Main.class.getResource("/images/miss.png")).getImage();
 
 				if (!note.isProceeded()) { /* 사용하지 않는 노트는 화면에서 삭제 */
 					noteList.remove(i);
 					i--;
-				} else {
-					note.screenDraw(g);
 				}
 			}
 			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -136,7 +138,7 @@ public class Game extends Thread {
 			g.drawString("K", 485, 536);
 			g.drawString("L", 660, 536);
 		}
-		if (Note.combo != 0) {
+		if (Note.combo != 0 && !showingResult) {
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 80));
 			g.setColor(Color.BLACK);
 			g.drawString(Note.combo + "", 380, 402);
@@ -149,7 +151,6 @@ public class Game extends Thread {
 			judgeImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 			ending.draw(g);
 		}
-
 		g.drawImage(judgeImg, 220, 250, null);
 	}
 
