@@ -1,30 +1,28 @@
 //JavaObjServer.java ObjectStream 기반 채팅 Server
 
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Vector;
-import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 public class JavaGameServer extends JFrame {
 
@@ -129,13 +127,13 @@ public class JavaGameServer extends JFrame {
 		}
 	}
 
-	public void AppendText(String str) {
+	public synchronized void AppendText(String str) {
 		// textArea.append("사용자로부터 들어온 메세지 : " + str+"\n");
 		textArea.append(str + "\n");
 		textArea.setCaretPosition(textArea.getText().length());
 	}
 
-	public void AppendObject(ChatMsg msg) {
+	public synchronized void AppendObject(ChatMsg msg) {
 		// textArea.append("사용자로부터 들어온 object : " + str+"\n");
 		textArea.append("code = " + msg.getCode() + "\n");
 		textArea.append("id = " + msg.getId() + "\n");
@@ -182,7 +180,7 @@ public class JavaGameServer extends JFrame {
 		}
 
 		// 모든 User들에게 방송. 각각의 UserService Thread의 WriteOne() 을 호출한다.
-		public void WriteAll(String str) {
+		public synchronized void WriteAll(String str) {
 			for (int i = 0; i < user_vc.size(); i++) {
 				UserService user = (UserService) user_vc.elementAt(i);
 				if (user.UserStatus == "O")
@@ -190,7 +188,7 @@ public class JavaGameServer extends JFrame {
 			}
 		}
 		// 모든 User들에게 Object를 방송. 채팅 message와 image object를 보낼 수 있다
-		public void WriteAllObject(Object ob) {
+		public synchronized void WriteAllObject(Object ob) {
 			for (int i = 0; i < user_vc.size(); i++) {
 				UserService user = (UserService) user_vc.elementAt(i);
 				if (user.UserStatus == "O")
@@ -199,7 +197,7 @@ public class JavaGameServer extends JFrame {
 		}
 
 		// 나를 제외한 User들에게 방송. 각각의 UserService Thread의 WriteOne() 을 호출한다.
-		public void WriteOthers(String str) {
+		public synchronized void WriteOthers(String str) {
 			for (int i = 0; i < user_vc.size(); i++) {
 				UserService user = (UserService) user_vc.elementAt(i);
 				if (user != this && user.UserStatus == "O")
@@ -225,7 +223,7 @@ public class JavaGameServer extends JFrame {
 		}
 
 		// UserService Thread가 담당하는 Client 에게 1:1 전송
-		public void WriteOne(String msg) {
+		public synchronized void WriteOne(String msg) {
 			try {
 				ChatMsg obcm = new ChatMsg("SERVER", "200", msg);
 				oos.writeObject(obcm);
@@ -246,7 +244,7 @@ public class JavaGameServer extends JFrame {
 		}
 
 		// 귓속말 전송
-		public void WritePrivate(String msg) {
+		public synchronized void WritePrivate(String msg) {
 			try {
 				ChatMsg obcm = new ChatMsg("귓속말", "200", msg);
 				oos.writeObject(obcm);
@@ -265,7 +263,7 @@ public class JavaGameServer extends JFrame {
 			}
 		}
 		
-		public void WriteOneObject(Object ob) {
+		public synchronized void WriteOneObject(Object ob) {
 			try {
 			    oos.writeObject(ob);
 			} 
@@ -366,6 +364,15 @@ public class JavaGameServer extends JFrame {
 							UserStatus = "O";
 							WriteAllObject(cm);
 						}
+					} else if (cm.code.matches("403")) {	// try to enter room
+						int index = Integer.parseInt(cm.data.split(":")[0]);
+						GameRoom gameRoom = RoomManager.roomList.get(index);
+						gameRoom.enterUser(new GameUser(cm.id));
+						String roomInfo = String.format("%d#%s#%s#%d#%s", gameRoom.getId(), gameRoom.getRoomTitle(), gameRoom.getDifficulty(), gameRoom.getNumOfLines(), gameRoom.getRoomOwner().getUserName());
+						obcm = new ChatMsg(UserName, "400", roomInfo);
+						oos.writeObject(obcm);
+					} else if (cm.getCode().matches("410")) { // 방나가기 message 처리
+						
 					} else if (cm.code.matches("420")) {	// create room
 						String [] roomInfo = cm.data.split("#");
 						String title = roomInfo[0];
@@ -373,10 +380,34 @@ public class JavaGameServer extends JFrame {
 						int numOfLines = Integer.parseInt(roomInfo[3]);
 						GameRoom newGameRoom = RoomManager.createRoom(new GameUser(cm.id), title, difficulty, numOfLines);
 						String gameRoomInfo = String.format("%d#%s#%s#%s", newGameRoom.getId(), newGameRoom.getRoomTitle(), newGameRoom.getDifficulty(), newGameRoom.getNumOfLines());
-						obcm = new ChatMsg(UserName, "420", gameRoomInfo);
+						obcm = new ChatMsg(UserName, "400", gameRoomInfo);
 						oos.writeObject(obcm);
 					} else if (cm.getCode().matches("425")) {
 						
+					} else if (cm.getCode().matches("450")) {	// game start
+						WriteAllObject(cm);
+					} else if (cm.getCode().matches("460")) {	// game over
+						FileWriter fw;
+						BufferedWriter writer;
+						UserName = cm.getId();
+						String[] args = cm.data.split("#"); // 단어들을 분리한다.
+						String dateStr = args[0];
+						String titleStr = args[1];
+						String scoreStr = args[2];
+						try {
+							fw = new FileWriter(new File("src/ScoreLog.txt"), true);
+							writer = new BufferedWriter(fw);
+							writer.write(dateStr + "\t\t");
+							writer.write(UserName+ "##");
+							writer.write(titleStr + "##");
+							writer.write(scoreStr);
+							writer.newLine();
+							writer.flush();
+							fw.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						break; 
 					} else if (cm.getCode().matches("500")) {	/* status: sleep */
 						UserStatus = "S";
 					} else if (cm.getCode().matches("600")) {	/* status: wakeup */

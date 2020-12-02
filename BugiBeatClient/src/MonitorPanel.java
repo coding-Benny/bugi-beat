@@ -14,6 +14,9 @@ public class MonitorPanel extends JPanel {
 
 	private ImageIcon sendItemImg = new ImageIcon(Main.class.getResource("/images/item-send.png"));
 	private ImageIcon recvItemImg = new ImageIcon(Main.class.getResource("/images/item-recv.png"));
+	private Image sendItem = new ImageIcon(Main.class.getResource("/images/item-send.png")).getImage();
+	private Image recvItem = new ImageIcon(Main.class.getResource("/images/item-recv.png")).getImage();
+	private Image itemIcon = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private JPanel p2Panel, p3Panel, p4Panel;
@@ -28,10 +31,29 @@ public class MonitorPanel extends JPanel {
 		g.drawImage(screenImage, 0, 0, null);
 	}
 	
-	
 	public void screenDraw(Graphics2D g) {
 		g.drawImage(background, 0, 0, null);
 		setOpaque(false);
+		
+		if (Game.isSendItem == 0) {
+			g.drawImage(itemIcon, 0, 0, null);
+		} else if (Game.isSendItem == 2) {
+			g.drawImage(sendItem, 20, 85, null);
+		} else if (Game.isSendItem == 3) {
+			g.drawImage(sendItem, 20, 305, null);
+		} else if (Game.isSendItem == 4) {
+			g.drawImage(sendItem, 20, 525, null);
+		}
+		
+		if (Game.isRecvItem == 0) {
+			g.drawImage(itemIcon, 0, 0, null);
+		} else if (Game.isRecvItem == 2) {
+			g.drawImage(recvItem, 20, 85, null);
+		} else if (Game.isRecvItem == 3) {
+			g.drawImage(recvItem, 20, 305, null);
+		} else if (Game.isRecvItem == 4) {
+			g.drawImage(recvItem, 20, 525, null);
+		}
 		
 		g.drawImage(screenImage, 0, 0, null);
 		this.repaint();

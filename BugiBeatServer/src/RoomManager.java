@@ -30,13 +30,6 @@ public class RoomManager {
 			return null;
 	}
 	
-	public static GameRoom getRoom(int index) {
-		if (index > 0)
-			return (GameRoom) roomList.get(index);
-		else
-			return null;
-	}
-	
 	public static void removeRoom(GameRoom gameRoom) {
 		gameRoom.close();
 		roomList.remove(gameRoom);

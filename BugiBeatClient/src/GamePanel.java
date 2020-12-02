@@ -1,24 +1,36 @@
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
-import javax.swing.*;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.border.LineBorder;
 
 public class GamePanel extends JPanel {
 	private Image screenImage;
 	private Graphics screenGraphic;
-
-	public Music standbyMusic = new Music("stand by beat.mp3", true);
+	
+	private Socket socket;
+	private ObjectOutputStream oos;
+	
+	public static Music standbyMusic = new Music("stand by beat.mp3", true);
 
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private RoomChat roomChatPanel = new RoomChat();
 	public static Image background;
-	public static Image gameScreenBg;
+	public Image gameScreenBg;
 
 	private Image line4_bg_Img = new ImageIcon(Main.class.getResource("/images/4line-bg.png")).getImage();
 	private Image line6_bg_Img = new ImageIcon(Main.class.getResource("/images/6line-bg.png")).getImage();
@@ -35,7 +47,7 @@ public class GamePanel extends JPanel {
 	private ImageIcon roomsetEnteredImg = new ImageIcon(Main.class.getResource("/images/roomsetting1.png"));
 	private ImageIcon roomsetImg = new ImageIcon(Main.class.getResource("/images/roomsetting0.png"));
 	
-	private JButton startBtn = new JButton(startBtnImg);
+	public JButton startBtn = new JButton(startBtnImg);
 	private JButton roomsetBtn = new JButton(roomsetImg);
 	private JButton quitBtn = new JButton(quitBtnImg);
 	private JLabel roomInfo = new JLabel("");
@@ -122,8 +134,22 @@ public class GamePanel extends JPanel {
 						Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 						btnPressedMusic.start();
 					}
-					gameStart(roomSetPanel.getNowSelected(), "Easy");
-					addKeyListener(new KeyListener());
+					try {
+						socket = WaitingRoom.socket;
+	
+						oos = WaitingRoom.oos;
+						oos.flush();
+						ChatMsg obcm = new ChatMsg(WaitingRoom.user, "450", roomSetPanel.getNowSelected() + "#" + roomSetPanel.getDifficulty());
+						try {
+							oos.writeObject(obcm);
+						} catch (IOException ex) {
+							ex.printStackTrace();
+						}
+					} catch(Exception ex) {
+						ex.printStackTrace();
+					}
+					//gameStart(roomSetPanel.getNowSelected(), roomSetPanel.getDifficulty());
+					//addKeyListener(new KeyListener());
 			}
 		});
 		add(startBtn);
@@ -231,13 +257,15 @@ public class GamePanel extends JPanel {
 		roomInfo.setFont(new Font("산돌수필B", Font.PLAIN, 28));
 		add(roomInfo);
 	}
-
+		
 	public void gameStart(int nowSelected, String difficulty) {
 		selectedMusic = roomSetPanel.getSelectedMusic();
 		musicTitle = roomSetPanel.getTrackList().get(nowSelected).getTitleName();
 		
 		if (selectedMusic != null)
 			selectedMusic.close();
+		
+		game = new Game(musicTitle, difficulty, roomSetPanel.getTrackList().get(nowSelected).getGameMusic(), roomSetPanel.getLine());
 		
 		isMainScreen = false;
 		isGameScreen = true;
@@ -254,11 +282,10 @@ public class GamePanel extends JPanel {
 			gameScreenBg = line4_bg_Img;
 		standbyMusic.close();
 		
-		game = new Game(musicTitle, difficulty, roomSetPanel.getTrackList().get(nowSelected).getGameMusic(), roomSetPanel.getLine());
 		game.start();
 		setFocusable(true);
 	}
-	
+		
 	public Music getBackgroundMusic() {
 		return standbyMusic;
 	}

@@ -27,6 +27,10 @@ public class Game extends Thread {
 	private Image fever_line4_Pressed = new ImageIcon(Main.class.getResource("/images/fever-4line-p.png")).getImage();
 	private Image line6_Pressed = new ImageIcon(Main.class.getResource("/images/6line-p.png")).getImage();
 	private Image fever_line6_Pressed = new ImageIcon(Main.class.getResource("/images/fever-6line-p.png")).getImage();
+	private Image cloudSendNoti0Img = new ImageIcon(Main.class.getResource("/images/cloouds-send0.png")).getImage();
+	private Image cloudSendNoti1Img = new ImageIcon(Main.class.getResource("/images/cloouds-send1.png")).getImage();
+	private Image cloudSendNothing = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	public static Image cloudNotiImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	public static Image gameScreenBg;
 	private Image linePressedImg;
 	private Image judgeImg;
@@ -37,6 +41,11 @@ public class Game extends Thread {
 	private String musicTitle;
 	private int line;
 	private Music gameMusic;
+	private EndingResult ending;
+	public static boolean showingResult;
+	public static int isSendItem = 0;
+	public static int isRecvItem = 0;
+	public static boolean isItemOn = false;
 
 	ArrayList<Note> noteList = new ArrayList<Note>();
 	
@@ -56,7 +65,7 @@ public class Game extends Thread {
 			g.drawImage(judgementLineImg, 11, 500, null);
 		else
 			g.drawImage(fever_judgementLineImg, 11, 500, null);
-
+		
 		if (line == 6) {
 			g.drawImage(noteRouteSImg, 45, 80, null);
 			g.drawImage(noteRouteDImg, 160, 80, null);
@@ -67,14 +76,13 @@ public class Game extends Thread {
 
 			for (int i = 0; i < noteList.size(); i++) {
 				Note note = noteList.get(i);
+				note.screenDraw(g);
 				if (note.getY() > 560)
 					judgeImg = new ImageIcon(Main.class.getResource("/images/miss.png")).getImage();
 
 				if (!note.isProceeded()) { /* 사용하지 않는 노트는 화면에서 삭제 */
 					noteList.remove(i);
 					i--;
-				} else {
-					note.screenDraw(g);
 				}
 			}
 			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -83,10 +91,10 @@ public class Game extends Thread {
 			g.drawString(titleName, 40, 38);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 			g.setColor(Color.YELLOW);
-			g.drawString("Score : ", 40, 70); // 92, 70
+			g.drawString("Score : " + Note.score, 40, 70); // 92, 70
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 28));
 			g.setColor(Color.ORANGE);
-			g.drawString("Max Combo: ", 40, 100);
+			g.drawString("Max Combo: " + Note.maxCombo, 40, 100);
 
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 			g.setColor(Color.WHITE);
@@ -133,13 +141,18 @@ public class Game extends Thread {
 			g.drawString("K", 485, 536);
 			g.drawString("L", 660, 536);
 		}
-		if (Note.combo != 0) {
+		if (Note.combo != 0 && !showingResult) {
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 80));
 			g.setColor(Color.BLACK);
 			g.drawString(Note.combo + "", 380, 402);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 70));
 			g.setColor(Color.WHITE);
 			g.drawString(Note.combo + "", 380, 400);
+		}
+		// result
+		if (showingResult) {
+			judgeImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+			ending.draw(g);
 		}
 		g.drawImage(judgeImg, 220, 250, null);
 	}
@@ -187,12 +200,21 @@ public class Game extends Thread {
 	}
 
 	public void pressSpace() {
-		judge("Space"); // 아이템
+		judge("Space");
 		new Music("senditem.mp3", false).start();
 	}
 
 	public void releaseSpace() {
 		// 스페이스바 뗐을때 이펙트
+	}
+	
+	public void releaseEnter() {
+		//엔터키
+	}
+
+	public void pressEnter() {
+		if(showingResult)  // 결과창에서만 입력받음
+			GamePanel.game.close();  // 방 나가기
 	}
 
 	public void pressJ() {
@@ -303,7 +325,7 @@ public class Game extends Thread {
 					new Beat(startTime + gap * 365, "D"), new Beat(startTime + gap * 369, "K"),
 					new Beat(startTime + gap * 374, "S"), new Beat(startTime + gap * 377, "D"),
 					new Beat(startTime + gap * 379, "K"), new Beat(startTime + gap * 381, "D"),
-					new Beat(startTime + gap * 383, "K"),
+					new Beat(startTime + gap * 383, "K"), new Beat(startTime + gap * 430, "end"),
 
 			};
 		} else if (titleName.equals("미행 - f(x)") && difficulty.equals("Hard") && line == 4) {
@@ -328,15 +350,19 @@ public class Game extends Thread {
 					new Beat(startTime + gap * 32, "K"), new Beat(startTime + gap * 36, "J"), };
 		} else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Easy")) {
 			int startTime = 1000;
-			beats = new Beat[] { new Beat(startTime, "S"), };
+			int gap = 114; /* 박자 계산 */
+			beats = new Beat[] { new Beat(startTime, "S"), new Beat(startTime + gap * 50, "end"),
+					//"end"노트는 +50
+			};
 		} else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Hard")) {
 			int startTime = 1000;
 			beats = new Beat[] { new Beat(startTime, "S"), };
 		}
 		int i = 0;
 		gameMusic.start();
+		showingResult = false;
+		ending = new EndingResult();
 		while (i < beats.length && !isInterrupted()) {
-			//
 			boolean dropped = false;
 			if (beats[i].getTime() <= gameMusic.getTime()) {
 				Note note = new Note(beats[i].getNoteName(), line, note_Img);
@@ -352,6 +378,15 @@ public class Game extends Thread {
 					e.printStackTrace();
 				}
 			}
+			
+			if (showingResult) {
+				gameMusic.close();
+				ending.playBgm();
+				ending.takeScore(Note.score);
+				ending.calRank();
+				ending.writeScore(titleName);
+			}
+			ending.update();
 		}
 	}
 
