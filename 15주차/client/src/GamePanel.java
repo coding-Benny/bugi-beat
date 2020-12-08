@@ -89,7 +89,8 @@ public class GamePanel extends JPanel {
 		background = roomSetPanel.getGamePanelBg();
 		gameScreenBg = gamescreenbgImg;
 		
-		standbyMusic.start();
+		if(Main.SOUND_EFFECT)
+			standbyMusic.start();
 
 		roomSetPanel.setBounds(12, 100, 780, 442); // 가로위치, 세로위치, 가로길이, 세로길이
 		roomSetPanel.setVisible(false);
@@ -172,8 +173,8 @@ public class GamePanel extends JPanel {
 					if (Main.SOUND_EFFECT) {
 						Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 						btnPressedMusic.start();
-						roomSetPanel.setVisible(true);
 					}
+					roomSetPanel.setVisible(true);
 			}
 		});
 		add(roomsetBtn);
@@ -273,7 +274,9 @@ public class GamePanel extends JPanel {
 			gameScreenBg = line6_bg_Img;
 		else if(roomSetPanel.getLine() == 4)
 			gameScreenBg = line4_bg_Img;
-		standbyMusic.close();
+		
+		if(Main.SOUND_EFFECT)
+			standbyMusic.close();
 		
 		game.start();
 		setFocusable(true);

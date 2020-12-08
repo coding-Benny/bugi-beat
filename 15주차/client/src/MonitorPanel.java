@@ -39,9 +39,9 @@ public class MonitorPanel extends JPanel {
 			g.drawImage(ItemIcon, 0, 0, null);
 		} else if (Game.isSendItem == 2) {
 			g.drawImage(sendItem, 20, 85, null);
-		//} else if (Game.isSendItem == 3) {
+		} else if (Game.isSendItem == 3) {
 			g.drawImage(sendItem, 20, 305, null);
-		//} else if (Game.isSendItem == 4) {
+		} else if (Game.isSendItem == 4) {
 			g.drawImage(sendItem, 20, 525, null);
 		}
 
@@ -108,10 +108,10 @@ public class MonitorPanel extends JPanel {
 		p2Rank.setBounds(170, 210, 50, 40);
 		p3Rank.setBounds(170, 430, 50, 40);
 		p4Rank.setBounds(170, 650, 50, 40);
-		p2Name.setForeground(Color.YELLOW);
 		p2Rank.setForeground(Color.YELLOW);
 		p3Rank.setForeground(Color.YELLOW);
-		p4Rank.setFont(new Font("산돌수필B", Font.PLAIN, 30));
+		p4Rank.setForeground(Color.YELLOW);
+		p2Rank.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 		p3Rank.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 		p4Rank.setFont(new Font("산돌수필B", Font.PLAIN, 30));
 		add(p2Rank);
@@ -133,8 +133,19 @@ public class MonitorPanel extends JPanel {
 	public JLabel getP2Label() {
 		return p2Label;
 	}
-	
 	public JLabel getP2Name() {
 		return p2Name;
+	}
+	public JLabel getP3Label() {
+		return p3Label;
+	}
+	public JLabel getP3Name() {
+		return p3Name;
+	}
+	public JLabel getP4Label() {
+		return p4Label;
+	}
+	public JLabel getP4Name() {
+		return p4Name;
 	}
 }

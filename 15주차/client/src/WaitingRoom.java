@@ -100,6 +100,7 @@ public class WaitingRoom extends JFrame {
 	public static Music waitingMusic = new Music("waiting beat.mp3", true);
 
 	private int mouseX, mouseY;
+	public int usercnt=1;
 
 	public WaitingRoom(String userName, String ipAddress, String portNo) {
 		super("대기실");
@@ -186,6 +187,7 @@ public class WaitingRoom extends JFrame {
 				if (Main.SOUND_EFFECT) {
 					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 					btnPressedMusic.start();
+				}
 					// 방 설정 다이얼로그 띄우기
 					JDialog dialog = new JDialog();
 					dialog.getContentPane().setLayout(null);
@@ -276,7 +278,6 @@ public class WaitingRoom extends JFrame {
 					
 					dialog.setVisible(true);
 				}
-			}
 		});
 		c.add(createRoomBtn);
 
@@ -287,7 +288,7 @@ public class WaitingRoom extends JFrame {
 		gameSetBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				gameSetBtn.setIcon(gameSetBtnEnteredImg); // 이미지 만들면 수정
+				gameSetBtn.setIcon(gameSetBtnEnteredImg);
 				gameSetBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				if (Main.SOUND_EFFECT) {
 					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
@@ -306,9 +307,58 @@ public class WaitingRoom extends JFrame {
 				if (Main.SOUND_EFFECT) {
 					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 					btnPressedMusic.start();
-					// gameSetPanel.setVisible(true); //나중에 추가
 				}
-			}
+					// 방 설정 다이얼로그 띄우기
+					JDialog dialog = new JDialog();
+					dialog.getContentPane().setLayout(null);
+					dialog.setLocationRelativeTo(null);
+					dialog.setModal(true);
+					dialog.setSize(400, 250);
+
+					JLabel backMusicLabel = new JLabel("UI Sound");
+					backMusicLabel.setBounds(dialog.getWidth() / 2 - 100, 90, 100, 20);
+					dialog.getContentPane().add(backMusicLabel);
+					
+					ButtonGroup backMusicGroup = new ButtonGroup();
+					JRadioButton musicOnBtn = new JRadioButton("On");
+					musicOnBtn.setBounds(dialog.getWidth() / 2 - 50, 90, 70, 20);
+					musicOnBtn.setActionCommand("On");
+					dialog.getContentPane().add(musicOnBtn);
+					JRadioButton musicOffBtn = new JRadioButton("Off");
+					musicOffBtn.setBounds(dialog.getWidth() / 2 + 25, 90, 70, 20);
+					musicOffBtn.setActionCommand("Off");
+					dialog.getContentPane().add(musicOffBtn);
+					
+					if(Main.SOUND_EFFECT) {
+						musicOnBtn.setSelected(true);
+						musicOffBtn.setSelected(false);
+					}
+					else {
+						musicOnBtn.setSelected(false);
+						musicOffBtn.setSelected(true);
+					}
+					backMusicGroup.add(musicOnBtn);
+					backMusicGroup.add(musicOffBtn);
+					
+					JButton okBtn = new JButton("적용");
+					okBtn.setBounds(dialog.getWidth() / 2 - 40, 160, 80, 20);
+					okBtn.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							if(!musicOnBtn.isSelected()) {
+								Main.SOUND_EFFECT=false;
+								waitingMusic.close();
+							}
+							else
+								Main.SOUND_EFFECT=true;
+							dialog.setVisible(false);
+							dialog.dispose();
+						}
+					});
+					dialog.getContentPane().add(okBtn);
+					
+					dialog.setVisible(true);
+				}
 		});
 		c.add(gameSetBtn);
 
@@ -454,9 +504,18 @@ public class WaitingRoom extends JFrame {
 						break;
 					case "405":
 						gameRoom.getMonitorPanel().getP2Name().setText(cm.data);
+						if(usercnt==3)
+							gameRoom.getMonitorPanel().getP3Name().setText(cm.data);
+						else if(usercnt==4)
+							gameRoom.getMonitorPanel().getP4Name().setText(cm.data);
 						break;
 					case "410":
-						gameRoom.getMonitorPanel().getP2Name().setText("");
+						if(cm.getId().equals(gameRoom.getMonitorPanel().getP2Name().getText())) 
+							gameRoom.getMonitorPanel().getP2Name().setText("");
+						else if(cm.getId().equals(gameRoom.getMonitorPanel().getP3Name().getText())) 
+							gameRoom.getMonitorPanel().getP3Name().setText("");
+						else if(cm.getId().equals(gameRoom.getMonitorPanel().getP4Name().getText())) 
+							gameRoom.getMonitorPanel().getP4Name().setText("");
 						break;
 					case "425":	// 기존 게임 방
 						String existGameRoom = cm.data;
@@ -479,7 +538,7 @@ public class WaitingRoom extends JFrame {
 						System.out.println(msg);
 						break;
 					case "570": // capture screen
-						AppendScreenshot(cm.img);	
+						AppendScreenshot(cm.img, cm.getId());
 						break;
 					case "900": // emoji
 						if (user.equals(cm.getId())) {
@@ -590,14 +649,25 @@ public class WaitingRoom extends JFrame {
 		textArea.replaceSelection("\n");
 	}
 
-	public synchronized void AppendScreenshot(ImageIcon screenshot) {
+	public synchronized void AppendScreenshot(ImageIcon screenshot, String userName) {
 		int width = 300;
 		int height = 165;
 		JLabel p2 = gameRoom.getMonitorPanel().getP2Label();
+		JLabel p3 = gameRoom.getMonitorPanel().getP3Label();
+		JLabel p4 = gameRoom.getMonitorPanel().getP4Label();
 		Image screenshot_img = screenshot.getImage();
 		Image resizedImg = screenshot_img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		ImageIcon capture = new ImageIcon(resizedImg);
-		p2.setIcon(capture);
+		
+		if(gameRoom.getMonitorPanel().getP2Name().getText().equals(userName)) {
+			p2.setIcon(capture);
+		}
+		else if(gameRoom.getMonitorPanel().getP3Name().getText().equals(userName)) {
+			p3.setIcon(capture);
+		}
+		else if(gameRoom.getMonitorPanel().getP4Name().getText().equals(userName)) {
+			p4.setIcon(capture);
+		}
 	}
 	
 	public void enterRoom(String msg) {
@@ -607,6 +677,7 @@ public class WaitingRoom extends JFrame {
 		difficulty = roomInfo[2];
 		numOfLines = Integer.parseInt(roomInfo[3]);
 		try {
+			usercnt = Integer.parseInt(roomInfo[5]);
 			owner = roomInfo[4];
 			gameRoom = new GameRoom(roomID, roomTitle, difficulty, numOfLines, owner);
 			if (!user.equals(owner))

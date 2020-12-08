@@ -8,6 +8,7 @@ public class GameRoom {
 	private String roomTitle;	// 방제
 	private String difficulty;	// 난이도
 	private int numOfLines;	// 칸 수
+	private int usercnt;	// 유저수
 	
 	public GameRoom(int roomID) {
 		this.id = roomID;
@@ -23,16 +24,19 @@ public class GameRoom {
 		user.enterRoom(this);
 		userList.add(user);	// 유저를 추가
 		this.roomOwner = user;	// 방을 생성한 user가 방장이 됨
+		usercnt = userList.size();
 	}
 	
 	public void enterUser(GameUser user) {
 		user.enterRoom(this);
 		userList.add(user);
+		usercnt = userList.size();
 	}
 	
 	public void exitUser(GameUser user) {
 		user.exitRoom(this);
 		userList.remove(user);	// 해당 유저를 강퇴
+		usercnt = userList.size();
 		
 		if (userList.size() < 1) {	// 모든 인원이 퇴장한 경우
 			RoomManager.removeRoom(this);	// 방을 제거
@@ -54,6 +58,7 @@ public class GameRoom {
 		}
 		this.userList.clear();
 		this.userList = null;
+		usercnt = userList.size();
 	}
 	
 	public void setOwner(GameUser gameUser) {
@@ -104,4 +109,7 @@ public class GameRoom {
 		return numOfLines;
 	}
 	
+	public int getUsercnt() {
+		return usercnt;
+	}
 }

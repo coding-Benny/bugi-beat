@@ -14,7 +14,6 @@ public class Note extends Thread {
 	private Image line4_bg_Img = new ImageIcon(Main.class.getResource("/images/4line-bg.png")).getImage();
 	private Image fever_line4_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-4line-bg.png")).getImage();
 	private Image cloudsendNoti0Img = new ImageIcon(Main.class.getResource("/images/cloouds-send0.png")).getImage();
-	private Image cloudsendNoti1Img = new ImageIcon(Main.class.getResource("/images/cloouds-send1.png")).getImage();
 	private Image nothing = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 
 	public static boolean isFever = false;

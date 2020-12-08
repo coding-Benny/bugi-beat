@@ -404,7 +404,7 @@ public class JavaGameServer extends JFrame {
 						int numOfLines = gameRoom.getNumOfLines();
 						String roomOwner = gameRoom.getRoomOwner().getUserName();
 						gameRoom.enterUser(new GameUser(cm.id));
-						String roomInfo = String.format("%d#%s#%s#%d#%s", roomID, roomTitle, difficulty, numOfLines, roomOwner);
+						String roomInfo = String.format("%d#%s#%s#%d#%s#%d", roomID, roomTitle, difficulty, numOfLines, roomOwner, gameRoom.getUsercnt());
 						obcm = new ChatMsg(UserName, "400", roomInfo);
 						oos.writeObject(obcm);
 						for (int i = 0; i < user_vc.size(); i++) {
