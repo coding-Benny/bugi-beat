@@ -60,7 +60,7 @@ public class RoomSetting extends JPanel {
 
 		trackList.add(new Track("onion-start-image.png", "onion-highlight.mp3", "Onion.mp3", "Onion - Lukrembo"));
 		trackList.add(new Track("alien-start-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3", "Alien - Lee SuHyun"));
-		trackList.add(new Track("shadow-start-image.png", "shadow - f(x).mp3", "shadow - f(x).mp3", "미행 - f(x)"));
+		trackList.add(new Track("shadow-start-image.png", "shadow - f(x)-highlight.mp3", "shadow - f(x).mp3", "미행 - f(x)"));
 
 		selectedImg = new ImageIcon(Main.class.getResource("/images/" + trackList.get(0).getStartImage())).getImage();
 		
@@ -298,7 +298,7 @@ public class RoomSetting extends JPanel {
 		// standByMusic 볼륨 줄이기 코드 추가 예정
 		selectedImg = new ImageIcon(Main.class.getResource("/images/" + trackList.get(nowSelected).getStartImage())).getImage();
 		selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true);
-		//selectedMusic.start();
+		selectedMusic.start();
 	}
 	
 	public void selectLeft() {

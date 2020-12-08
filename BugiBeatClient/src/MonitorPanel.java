@@ -1,9 +1,5 @@
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-
 import javax.swing.*;
 
 public class MonitorPanel extends JPanel {
@@ -12,8 +8,6 @@ public class MonitorPanel extends JPanel {
 
 	public static Image background;
 
-	private ImageIcon sendItemImg = new ImageIcon(Main.class.getResource("/images/item-send.png"));
-	private ImageIcon recvItemImg = new ImageIcon(Main.class.getResource("/images/item-recv.png"));
 	private Image sendItem = new ImageIcon(Main.class.getResource("/images/item-send.png")).getImage();
 	private Image recvItem = new ImageIcon(Main.class.getResource("/images/item-recv.png")).getImage();
 	private Image ItemIcon = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();;

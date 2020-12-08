@@ -27,12 +27,7 @@ public class GamePanel extends JPanel {
 
 	private Image line4_bg_Img = new ImageIcon(Main.class.getResource("/images/4line-bg.png")).getImage();
 	private Image line6_bg_Img = new ImageIcon(Main.class.getResource("/images/6line-bg.png")).getImage();
-	private Image bg1Img = new ImageIcon(Main.class.getResource("/images/room-bg1.png")).getImage();
-	private Image bg2Img = new ImageIcon(Main.class.getResource("/images/room2-bg1.png")).getImage();
-	private Image feverBar_bg = new ImageIcon(Main.class.getResource("/images/fever-bar-bg.png")).getImage();
 	private Image gamescreenbgImg = new ImageIcon(Main.class.getResource("/images/game-bg0.png")).getImage();
-	private ImageIcon fever_line6_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-6line-bg.png"));
-	private ImageIcon fever_line4_bg_Img = new ImageIcon(Main.class.getResource("/images/fever-4line-bg.png"));
 	private ImageIcon startBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/start1.png"));
 	private ImageIcon startBtnImg = new ImageIcon(Main.class.getResource("/images/start0.png"));
 	private ImageIcon quitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/roomquit1.png"));
@@ -220,6 +215,8 @@ public class GamePanel extends JPanel {
 				if (Main.SOUND_EFFECT) {
 					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 					btnPressedMusic.start();
+					standbyMusic.close();
+					roomSetPanel.selectTrack(0);
 					roomSetPanel.setVisible(true);
 				}
 			}
