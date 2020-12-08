@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -13,18 +12,15 @@ import java.net.Socket;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 public class GamePanel extends JPanel {
 	private Image screenImage;
 	private Graphics screenGraphic;
 	
-	private Socket socket;
 	private ObjectOutputStream oos;
 	
 	public static Music standbyMusic = new Music("stand by beat.mp3", true);
@@ -148,8 +144,6 @@ public class GamePanel extends JPanel {
 					} catch(Exception ex) {
 						ex.printStackTrace();
 					}
-					//gameStart(roomSetPanel.getNowSelected(), roomSetPanel.getDifficulty());
-					//addKeyListener(new KeyListener());
 			}
 		});
 		add(startBtn);

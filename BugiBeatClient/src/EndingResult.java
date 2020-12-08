@@ -2,7 +2,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -19,7 +18,6 @@ public class EndingResult {
 	private boolean step4On;
 	private boolean nextgame;
 	private int angle;
-	private Socket socket; // 연결소켓
 	private ObjectOutputStream oos;
 
 	// BGM

@@ -4,13 +4,9 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import javax.swing.ImageIcon;
 
@@ -373,14 +369,11 @@ public class Game extends Thread {
 		int i = 0;
 		gameMusic.start();
 		captureTool.start();
-		//captureName = cur.format(cal.getTime());
 		showingResult = false;
 		ending = new EndingResult();
 		while (i < beats.length && !isInterrupted()) {
 			boolean dropped = false;
 			if (beats[i].getTime() <= gameMusic.getTime()) {
-				//screenshot = waitingRoom.capture(GameRoom.getGamePanel(), WaitingRoom.user + captureName + i);
-				//sendCapture(new ImageIcon(screenshot));
 				Note note = new Note(beats[i].getNoteName(), line, note_Img);
 				note.start();
 				noteList.add(note);

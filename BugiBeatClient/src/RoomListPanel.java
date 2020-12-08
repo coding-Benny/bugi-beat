@@ -2,13 +2,7 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.CropImageFilter;
-import java.awt.image.FilteredImageSource;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -19,9 +13,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 public class RoomListPanel extends JPanel {
-	private Image background;
-	private Image screenImage;
-	private Graphics screenGraphic;
 	private Image roomListPanel_bg= new ImageIcon(Main.class.getResource("/images/roomlist-bg.png")).getImage();
 	
 	private RoomSetting roomSetPanel = new RoomSetting();

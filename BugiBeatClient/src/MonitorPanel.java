@@ -60,8 +60,8 @@ public class MonitorPanel extends JPanel {
 		}
 		
 		g.drawImage(screenImage, 0, 0, null);
-		this.repaint();
 		paintComponents(g);
+		this.repaint();
 	}
 	
 	public MonitorPanel() {
@@ -97,9 +97,9 @@ public class MonitorPanel extends JPanel {
 		p2Name.setBounds(220, 210, 100, 40);
 		p3Name.setBounds(220, 430, 100, 40);
 		p4Name.setBounds(220, 650, 100, 40);
-		p2Name.setFont(new Font("산돌수필B", Font.PLAIN, 16));
-		p3Name.setFont(new Font("산돌수필B", Font.PLAIN, 16));
-		p4Name.setFont(new Font("산돌수필B", Font.PLAIN, 16));
+		p2Name.setFont(new Font("산돌수필B", Font.PLAIN, 32));
+		p3Name.setFont(new Font("산돌수필B", Font.PLAIN, 32));
+		p4Name.setFont(new Font("산돌수필B", Font.PLAIN, 32));
 		p2Name.setForeground(Color.WHITE);
 		p3Name.setForeground(Color.WHITE);
 		p4Name.setForeground(Color.WHITE);
@@ -113,7 +113,7 @@ public class MonitorPanel extends JPanel {
 		p2Rank.setBounds(170, 210, 50, 40);
 		p3Rank.setBounds(170, 430, 50, 40);
 		p4Rank.setBounds(170, 650, 50, 40);
-		p2Name.setForeground(Color.YELLOW);
+		p2Rank.setForeground(Color.YELLOW);
 		p2Rank.setForeground(Color.YELLOW);
 		p3Rank.setForeground(Color.YELLOW);
 		p4Rank.setFont(new Font("산돌수필B", Font.PLAIN, 30));

@@ -1,29 +1,23 @@
 
-import java.awt.AWTException;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
-import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -199,14 +193,6 @@ public class WaitingRoom extends JFrame {
 					
 					JTextField roomTitle = new JTextField(15);
 					roomTitle.setBounds(dialog.getWidth() / 2 - 50, 30, 100, 20);
-					roomTitle.addKeyListener(new KeyListener() {	// 엔터 누르면 방 만들기 버튼 자동 클릭
-						@Override
-						public void keyReleased(KeyEvent e) {
-							if (e.getKeyCode() == 10) {
-								createRoomBtn.doClick();
-							}
-						}
-					});
 					dialog.getContentPane().add(roomTitle);
 					
 					JLabel roomPwdLabel = new JLabel("비번 : ");
@@ -217,14 +203,6 @@ public class WaitingRoom extends JFrame {
 					roomPwd.setBounds(dialog.getWidth() / 2 - 50, 60, 100, 20);
 					roomPwd.setEnabled(false);
 					roomPwd.setEditable(false);
-					roomPwd.addKeyListener(new KeyListener() {	// 엔터 누르면 방 만들기 버튼 자동 클릭
-						@Override
-						public void keyReleased(KeyEvent e) {
-							if (e.getKeyCode() == 10) {
-								createRoomBtn.doClick();
-							}
-						}
-					});
 					dialog.getContentPane().add(roomPwd);
 					
 					JCheckBox roomSecret = new JCheckBox("비밀방");
@@ -466,14 +444,19 @@ public class WaitingRoom extends JFrame {
 						break;
 					case "400":	// enter room
 					case "420":	// successfully created and enter room
-						enterRoom(cm.data, cm.id);
+						enterRoom(cm.data);
+						break;
+					case "405":
+						gameRoom.getMonitorPanel().getP2Name().setText(cm.data);
+						break;
+					case "410":
+						gameRoom.getMonitorPanel().getP2Name().setText("");
 						break;
 					case "425":	// 기존 게임 방
 						String existGameRoom = cm.data;
 						RoomListPanel.room.addElement(existGameRoom);
 						break;
 					case "450":	// start game
-						System.out.println(user + "::" + cm.data);
 						String [] gameInfo = cm.data.split("#");
 						int nowSelected = Integer.parseInt(gameInfo[0]);
 						String difficulty = gameInfo[1];
@@ -607,13 +590,21 @@ public class WaitingRoom extends JFrame {
 		p2.setIcon(capture);
 	}
 	
-	public void enterRoom(String msg, String owner) {
+	public void enterRoom(String msg) {
 		roomInfo = msg.split("#");
 		roomID = Integer.parseInt(roomInfo[0]);
 		roomTitle = roomInfo[1];
 		difficulty = roomInfo[2];
 		numOfLines = Integer.parseInt(roomInfo[3]);
-		gameRoom = new GameRoom(roomID, roomTitle, difficulty, numOfLines, owner);
+		try {
+			owner = roomInfo[4];
+			gameRoom = new GameRoom(roomID, roomTitle, difficulty, numOfLines, owner);
+			if (!user.equals(owner))
+				gameRoom.getMonitorPanel().getP2Name().setText(owner);
+		} catch(ArrayIndexOutOfBoundsException e) {
+			owner = user;
+			gameRoom = new GameRoom(roomID, roomTitle, difficulty, numOfLines, owner);
+		}
 		waitingMusic.close();
 	}
 	
@@ -660,15 +651,4 @@ public class WaitingRoom extends JFrame {
 			AppendText("SendObject Error");
 		}
 	}
-	
-	public synchronized BufferedImage capture(Component frame, String filePath) {
-		rect = new Rectangle(frame.getLocationOnScreen().x+45, frame.getLocationOnScreen().y+110, frame.getWidth()-80, frame.getHeight()-210);
-    	try {
-    		capturedImg = new Robot().createScreenCapture(rect);
-			ImageIO.write(capturedImg, "png", new File("./src/captures/" + filePath + ".png"));
-		} catch (AWTException | IOException e) {
-			e.printStackTrace();
-		}
-		return capturedImg;
-    }
 }

@@ -17,9 +17,6 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 
 public class UserListPanel extends JPanel {
-	private Image screenImage;
-	private Graphics screenGraphic;
-	private Image background;
 	private Image accessListImg = new ImageIcon(Main.class.getResource("/images/accesslist-bg.png")).getImage();
 	
 	private RoomSetting roomSetPanel = new RoomSetting();
