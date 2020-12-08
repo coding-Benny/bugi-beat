@@ -60,7 +60,7 @@ public class WaitingRoom extends JFrame {
 	public static String roomTitle;
 	public static String difficulty;
 	private int numOfLines;
-	private String owner;
+	public static String owner;
 	private GameRoom gameRoom;
 
 	private Image background;
@@ -464,6 +464,12 @@ public class WaitingRoom extends JFrame {
 					case "425":	// 기존 게임 방
 						String existGameRoom = cm.data;
 						RoomListPanel.room.addElement(existGameRoom);
+						break;
+					case "430":
+						gameRoom.getMonitorPanel().getP2Status().setText("READY");
+						break;
+					case "440":
+						gameRoom.getMonitorPanel().getP2Status().setText("");
 						break;
 					case "450":	// start game
 						String [] gameInfo = cm.data.split("#");

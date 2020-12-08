@@ -431,6 +431,10 @@ public class JavaGameServer extends JFrame {
 						oos.writeObject(obcm);
 					} else if (cm.getCode().matches("425")) {
 						
+					} else if (cm.getCode().matches("430")) {	// ready
+						WriteAllObject(cm);
+					} else if (cm.getCode().matches("440")) {	// not ready
+						WriteAllObject(cm);
 					} else if (cm.getCode().matches("450")) {	// game start
 						WriteAllObject(cm);
 					} else if (cm.getCode().matches("460")) {	// game over
