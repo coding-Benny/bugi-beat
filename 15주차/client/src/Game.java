@@ -4,6 +4,9 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -29,8 +32,10 @@ public class Game extends Thread {
 	private Image fever_line6_Pressed = new ImageIcon(Main.class.getResource("/images/fever-6line-p.png")).getImage();
 	private Image cloudsendNoti0Img = new ImageIcon(Main.class.getResource("/images/cloouds-send0.png")).getImage();
 	private Image cloudsendNoti1Img = new ImageIcon(Main.class.getResource("/images/cloouds-send1.png")).getImage();
-	private Image cloudsendnothing = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
-	public static Image cloudNotiImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	private Image cloudnothing = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	private Image cloudrecvImg = new ImageIcon(Main.class.getResource("/images/clouds-item.png")).getImage();
+	public static Image itemNotiImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	public static Image attackNotiImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	public static Image gameScreenBg;
 	private Image linePressedImg;
 	private Image judgeImg;
@@ -40,9 +45,10 @@ public class Game extends Thread {
 	private String difficulty;
 	private String musicTitle;
 	private int line;
-	int cnt=0;
+	private int cnt=0;
 	private Music gameMusic;
-	private Music itemcount = new Music("itemcount.mp3", false);
+	private Music itemsendcount = new Music("itemsendcount.mp3", false);
+	private Music itemrecvcount = new Music("itemsendcount.mp3", false);
 	private EndingResult ending;
 	public static boolean showingResult;
 	public static int isSendItem = 0;
@@ -50,7 +56,10 @@ public class Game extends Thread {
 	public static boolean isItemOn = false;
 
 	ArrayList<Note> noteList = new ArrayList<Note>();
-
+	private CaptureTool captureTool = new CaptureTool(GameRoom.getGamePanel());
+	
+	private ObjectOutputStream oos;
+	
 	public Game(String titleName, String difficulty, String musicTitle, int line) {
 		this.titleName = titleName;
 		this.difficulty = difficulty;
@@ -68,7 +77,7 @@ public class Game extends Thread {
 		else
 			g.drawImage(fever_judgementLineImg, 11, 500, null);
 		
-		g.drawImage(cloudNotiImg, 300, 0, null);
+		g.drawImage(itemNotiImg, 300, 10, null);
 			
 		if (line == 6) {
 			g.drawImage(noteRouteSImg, 45, 80, null);
@@ -153,8 +162,9 @@ public class Game extends Thread {
 			g.setColor(Color.WHITE);
 			g.drawString(Note.combo + "", 380, 400);
 		}
-		// result
-		if (showingResult) {
+		g.drawImage(attackNotiImg, 0, 87, null);  //먹구름
+		
+		if (showingResult) { // result
 			judgeImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 			ending.draw(g);
 		}
@@ -206,15 +216,16 @@ public class Game extends Thread {
 	public void pressSpace() { // 아이템보내기
 		System.out.println(cnt);
 		if(isItemOn) {
-			isSendItem=2;   //다른 유저 나중에 name같은걸로 변경
-			cloudNotiImg = cloudsendnothing;
+			isSendItem=2;   //모니터패널 전송아이콘
+			itemNotiImg = cloudnothing;
+			attackNotiImg = cloudrecvImg;
 			isItemOn=false;
 			new Music("senditem.mp3", false).start();
 			if(cnt!=0) {
-				itemcount.stop();
-				itemcount = new Music("itemcount.mp3", false);
+				itemsendcount.stop();
+				itemsendcount = new Music("itemsendcount.mp3", false);
 			}
-			itemcount.start();
+			itemsendcount.start();
 			cnt++;
 		}
 	}
@@ -269,6 +280,7 @@ public class Game extends Thread {
 
 	public void close() {
 		gameMusic.close();
+		captureTool.close();
 		this.interrupt();
 	}
 
@@ -376,6 +388,7 @@ public class Game extends Thread {
 		int i = 0;
 		int j = 0;
 		gameMusic.start();
+		captureTool.start();
 		showingResult = false;
 		ending = new EndingResult();
 		while (i < beats.length && !isInterrupted()) {
@@ -394,16 +407,19 @@ public class Game extends Thread {
 					e.printStackTrace();
 				}
 			}
-			if(itemcount.getTime()>= 3000) {  //아이템 보내고 3초뒤에
-				cloudNotiImg = cloudsendnothing;
+			if(itemsendcount.getTime()>= 3000) {  //아이템 보내고 3초뒤에
+				itemNotiImg = cloudnothing;
 				isSendItem=0;  //아이콘 지우기
-				isRecvItem=0;
 				j=0;
 				isItemOn=false;
 			}
+			if(itemrecvcount.getTime()>= 7000) {  //아이템 받고 7초뒤에
+				attackNotiImg = cloudnothing;
+				isRecvItem=0;  //아이콘 지우기
+			}
 			else if(gameMusic.getTime()>71000) {
 				isItemOn=false;
-				cloudNotiImg = cloudsendnothing;
+				itemNotiImg = cloudnothing;
 				j++;
 			}
 			else if(!isItemOn && gameMusic.getTime()>10000 && Note.score>=100 || !isItemOn && gameMusic.getTime()>40000 && Note.score>=500 || !isItemOn && gameMusic.getTime()>70000 && Note.score>=1000) {
@@ -414,9 +430,9 @@ public class Game extends Thread {
 				else
 					isItemOn=false;
 				if(isSendItem!=0)
-					cloudNotiImg = cloudsendnothing;
+					itemNotiImg = cloudnothing;
 				else
-					cloudNotiImg = cloudsendNoti0Img;
+					itemNotiImg = cloudsendNoti0Img;
 				j++;
 			}
 			
@@ -426,14 +442,28 @@ public class Game extends Thread {
 				ending.takeScore(Note.score);
 				ending.calRank();
 				ending.writeScore(titleName);
+				captureTool.close();
 			}
 			ending.update();
 		}
 	}
 
-	/*
-	 * 큐처럼 먼저 떨어지는 노트에 대해서 입력 정확도 검사
-	 */
+	public synchronized void sendCapture(ImageIcon capture) {
+		try {
+			oos = WaitingRoom.oos;
+			oos.flush();
+			
+			ChatMsg obcm = new ChatMsg(WaitingRoom.user, "570", "CAPTURE");
+			obcm.setImg(capture);
+			oos.writeObject(capture);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+	// 큐처럼 먼저 떨어지는 노트에 대해서 입력 정확도 검사
+
 	public void judge(String input) {
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
@@ -461,4 +491,85 @@ public class Game extends Thread {
 			judgeImg = new ImageIcon(Main.class.getResource("/images/perfect.png")).getImage();
 
 	}
+	/*
+	// Server Message를 수신해서 화면에 표시
+		class ListenNetwork extends Thread {
+			public void run() {
+				while (true) {
+					try {
+						Object obcm = null;
+						String msg = null;
+						ChatMsg cm;
+						try {
+							obcm = WaitingRoom.ois.readObject();
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+							break;
+						}
+						if (obcm == null)
+							break;
+						if (obcm instanceof ChatMsg) {
+							cm = (ChatMsg) obcm;
+							msg = String.format("[%s] %s", cm.id, cm.data);
+						} else
+							continue;
+						switch (cm.code) {
+						case "500": //아이템 공격받음
+							if (msg.contains("senditem")) {
+								String[] welcomeMsg = cm.getData().split("]");
+								String newUser = welcomeMsg[0].substring(1);
+								
+							}
+							if (!WaitingRoom.user.equals(cm.getId())) {
+								//먹구름
+								isRecvItem=2; //2번유저한테 받음
+								attackNotiImg=cloudrecvImg;
+							}
+							break;
+						case "200": // chat message
+							if (msg.contains("입장")) {
+								String[] welcomeMsg = cm.getData().split("]");
+								String newUser = welcomeMsg[0].substring(1);
+								UserListPanel.member.addElement(newUser);
+							}
+							if (WaitingRoom.user.equals(cm.getId())) {
+								//AppendMyText(msg);
+							}
+							else {
+								//AppendText(msg);
+							}
+							break;
+						}
+					} catch (IOException e) {
+						try {
+							WaitingRoom.ois.close();
+							oos.close();
+							socket.close();
+
+							break;
+						} catch (Exception ee) {
+							break;
+						} // catch문 끝
+					} // 바깥 catch문끝
+				}
+			}
+		}
+		
+		// Server에게 network으로 전송
+		public synchronized void SendMessage(String msg) {
+			try {
+				ChatMsg obcm = new ChatMsg(WaitingRoom.user, "200", msg);
+				oos.writeObject(obcm);
+			} catch (IOException e) {
+				try {
+					WaitingRoom.ois.close();
+					oos.close();
+					socket.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					System.exit(0);
+				}
+			}
+		}
+		*/
 }

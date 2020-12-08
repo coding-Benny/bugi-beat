@@ -195,6 +195,14 @@ public class JavaGameServer extends JFrame {
 					user.WriteOneObject(ob);
 			}
 		}
+		
+		public synchronized void WriteOthersObject(Object ob) {
+			for (int i = 0; i < user_vc.size(); i++) {
+				UserService user = (UserService) user_vc.elementAt(i);
+				if (user != this)
+					user.WriteOneObject(ob);
+			}
+		}
 
 		// 나를 제외한 User들에게 방송. 각각의 UserService Thread의 WriteOne() 을 호출한다.
 		public synchronized void WriteOthers(String str) {
@@ -283,6 +291,29 @@ public class JavaGameServer extends JFrame {
 			}
 		}
 		
+		public void record(ChatMsg cm) {
+			FileWriter fw;
+			BufferedWriter writer;
+			UserName = cm.getId();
+			String[] args = cm.data.split("#"); // 단어들을 분리한다.
+			String dateStr = args[0];
+			String titleStr = args[1];
+			String scoreStr = args[2];
+			try {
+				fw = new FileWriter(new File("src/ScoreLog.txt"), true);
+				writer = new BufferedWriter(fw);
+				writer.write(dateStr + "\t\t");
+				writer.write(UserName+ "##");
+				writer.write(titleStr + "##");
+				writer.write(scoreStr);
+				writer.newLine();
+				writer.flush();
+				fw.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 		public void run() {
 			while (true) { // 사용자 접속을 계속해서 받기 위해 while문
 				try {
@@ -367,12 +398,25 @@ public class JavaGameServer extends JFrame {
 					} else if (cm.code.matches("403")) {	// try to enter room
 						int index = Integer.parseInt(cm.data.split(":")[0]);
 						GameRoom gameRoom = RoomManager.roomList.get(index);
+						int roomID = gameRoom.getId();
+						String roomTitle = gameRoom.getRoomTitle();
+						String difficulty = gameRoom.getDifficulty();
+						int numOfLines = gameRoom.getNumOfLines();
+						String roomOwner = gameRoom.getRoomOwner().getUserName();
 						gameRoom.enterUser(new GameUser(cm.id));
-						String roomInfo = String.format("%d#%s#%s#%d#%s", gameRoom.getId(), gameRoom.getRoomTitle(), gameRoom.getDifficulty(), gameRoom.getNumOfLines(), gameRoom.getRoomOwner().getUserName());
+						String roomInfo = String.format("%d#%s#%s#%d#%s", roomID, roomTitle, difficulty, numOfLines, roomOwner);
 						obcm = new ChatMsg(UserName, "400", roomInfo);
 						oos.writeObject(obcm);
+						for (int i = 0; i < user_vc.size(); i++) {
+							UserService user = (UserService) user_vc.elementAt(i);
+							if (user.UserName.equals(roomOwner)) {
+								obcm = new ChatMsg(UserName, "405", cm.id);
+								user.WriteOneObject(obcm);
+								break;
+							}
+						}
 					} else if (cm.getCode().matches("410")) { // 방나가기 message 처리
-						
+						WriteOthersObject(cm);
 					} else if (cm.code.matches("420")) {	// create room
 						String [] roomInfo = cm.data.split("#");
 						String title = roomInfo[0];
@@ -387,31 +431,21 @@ public class JavaGameServer extends JFrame {
 					} else if (cm.getCode().matches("450")) {	// game start
 						WriteAllObject(cm);
 					} else if (cm.getCode().matches("460")) {	// game over
-						FileWriter fw;
-						BufferedWriter writer;
-						UserName = cm.getId();
-						String[] args = cm.data.split("#"); // 단어들을 분리한다.
-						String dateStr = args[0];
-						String titleStr = args[1];
-						String scoreStr = args[2];
-						try {
-							fw = new FileWriter(new File("src/ScoreLog.txt"), true);
-							writer = new BufferedWriter(fw);
-							writer.write(dateStr + "\t\t");
-							writer.write(UserName+ "##");
-							writer.write(titleStr + "##");
-							writer.write(scoreStr);
-							writer.newLine();
-							writer.flush();
-							fw.close();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						record(cm);
 						break; 
-					} else if (cm.getCode().matches("500")) {	/* status: sleep */
+					} else if (cm.getCode().matches("500")) {	//send item
+						msg = String.format("[%s] %s", cm.getId(), cm.getData());
+						AppendText(msg); // server 화면에 출력
+						String[] args = msg.split(" "); // 단어들을 분리한다.
+						
+						WriteOthers(msg);
+					}
+					else if (cm.getCode().matches("230")) {	/* status: sleep */
 						UserStatus = "S";
-					} else if (cm.getCode().matches("600")) {	/* status: wakeup */
+					} else if (cm.getCode().matches("240")) {	/* status: wakeup */
 						UserStatus = "O";
+					}  else if (cm.getCode().matches("570")) {	// capture game screen
+						WriteOthersObject(cm);
 					} else {
 						WriteAllObject(cm);
 					}

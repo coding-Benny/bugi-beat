@@ -1,11 +1,15 @@
 
+import java.awt.AWTException;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -13,12 +17,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -42,7 +49,7 @@ import javax.swing.text.StyleContext;
 public class WaitingRoom extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int BUF_LEN = 128; // Windows 처럼 BUF_LEN 을 정의
-	public static Socket socket; // 연결소켓
+	public Socket socket; // 연결소켓
 
 	public static ObjectInputStream ois;
 	public static ObjectOutputStream oos;
@@ -50,8 +57,8 @@ public class WaitingRoom extends JFrame {
 	public static String user;
 	private String [] roomInfo;
 	private int roomID;
-	private String roomTitle;
-	private String difficulty;
+	public static String roomTitle;
+	public static String difficulty;
 	private int numOfLines;
 	private String owner;
 	private GameRoom gameRoom;
@@ -73,9 +80,7 @@ public class WaitingRoom extends JFrame {
 	private JPanel userListPanel = new UserListPanel();
 	private JPanel roomListPanel = new RoomListPanel();
 	private JPanel rankingPanel = new RankingPanel();
-
 	private JScrollPane chatScrollPane = new JScrollPane();
-
 	private JTextPane textArea = new JTextPane();
 	private JTextField inputField = new JTextField();
 	private JButton exitBtn = new JButton(exitBtnImg);
@@ -90,7 +95,8 @@ public class WaitingRoom extends JFrame {
 			g.drawImage(waitchattingImg, 25, 620, null);
 		}
 	};
-
+	BufferedImage capturedImg = null;
+	Rectangle rect;
 	public static Music waitingMusic = new Music("waiting beat.mp3", true);
 
 	private int mouseX, mouseY;
@@ -153,7 +159,7 @@ public class WaitingRoom extends JFrame {
 
 		userListPanel.setBounds(915, 230, 340, 420);
 		bgPanel.add(userListPanel);
-
+		
 		createRoomBtn.setBounds(1010, 50, 160, 70);
 		createRoomBtn.setBorderPainted(false);
 		createRoomBtn.setContentAreaFilled(false);
@@ -161,20 +167,20 @@ public class WaitingRoom extends JFrame {
 		createRoomBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				createRoomBtn.setIcon(createBtnEnteredImg); // 이미지 만들면 수정
+				createRoomBtn.setIcon(createBtnEnteredImg);  //이미지 만들면 수정
 				createRoomBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				if (Main.SOUND_EFFECT) {
 					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
 					btnEnteredMusic.start();
 				}
 			}
-
+			
 			@Override
 			public void mouseExited(MouseEvent e) {
 				createRoomBtn.setIcon(createBtnImg);
 				createRoomBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
-
+			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (Main.SOUND_EFFECT) {
@@ -190,37 +196,21 @@ public class WaitingRoom extends JFrame {
 					JLabel roomTitleLabel = new JLabel("방제 : ");
 					roomTitleLabel.setBounds(dialog.getWidth() / 2 - 100, 30, 100, 20);
 					dialog.getContentPane().add(roomTitleLabel);
-
+					
 					JTextField roomTitle = new JTextField(15);
 					roomTitle.setBounds(dialog.getWidth() / 2 - 50, 30, 100, 20);
-					roomTitle.addKeyListener(new KeyListener() { // 엔터 누르면 방 만들기 버튼 자동 클릭
-						@Override
-						public void keyReleased(KeyEvent e) {
-							if (e.getKeyCode() == 10) {
-								createRoomBtn.doClick();
-							}
-						}
-					});
 					dialog.getContentPane().add(roomTitle);
-
+					
 					JLabel roomPwdLabel = new JLabel("비번 : ");
 					roomPwdLabel.setBounds(dialog.getWidth() / 2 - 100, 60, 100, 20);
 					dialog.getContentPane().add(roomPwdLabel);
-
+					
 					JPasswordField roomPwd = new JPasswordField(15);
 					roomPwd.setBounds(dialog.getWidth() / 2 - 50, 60, 100, 20);
 					roomPwd.setEnabled(false);
 					roomPwd.setEditable(false);
-					roomPwd.addKeyListener(new KeyListener() { // 엔터 누르면 방 만들기 버튼 자동 클릭
-						@Override
-						public void keyReleased(KeyEvent e) {
-							if (e.getKeyCode() == 10) {
-								createRoomBtn.doClick();
-							}
-						}
-					});
 					dialog.getContentPane().add(roomPwd);
-
+					
 					JCheckBox roomSecret = new JCheckBox("비밀방");
 					roomSecret.setBounds(dialog.getWidth() / 2 + 75, 60, 100, 20);
 					roomSecret.addActionListener(new ActionListener() {
@@ -229,18 +219,19 @@ public class WaitingRoom extends JFrame {
 							if (roomSecret.isSelected()) {
 								roomPwd.setEditable(true);
 								roomPwd.setEnabled(true);
-							} else {
+							}
+							else {
 								roomPwd.setEditable(false);
 								roomPwd.setEnabled(false);
 							}
 						}
 					});
 					dialog.getContentPane().add(roomSecret);
-
+					
 					JLabel difficultyLabel = new JLabel("난이도 : ");
 					difficultyLabel.setBounds(dialog.getWidth() / 2 - 100, 90, 100, 20);
 					dialog.getContentPane().add(difficultyLabel);
-
+					
 					ButtonGroup difficultyGroup = new ButtonGroup();
 					JRadioButton easyBtn = new JRadioButton("Easy");
 					easyBtn.setBounds(dialog.getWidth() / 2 - 50, 90, 70, 20);
@@ -252,11 +243,11 @@ public class WaitingRoom extends JFrame {
 					dialog.getContentPane().add(hardBtn);
 					difficultyGroup.add(easyBtn);
 					difficultyGroup.add(hardBtn);
-
+					
 					JLabel numOfLineLabel = new JLabel("칸 수 : ");
 					numOfLineLabel.setBounds(dialog.getWidth() / 2 - 100, 120, 100, 20);
 					dialog.getContentPane().add(numOfLineLabel);
-
+					
 					ButtonGroup numOfLineGroup = new ButtonGroup();
 					JRadioButton line4Btn = new JRadioButton("4칸");
 					line4Btn.setBounds(dialog.getWidth() / 2 - 50, 120, 70, 20);
@@ -268,15 +259,13 @@ public class WaitingRoom extends JFrame {
 					dialog.getContentPane().add(line6Btn);
 					numOfLineGroup.add(line4Btn);
 					numOfLineGroup.add(line6Btn);
-
+					
 					JButton createBtn = new JButton("Create");
 					createBtn.setBounds(dialog.getWidth() / 2 - 40, 160, 80, 20);
 					createBtn.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							String roomInfo = String.format("%s#%s#%s#%s", roomTitle.getText(), roomPwd.getPassword(),
-									difficultyGroup.getSelection().getActionCommand(),
-									numOfLineGroup.getSelection().getActionCommand());
+							String roomInfo = String.format("%s#%s#%s#%s", roomTitle.getText(), roomPwd.getPassword(), difficultyGroup.getSelection().getActionCommand(), numOfLineGroup.getSelection().getActionCommand());
 							ChatMsg obcm = new ChatMsg(userName, "420", roomInfo);
 							RoomListPanel.room.addElement(roomTitle.getText());
 							SendObject(obcm);
@@ -284,7 +273,7 @@ public class WaitingRoom extends JFrame {
 						}
 					});
 					dialog.getContentPane().add(createBtn);
-
+					
 					dialog.setVisible(true);
 				}
 			}
@@ -406,7 +395,7 @@ public class WaitingRoom extends JFrame {
 			AppendText("connect error");
 		}
 	}
-	
+
 	// Server Message를 수신해서 화면에 표시
 	class ListenNetwork extends Thread {
 		public void run() {
@@ -461,22 +450,32 @@ public class WaitingRoom extends JFrame {
 						break;
 					case "400":	// enter room
 					case "420":	// successfully created and enter room
-						enterRoom(cm.data, cm.id);
+						enterRoom(cm.data);
+						break;
+					case "405":
+						gameRoom.getMonitorPanel().getP2Name().setText(cm.data);
+						break;
+					case "410":
+						gameRoom.getMonitorPanel().getP2Name().setText("");
 						break;
 					case "425":	// 기존 게임 방
 						String existGameRoom = cm.data;
 						RoomListPanel.room.addElement(existGameRoom);
 						break;
 					case "450":	// start game
-						System.out.println(user + "::" + cm.data);
 						String [] gameInfo = cm.data.split("#");
 						int nowSelected = Integer.parseInt(gameInfo[0]);
 						String difficulty = gameInfo[1];
-						gameRoom.getGamePanel().gameStart(nowSelected, difficulty);
-						gameRoom.getGamePanel().addKeyListener(new KeyListener());
+						GamePanel panel = gameRoom.getGamePanel();
+						panel.gameStart(nowSelected, difficulty);
+						panel.addKeyListener(new KeyListener());
+						panel.requestFocus();
 						break;
 					case "460":	// game over
 						AppendText(msg);
+						break;
+					case "570": // capture screen
+						AppendScreenshot(cm.img);	
 						break;
 					case "900": // emoji
 						if (user.equals(cm.getId())) {
@@ -586,14 +585,32 @@ public class WaitingRoom extends JFrame {
 		textArea.setCaretPosition(len);
 		textArea.replaceSelection("\n");
 	}
+
+	public synchronized void AppendScreenshot(ImageIcon screenshot) {
+		int width = 300;
+		int height = 165;
+		JLabel p2 = gameRoom.getMonitorPanel().getP2Label();
+		Image screenshot_img = screenshot.getImage();
+		Image resizedImg = screenshot_img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		ImageIcon capture = new ImageIcon(resizedImg);
+		p2.setIcon(capture);
+	}
 	
-	public void enterRoom(String msg, String owner) {
+	public void enterRoom(String msg) {
 		roomInfo = msg.split("#");
 		roomID = Integer.parseInt(roomInfo[0]);
 		roomTitle = roomInfo[1];
 		difficulty = roomInfo[2];
 		numOfLines = Integer.parseInt(roomInfo[3]);
-		gameRoom = new GameRoom(roomID, roomTitle, difficulty, numOfLines, owner);
+		try {
+			owner = roomInfo[4];
+			gameRoom = new GameRoom(roomID, roomTitle, difficulty, numOfLines, owner);
+			if (!user.equals(owner))
+				gameRoom.getMonitorPanel().getP2Name().setText(owner);
+		} catch(ArrayIndexOutOfBoundsException e) {
+			owner = user;
+			gameRoom = new GameRoom(roomID, roomTitle, difficulty, numOfLines, owner);
+		}
 		waitingMusic.close();
 	}
 	

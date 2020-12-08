@@ -22,7 +22,6 @@ public class EndingResult {
 	private boolean step3On;
 	private boolean step4On;
 	private boolean nextgame;
-	private Socket socket; // 연결소켓
 	private ObjectOutputStream oos;
 
 	// BGM
@@ -53,7 +52,7 @@ public class EndingResult {
 
 	public void writeScore(String musicTitle) {
 		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yy.MM.dd hh:mm:ss");
 		String dateStr = sdf.format(cal.getTime());
 		String titleStr = musicTitle;
 		String scoreStr = String.valueOf(score);
@@ -120,16 +119,10 @@ public class EndingResult {
 	
 	public synchronized void SendMessage(String msg) {
 		try {
-			socket = WaitingRoom.socket;
-
 			oos = WaitingRoom.oos;
 			oos.flush();
 			ChatMsg obcm = new ChatMsg(WaitingRoom.user, "460", msg);
-			try {
-				oos.writeObject(obcm);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+			oos.writeObject(obcm);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -137,7 +130,9 @@ public class EndingResult {
 	
 	public void playBgm() {
 		isPlayed = true;
-		endingBgm.start();
+		if(endingBgm.getState() == Thread.State.NEW){
+			endingBgm.start();
+		}
 	}
 
 	public void closeBgm() {

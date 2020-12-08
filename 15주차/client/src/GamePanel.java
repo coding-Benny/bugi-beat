@@ -16,7 +16,6 @@ public class GamePanel extends JPanel {
 	private Image screenImage;
 	private Graphics screenGraphic;
 	
-	private Socket socket;
 	private ObjectOutputStream oos;
 	
 	public static Music standbyMusic = new Music("stand by beat.mp3", true);
@@ -129,8 +128,6 @@ public class GamePanel extends JPanel {
 						btnPressedMusic.start();
 					}
 					try {
-						socket = WaitingRoom.socket;
-	
 						oos = WaitingRoom.oos;
 						oos.flush();
 						ChatMsg obcm = new ChatMsg(WaitingRoom.user, "450", roomSetPanel.getNowSelected() + "#" + roomSetPanel.getDifficulty());
@@ -246,7 +243,8 @@ public class GamePanel extends JPanel {
 		lifeBar.setMaximum(10);
 		add(lifeBar);
 		
-		roomInfo.setBounds(35, 30, 200, 30);
+		roomInfo.setText("방 이름: " + WaitingRoom.roomTitle + " - 난이도: " + WaitingRoom.difficulty);
+		roomInfo.setBounds(35, 30, 500, 30);
 		roomInfo.setForeground(Color.WHITE);
 		roomInfo.setFont(new Font("산돌수필B", Font.PLAIN, 28));
 		add(roomInfo);
@@ -267,6 +265,7 @@ public class GamePanel extends JPanel {
 		startBtn.setVisible(false);
 		roomsetBtn.setVisible(false);
 		roomSetPanel.setVisible(false);
+		roomInfo.setVisible(false);
 		feverBar.setVisible(true);
 		lifeBar.setVisible(true);
 		

@@ -56,12 +56,6 @@ public class GameRoom {
 		this.userList = null;
 	}
 	
-	public void broadcast(byte[] data) {
-		for (GameUser user : userList) {
-			// 각 유저에게 데이터 전송
-		}
-	}
-	
 	public void setOwner(GameUser gameUser) {
 		this.roomOwner = gameUser;
 	}
@@ -82,11 +76,11 @@ public class GameRoom {
 		return roomOwner;
 	}
 	
-	public List getUserList() {
+	public List<GameUser> getUserList() {
 		return userList;
 	}
 	
-	public void setUserList(List userList) {
+	public void setUserList(List<GameUser> userList) {
 		this.userList = userList;
 	}
 	

@@ -17,10 +17,13 @@ public class MonitorPanel extends JPanel {
 	private Image sendItem = new ImageIcon(Main.class.getResource("/images/item-send.png")).getImage();
 	private Image recvItem = new ImageIcon(Main.class.getResource("/images/item-recv.png")).getImage();
 	private Image ItemIcon = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();;
+	
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private JPanel p2Panel, p3Panel, p4Panel;
+	private JLabel p2Label, p3Label, p4Label;
 	private JLabel p2Name, p3Name, p4Name;
 	private JLabel p2Rank, p3Rank, p4Rank;
+	private JLabel p2Icon, p3Icon, p4Icon;
 
 	public void paint(Graphics g) { // 컴포넌트 본인만 paint
 		screenImage = createImage(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
@@ -36,9 +39,9 @@ public class MonitorPanel extends JPanel {
 			g.drawImage(ItemIcon, 0, 0, null);
 		} else if (Game.isSendItem == 2) {
 			g.drawImage(sendItem, 20, 85, null);
-		} else if (Game.isSendItem == 3) {
+		//} else if (Game.isSendItem == 3) {
 			g.drawImage(sendItem, 20, 305, null);
-		} else if (Game.isSendItem == 4) {
+		//} else if (Game.isSendItem == 4) {
 			g.drawImage(sendItem, 20, 525, null);
 		}
 
@@ -60,22 +63,28 @@ public class MonitorPanel extends JPanel {
 		setSize(480, 720);
 		setLayout(null);
 		background = roomSetPanel.getMonitorPanelBg();
-
+		
+		p2Label = new JLabel();
 		p2Panel = new JPanel();
 		p2Panel.setBackground(new Color(0, 0, 0));
 		p2Panel.setBounds(120, 40, 300, 165);
+		p2Panel.add(p2Label);
 		add(p2Panel);
-
+		
+		p3Label = new JLabel();
 		p3Panel = new JPanel();
 		p3Panel.setBackground(new Color(0, 0, 0));
 		p3Panel.setBounds(120, 260, 300, 165);
+		p3Panel.add(p3Label);
 		add(p3Panel);
-
+		
+		p4Label = new JLabel();
 		p4Panel = new JPanel();
 		p4Panel.setBackground(new Color(0, 0, 0));
 		p4Panel.setBounds(120, 480, 300, 165);
+		p4Panel.add(p4Label);
 		add(p4Panel);
-
+		
 		p2Name = new JLabel();
 		p3Name = new JLabel();
 		p4Name = new JLabel();
@@ -83,9 +92,9 @@ public class MonitorPanel extends JPanel {
 		p2Name.setBounds(220, 210, 100, 40);
 		p3Name.setBounds(220, 430, 100, 40);
 		p4Name.setBounds(220, 650, 100, 40);
-		p2Name.setFont(new Font("산돌수필B", Font.PLAIN, 16));
-		p3Name.setFont(new Font("산돌수필B", Font.PLAIN, 16));
-		p4Name.setFont(new Font("산돌수필B", Font.PLAIN, 16));
+		p2Name.setFont(new Font("산돌수필B", Font.PLAIN, 32));
+		p3Name.setFont(new Font("산돌수필B", Font.PLAIN, 32));
+		p4Name.setFont(new Font("산돌수필B", Font.PLAIN, 32));
 		p2Name.setForeground(Color.WHITE);
 		p3Name.setForeground(Color.WHITE);
 		p4Name.setForeground(Color.WHITE);
@@ -109,6 +118,23 @@ public class MonitorPanel extends JPanel {
 		add(p3Rank);
 		add(p4Rank);
 
+		p2Icon = new JLabel();
+		p3Icon = new JLabel();
+		p4Icon = new JLabel();
+		p2Icon.setBounds(20, 85, 100, 80);
+		p3Icon.setBounds(20, 305, 100, 80);
+		p4Icon.setBounds(20, 525, 100, 80);
+		add(p2Icon);
+		add(p3Icon);
+		add(p4Icon);
+		
 		setFocusable(false);
+	}
+	public JLabel getP2Label() {
+		return p2Label;
+	}
+	
+	public JLabel getP2Name() {
+		return p2Name;
 	}
 }
