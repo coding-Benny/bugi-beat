@@ -48,8 +48,8 @@ public class Game extends Thread {
 	private int cnt=0;
 	private int cnt2=0;
 	private Music gameMusic;
-	private Music itemsendcount = new Music("itemsendcount.mp3", false);
-	private Music itemrecvcount = new Music("itemsendcount.mp3", false);
+	private Music itemsendcount = new Music("itemcount.mp3", false);
+	private Music itemrecvcount = new Music("itemcount.mp3", false);
 	private EndingResult ending;
 	public static boolean showingResult;
 	public static int isSendItem = 0;
@@ -215,32 +215,31 @@ public class Game extends Thread {
 	}
 
 	public void pressSpace() { // 아이템보내기
-		try {
-			oos = WaitingRoom.oos;
-			oos.flush();
-			ChatMsg obcm = new ChatMsg(WaitingRoom.user, "500", "item1");
-			try {
-				oos.writeObject(obcm);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		}
-		if(isItemOn) {
+		//if(isItemOn) {
 			isSendItem=2;   //모니터패널 전송아이콘
-			
 			itemNotiImg = cloudnothing;
-			attackNotiImg = cloudrecvImg;
 			isItemOn=false;
 			new Music("senditem.mp3", false).start();
 			if(cnt!=0) {
 				itemsendcount.stop();
-				itemsendcount = new Music("itemsendcount.mp3", false);
+				itemsendcount = new Music("itemcount.mp3", false);
 			}
 			itemsendcount.start();
 			cnt++;
-		}
+
+			try {
+				oos = WaitingRoom.oos;
+				oos.flush();
+				ChatMsg obcm = new ChatMsg(WaitingRoom.user, "500", "item1");
+				try {
+					oos.writeObject(obcm);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			} catch(Exception ex) {
+				ex.printStackTrace();
+			}
+		//}
 	}
 
 	public void releaseSpace() {
@@ -426,11 +425,11 @@ public class Game extends Thread {
 				j=0;
 				isItemOn=false;
 			}
-			if(itemrecvcount.getTime()>= 7000) {  //아이템 받고 7초뒤에
+			if(itemrecvcount.getTime()>= 5000) {  //아이템 받고 5초뒤에
 				attackNotiImg = cloudnothing;
 				isRecvItem=0;  //아이콘 지우기
 			}
-			else if(gameMusic.getTime()>71000) {
+			if(gameMusic.getTime()>71000) {
 				isItemOn=false;
 				itemNotiImg = cloudnothing;
 				j++;
@@ -509,11 +508,10 @@ public class Game extends Thread {
 		isRecvItem=2;
 		System.out.println("아이템 받음");
 		attackNotiImg=cloudrecvImg;
-
 		new Music("attack.mp3", false).start();
 		if(cnt2!=0) {
 			itemrecvcount.stop();
-			itemrecvcount = new Music("itemsendcount.mp3", false);
+			itemrecvcount = new Music("itemcount.mp3", false);
 		}
 		itemrecvcount.start();
 		cnt2++;
