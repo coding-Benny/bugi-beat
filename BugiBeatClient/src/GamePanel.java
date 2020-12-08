@@ -1,20 +1,15 @@
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
+import javax.swing.*;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
 
 public class GamePanel extends JPanel {
@@ -45,7 +40,7 @@ public class GamePanel extends JPanel {
 	private ImageIcon roomsetEnteredImg = new ImageIcon(Main.class.getResource("/images/roomsetting1.png"));
 	private ImageIcon roomsetImg = new ImageIcon(Main.class.getResource("/images/roomsetting0.png"));
 	
-	public JButton startBtn = new JButton(startBtnImg);
+	private JButton startBtn = new JButton(startBtnImg);
 	private JButton roomsetBtn = new JButton(roomsetImg);
 	private JButton quitBtn = new JButton(quitBtnImg);
 	private JLabel roomInfo = new JLabel("");
@@ -144,6 +139,8 @@ public class GamePanel extends JPanel {
 					} catch(Exception ex) {
 						ex.printStackTrace();
 					}
+					//gameStart(roomSetPanel.getNowSelected(), roomSetPanel.getDifficulty());
+					//addKeyListener(new KeyListener());
 			}
 		});
 		add(startBtn);
@@ -246,12 +243,13 @@ public class GamePanel extends JPanel {
 		lifeBar.setMaximum(10);
 		add(lifeBar);
 		
-		roomInfo.setBounds(35, 30, 200, 30);
+		roomInfo.setText("방 이름: " + WaitingRoom.roomTitle + " - 난이도: " + WaitingRoom.difficulty);
+		roomInfo.setBounds(35, 30, 500, 30);
 		roomInfo.setForeground(Color.WHITE);
 		roomInfo.setFont(new Font("산돌수필B", Font.PLAIN, 28));
 		add(roomInfo);
 	}
-		
+
 	public void gameStart(int nowSelected, String difficulty) {
 		selectedMusic = roomSetPanel.getSelectedMusic();
 		musicTitle = roomSetPanel.getTrackList().get(nowSelected).getTitleName();
@@ -267,6 +265,7 @@ public class GamePanel extends JPanel {
 		startBtn.setVisible(false);
 		roomsetBtn.setVisible(false);
 		roomSetPanel.setVisible(false);
+		roomInfo.setVisible(false);
 		feverBar.setVisible(true);
 		lifeBar.setVisible(true);
 		
@@ -279,7 +278,7 @@ public class GamePanel extends JPanel {
 		game.start();
 		setFocusable(true);
 	}
-		
+	
 	public Music getBackgroundMusic() {
 		return standbyMusic;
 	}

@@ -1,25 +1,20 @@
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
 
 public class GameRoom extends JFrame {
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("/images/bar.png")));
 	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/exit1.png"));
 	private ImageIcon exitBtnImg = new ImageIcon(Main.class.getResource("/images/exit0.png"));
 	private JButton exitBtn = new JButton(exitBtnImg);
-	
+
 	public static GamePanel gamePanel = new GamePanel();
 	private MonitorPanel monitorPanel = new MonitorPanel();
 	
@@ -31,8 +26,6 @@ public class GameRoom extends JFrame {
 	private String difficulty;
 	private int numOfLines;
 	private String owner;
-	
-	public GameRoom() {	}
 	
 	public GameRoom(int id, String title, String difficulty, int numOfLines, String owner) {
 		super("게임 방");
@@ -69,7 +62,7 @@ public class GameRoom extends JFrame {
 			}
 		});
 		c.add(menuBar);
-
+	
 		exitBtn.setBounds(1238, 12, 30, 27);
 		exitBtn.setBorderPainted(false);
 		exitBtn.setContentAreaFilled(false);
@@ -128,7 +121,7 @@ public class GameRoom extends JFrame {
 		monitorPanel.setBounds(800, 0, 480, 720);
 		c.add(monitorPanel);
 	}
-	
+
 	public int getId() {
 		return id;
 	}

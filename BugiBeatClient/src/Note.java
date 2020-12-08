@@ -16,7 +16,7 @@ public class Note extends Thread {
 	private Image cloudsendNoti0Img = new ImageIcon(Main.class.getResource("/images/cloouds-send0.png")).getImage();
 	private Image cloudsendNoti1Img = new ImageIcon(Main.class.getResource("/images/cloouds-send1.png")).getImage();
 	private Image nothing = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
-	
+
 	public static boolean isFever = false;
 	public static int fever = 0;
 	public static int score = 0;
@@ -59,8 +59,8 @@ public class Note extends Thread {
 			} else if (noteType.equals("L")) {
 				x = 566;
 			} else if (noteType.equals("end")) {
-				x = 900;  // 안 보이게
-				Game.showingResult=true;
+				x = 900; // 안보이게
+				Game.showingResult = true;
 			}
 		} else if (line == 6) {
 			if (noteType.equals("S")) {
@@ -76,8 +76,8 @@ public class Note extends Thread {
 			} else if (noteType.equals("L")) {
 				x = 622;
 			} else if (noteType.equals("end")) {
-				x = 900;  //안보이게
-				Game.showingResult=true;
+				x = 900; // 안보이게
+				Game.showingResult = true;
 			}
 		}
 		this.noteType = noteType;
@@ -105,7 +105,7 @@ public class Note extends Thread {
 			else if (line == 6) {
 				g.drawImage(note_Img, x, y, null);
 			}
-		} else {	// 아이템 보내기
+		} else { // 아이템 보내기
 			// 아이템 시각 효과 그리기
 		}
 	}
@@ -115,7 +115,7 @@ public class Note extends Thread {
 		if (y > 560) { /* 판정바를 지나친 경우 */
 			combo = 0;
 			if (!noteType.equals("end")) {
-				life--;
+//				life--;
 				isFever = false;
 				fever = 0;
 			}
@@ -135,33 +135,31 @@ public class Note extends Thread {
 				drop();
 				GamePanel.lifeBar.setValue(life);
 				GamePanel.feverBar.setValue(fever);
-				
+
 				if (combo >= maxCombo) // 맥스콤보 갱신
 					maxCombo = combo;
 				if (combo != 0 && combo % 10 == 0) { // 10콤보마다 life 회복
-					if(life>=10)
-						life=10;
+					if (life >= 10)
+						life = 10;
 					else
 						life++;
 				}
-				if (fever != 0 && fever % 20 == 0) { // 20배수에 피버타임 off
+				if (fever != 0 && fever % 20 == 0) { // 20배수마다 피버타임 off
 					isFever = false;
 					fever = 0;
-				}
-				else if (fever != 0 && fever % 10 == 0) { // 10배수마다 피버타임 on
+				} else if (fever != 0 && fever % 10 == 0) { // 10배수마다 피버타임 on
 					isFever = true;
 				}
-
-				/*
-				 if (!Game.isItemOn) {
+/*
+				if (!Game.isItemOn) {
 					Game.cloudNotiImg = nothing;
-				 } else {
+				} else {
 					if(cnt%11==0)
 						Game.cloudNotiImg = cloudsendNoti0Img;
 					else
 						Game.cloudNotiImg = cloudsendNoti1Img;
-				 }
-				 */
+				}
+				*/
 				
 				if (proceeded) {
 					Thread.sleep(Main.SLEEP_TIME);

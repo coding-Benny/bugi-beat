@@ -6,14 +6,14 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
 public class Game extends Thread {
 	private Image judgementLineImg = new ImageIcon(Main.class.getResource("/images/judgement-line.png")).getImage();
-	private Image fever_judgementLineImg = new ImageIcon(Main.class.getResource("/images/fever-judgement-line.png"))
-			.getImage();
+	private Image fever_judgementLineImg = new ImageIcon(Main.class.getResource("/images/fever-judgement-line.png")).getImage();
 	private Image noteRouteSImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	private Image noteRouteDImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	private Image noteRouteFImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
@@ -30,10 +30,12 @@ public class Game extends Thread {
 	private Image fever_line4_Pressed = new ImageIcon(Main.class.getResource("/images/fever-4line-p.png")).getImage();
 	private Image line6_Pressed = new ImageIcon(Main.class.getResource("/images/6line-p.png")).getImage();
 	private Image fever_line6_Pressed = new ImageIcon(Main.class.getResource("/images/fever-6line-p.png")).getImage();
-	private Image cloudSendNoti0Img = new ImageIcon(Main.class.getResource("/images/cloouds-send0.png")).getImage();
-	private Image cloudSendNoti1Img = new ImageIcon(Main.class.getResource("/images/cloouds-send1.png")).getImage();
-	private Image cloudSendNothing = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
-	public static Image cloudNotiImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	private Image cloudsendNoti0Img = new ImageIcon(Main.class.getResource("/images/cloouds-send0.png")).getImage();
+	private Image cloudsendNoti1Img = new ImageIcon(Main.class.getResource("/images/cloouds-send1.png")).getImage();
+	private Image cloudnothing = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	private Image cloudrecvImg = new ImageIcon(Main.class.getResource("/images/clouds-item.png")).getImage();
+	public static Image itemNotiImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+	public static Image attackNotiImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	public static Image gameScreenBg;
 	private Image linePressedImg;
 	private Image judgeImg;
@@ -43,9 +45,12 @@ public class Game extends Thread {
 	private String difficulty;
 	private String musicTitle;
 	private int line;
+	private int cnt=0;
+	private int cnt2=0;
 	private Music gameMusic;
+	private Music itemsendcount = new Music("itemcount.mp3", false);
+	private Music itemrecvcount = new Music("itemcount.mp3", false);
 	private EndingResult ending;
-
 	public static boolean showingResult;
 	public static int isSendItem = 0;
 	public static int isRecvItem = 0;
@@ -53,9 +58,9 @@ public class Game extends Thread {
 
 	ArrayList<Note> noteList = new ArrayList<Note>();
 	private CaptureTool captureTool = new CaptureTool(GameRoom.getGamePanel());
-
+	
 	private ObjectOutputStream oos;
-
+	
 	public Game(String titleName, String difficulty, String musicTitle, int line) {
 		this.titleName = titleName;
 		this.difficulty = difficulty;
@@ -72,7 +77,9 @@ public class Game extends Thread {
 			g.drawImage(judgementLineImg, 11, 500, null);
 		else
 			g.drawImage(fever_judgementLineImg, 11, 500, null);
-
+		
+		g.drawImage(itemNotiImg, 300, 10, null);
+			
 		if (line == 6) {
 			g.drawImage(noteRouteSImg, 45, 80, null);
 			g.drawImage(noteRouteDImg, 160, 80, null);
@@ -156,8 +163,9 @@ public class Game extends Thread {
 			g.setColor(Color.WHITE);
 			g.drawString(Note.combo + "", 380, 400);
 		}
-		// result
-		if (showingResult) {
+		g.drawImage(attackNotiImg, 0, 87, null);  //먹구름
+		
+		if (showingResult) { // result
 			judgeImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 			ending.draw(g);
 		}
@@ -206,22 +214,45 @@ public class Game extends Thread {
 		noteRouteFImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	}
 
-	public void pressSpace() {
-		judge("Space");
-		new Music("senditem.mp3", false).start();
+	public void pressSpace() { // 아이템보내기
+		//if(isItemOn) {
+			isSendItem=2;   //모니터패널 전송아이콘
+			itemNotiImg = cloudnothing;
+			isItemOn=false;
+			new Music("senditem.mp3", false).start();
+			if(cnt!=0) {
+				itemsendcount.stop();
+				itemsendcount = new Music("itemcount.mp3", false);
+			}
+			itemsendcount.start();
+			cnt++;
+
+			try {
+				oos = WaitingRoom.oos;
+				oos.flush();
+				ChatMsg obcm = new ChatMsg(WaitingRoom.user, "500", "item1");
+				try {
+					oos.writeObject(obcm);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			} catch(Exception ex) {
+				ex.printStackTrace();
+			}
+		//}
 	}
 
 	public void releaseSpace() {
 		// 스페이스바 뗐을때 이펙트
 	}
-
+	
 	public void releaseEnter() {
-		// 엔터키
+		//엔터키
 	}
 
 	public void pressEnter() {
-		if (showingResult) // 결과창에서만 입력받음
-			GamePanel.game.close(); // 방 나가기
+		if(showingResult)  //결과창에서만 입력받음
+			GamePanel.game.close();  //방 나가기
 	}
 
 	public void pressJ() {
@@ -360,13 +391,14 @@ public class Game extends Thread {
 			int startTime = 1000;
 			int gap = 114; /* 박자 계산 */
 			beats = new Beat[] { new Beat(startTime, "S"), new Beat(startTime + gap * 50, "end"),
-					// "end"노트는 +50
+					//"end"노트는 +50
 			};
 		} else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Hard")) {
 			int startTime = 1000;
 			beats = new Beat[] { new Beat(startTime, "S"), };
 		}
 		int i = 0;
+		int j = 0;
 		gameMusic.start();
 		captureTool.start();
 		showingResult = false;
@@ -387,13 +419,42 @@ public class Game extends Thread {
 					e.printStackTrace();
 				}
 			}
+			if(itemsendcount.getTime()>= 3000) {  //아이템 보내고 3초뒤에
+				itemNotiImg = cloudnothing;
+				isSendItem=0;  //아이콘 지우기
+				j=0;
+				isItemOn=false;
+			}
+			if(itemrecvcount.getTime()>= 5000) {  //아이템 받고 5초뒤에
+				attackNotiImg = cloudnothing;
+				isRecvItem=0;  //아이콘 지우기
+			}
+			if(gameMusic.getTime()>71000) {
+				isItemOn=false;
+				itemNotiImg = cloudnothing;
+				j++;
+			}
+			else if(!isItemOn && gameMusic.getTime()>10000 && Note.score>=100 || !isItemOn && gameMusic.getTime()>40000 && Note.score>=500 || !isItemOn && gameMusic.getTime()>70000 && Note.score>=1000) {
+				if(gameMusic.getTime()>71000)
+					break;
+				if(j==0)
+					isItemOn=true;
+				else
+					isItemOn=false;
+				if(isSendItem!=0)
+					itemNotiImg = cloudnothing;
+				else
+					itemNotiImg = cloudsendNoti0Img;
+				j++;
+			}
+			
 			if (showingResult) {
 				gameMusic.close();
-				captureTool.close();
 				ending.playBgm();
 				ending.takeScore(Note.score);
 				ending.calRank();
 				ending.writeScore(titleName);
+				captureTool.close();
 			}
 			ending.update();
 		}
@@ -411,22 +472,27 @@ public class Game extends Thread {
 			e.printStackTrace();
 		}
 	}
+	
 
-	/*
-	 * 큐처럼 먼저 떨어지는 노트에 대해서 입력 정확도 검사
-	 */
+	// 큐처럼 먼저 떨어지는 노트에 대해서 입력 정확도 검사
+
 	public void judge(String input) {
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
-			if (input.equals(note.getNoteType())) {
+			if(input.equals("space")) {
+				break;
+			}
+			else if (input.equals(note.getNoteType())) {
 				judgeEvent(note.judge());
 				break;
 			}
+			// note.getNoteImg()
 		}
 	}
 
 	public void judgeEvent(String judge) {
 		judgeImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
+
 		if (judge.equals("Miss"))
 			judgeImg = new ImageIcon(Main.class.getResource("/images/miss.png")).getImage();
 		else if (judge.equals("Good"))
@@ -435,6 +501,20 @@ public class Game extends Thread {
 			judgeImg = new ImageIcon(Main.class.getResource("/images/great.png")).getImage();
 		else if (judge.equals("Perfect"))
 			judgeImg = new ImageIcon(Main.class.getResource("/images/perfect.png")).getImage();
+
+	}
+	
+	public void recvItem() {
+		isRecvItem=2;
+		System.out.println("아이템 받음");
+		attackNotiImg=cloudrecvImg;
+		new Music("attack.mp3", false).start();
+		if(cnt2!=0) {
+			itemrecvcount.stop();
+			itemrecvcount = new Music("itemcount.mp3", false);
+		}
+		itemrecvcount.start();
+		cnt2++;
 	}
 
 }

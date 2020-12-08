@@ -42,7 +42,7 @@ public class Music extends Thread {
 		try {
 			isLoop = false;
 			player.close();
-			this.interrupt();	/* 해당 스레드를 중지 상태로 만듦 */
+			this.interrupt(); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

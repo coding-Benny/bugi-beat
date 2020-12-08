@@ -12,6 +12,9 @@ import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -433,12 +436,61 @@ public class JavaGameServer extends JFrame {
 					} else if (cm.getCode().matches("460")) {	// game over
 						record(cm);
 						break; 
-					} else if (cm.getCode().matches("500")) {	/* status: sleep */
+					} else if (cm.getCode().matches("500")) {	//send item
+//						msg = String.format("[%s] %s", cm.getId(), cm.getData());
+//						AppendText(msg); // server 화면에 출력
+//						String[] args = msg.split(" "); // 단어들을 분리한다.
+						
+						WriteOthersObject(cm);
+					}
+					else if (cm.getCode().matches("230")) {	/* status: sleep */
 						UserStatus = "S";
+					} else if (cm.getCode().matches("240")) {	/* status: wakeup */
+						UserStatus = "O";
 					} else if (cm.getCode().matches("570")) {	// capture game screen
 						WriteOthersObject(cm);
-					} else if (cm.getCode().matches("600")) {	/* status: wakeup */
-						UserStatus = "O";
+					} else if (cm.getCode().matches("600")) { // transfer record -> 함수화 할 것
+						ArrayList<Integer> scores = new ArrayList<Integer>();
+						ArrayList<String> lines = new ArrayList<String>();
+
+						File records = new File("src/ScoreLog.txt");
+						Scanner logScanner = new Scanner(records);
+						while (logScanner.hasNextLine()) {
+							String line = logScanner.nextLine();
+							lines.add(line);
+							String[] record = line.split("##");
+							int score = Integer.parseInt(record[3]);
+							scores.add(score);
+						}
+						ArrayList<Integer> sortedScores = new ArrayList<Integer>(scores);
+						Collections.sort(sortedScores, Collections.reverseOrder());
+						logScanner.close();
+						FileWriter fw;
+						BufferedWriter writer;
+						File ranks = new File("src/Ranking.txt");
+						fw = new FileWriter(ranks, false);
+						writer = new BufferedWriter(fw);
+						for (int i = 0; i < scores.size(); i++) {
+							for (int j = 0; j < 10; j++) {
+								if (scores.get(i) == sortedScores.get(j)) {
+									try {
+										writer.write(lines.get(i));
+										writer.newLine();
+										writer.flush();
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}					
+							}
+						}
+						fw.close();
+						Scanner rankScanner = new Scanner(ranks);
+						while (rankScanner.hasNextLine()) {
+							String rank = rankScanner.nextLine();
+							obcm = new ChatMsg("RECORD", "600", rank);
+							oos.writeObject(obcm);
+						}
+						rankScanner.close();
 					} else {
 						WriteAllObject(cm);
 					}

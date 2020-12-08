@@ -1,6 +1,7 @@
 
 public class Track {
 	private String startImage;	// 게임 선택 창 표지 이미지
+	private String gameImage;	// 해당 곡을 실행했을 때 표지 이미지
 	private String startMusic;	// 게임 선택 창 음악
 	private String gameMusic;	// 해당 곡을 실행했을 때 음악
 	private String titleName;	// 곡 제목

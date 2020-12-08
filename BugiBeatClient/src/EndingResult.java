@@ -2,6 +2,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -17,7 +22,6 @@ public class EndingResult {
 	private boolean step3On;
 	private boolean step4On;
 	private boolean nextgame;
-	private int angle;
 	private ObjectOutputStream oos;
 
 	// BGM
@@ -31,7 +35,6 @@ public class EndingResult {
 		step3On = false;
 		step4On = false;
 		nextgame = false;
-		angle = 155;
 
 		endingBgm = new Music("resultBgm.mp3", false);
 	}
@@ -49,7 +52,7 @@ public class EndingResult {
 
 	public void writeScore(String musicTitle) {
 		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yy.MM.dd hh:mm:ss");
 		String dateStr = sdf.format(cal.getTime());
 		String titleStr = musicTitle;
 		String scoreStr = String.valueOf(score);
@@ -59,9 +62,8 @@ public class EndingResult {
 
 	}
 
-	public void update() {
-		angle += 3;
 
+	public void update() {
 		if (endingBgm.getTime() >= 6500) {
 			nextgame = true;
 		}
@@ -105,8 +107,6 @@ public class EndingResult {
 		// 4
 		if (endingBgm.getTime() >= 6500 || step4On == true) {
 			step4On = true;
-			if (angle >= 175)
-				angle = 0;
 			g.setColor(Color.BLACK);
 			g.setFont(new Font("산돌수필B", Font.PLAIN, 27));
 			g.drawString("- Press ENTER -", 332, 452);
@@ -130,7 +130,9 @@ public class EndingResult {
 	
 	public void playBgm() {
 		isPlayed = true;
-		endingBgm.start();
+		if(endingBgm.getState() == Thread.State.NEW){
+			endingBgm.start();
+		}
 	}
 
 	public void closeBgm() {
