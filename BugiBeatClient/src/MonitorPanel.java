@@ -1,10 +1,13 @@
 
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class MonitorPanel extends JPanel {
 	private Image screenImage;
@@ -20,6 +23,7 @@ public class MonitorPanel extends JPanel {
 	
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private JPanel p2Panel, p3Panel, p4Panel;
+	private JLabel p2Label, p3Label, p4Label;
 	private JLabel p2Name, p3Name, p4Name;
 	private JLabel p2Rank, p3Rank, p4Rank;
 	private JLabel p2Icon, p3Icon, p4Icon;
@@ -65,19 +69,25 @@ public class MonitorPanel extends JPanel {
 		setLayout(null);
 		background = roomSetPanel.getMonitorPanelBg();
 		
+		p2Label = new JLabel();
 		p2Panel = new JPanel();
 		p2Panel.setBackground(new Color(0, 0, 0));
 		p2Panel.setBounds(120, 40, 300, 165);
+		p2Panel.add(p2Label);
 		add(p2Panel);
 		
+		p3Label = new JLabel();
 		p3Panel = new JPanel();
 		p3Panel.setBackground(new Color(0, 0, 0));
 		p3Panel.setBounds(120, 260, 300, 165);
+		p3Panel.add(p3Label);
 		add(p3Panel);
 		
+		p4Label = new JLabel();
 		p4Panel = new JPanel();
 		p4Panel.setBackground(new Color(0, 0, 0));
 		p4Panel.setBounds(120, 480, 300, 165);
+		p4Panel.add(p4Label);
 		add(p4Panel);
 		
 		p2Name = new JLabel();
@@ -124,5 +134,13 @@ public class MonitorPanel extends JPanel {
 		add(p4Icon);
 		
 		setFocusable(false);
+	}
+	
+	public JLabel getP2Label() {
+		return p2Label;
+	}
+	
+	public JLabel getP2Name() {
+		return p2Name;
 	}
 }

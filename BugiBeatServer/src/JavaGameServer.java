@@ -195,6 +195,14 @@ public class JavaGameServer extends JFrame {
 					user.WriteOneObject(ob);
 			}
 		}
+		
+		public synchronized void WriteOthersObject(Object ob) {
+			for (int i = 0; i < user_vc.size(); i++) {
+				UserService user = (UserService) user_vc.elementAt(i);
+				if (user != this)
+					user.WriteOneObject(ob);
+			}
+		}
 
 		// 나를 제외한 User들에게 방송. 각각의 UserService Thread의 WriteOne() 을 호출한다.
 		public synchronized void WriteOthers(String str) {
@@ -410,6 +418,9 @@ public class JavaGameServer extends JFrame {
 						break; 
 					} else if (cm.getCode().matches("500")) {	/* status: sleep */
 						UserStatus = "S";
+					} else if (cm.getCode().matches("570")) {
+						//String from = cm.data.split("#")[0];
+						WriteOthersObject(cm);
 					} else if (cm.getCode().matches("600")) {	/* status: wakeup */
 						UserStatus = "O";
 					} else {

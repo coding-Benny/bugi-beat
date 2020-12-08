@@ -1,9 +1,13 @@
 
+import java.awt.AWTException;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -11,12 +15,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -40,7 +47,7 @@ import javax.swing.text.StyleContext;
 public class WaitingRoom extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int BUF_LEN = 128; // Windows 처럼 BUF_LEN 을 정의
-	public static Socket socket; // 연결소켓
+	private Socket socket; // 연결소켓
 
 	public static ObjectInputStream ois;
 	public static ObjectOutputStream oos;
@@ -71,9 +78,7 @@ public class WaitingRoom extends JFrame {
 	private JPanel userListPanel = new UserListPanel();
 	private JPanel roomListPanel = new RoomListPanel();
 	private JPanel rankingPanel = new RankingPanel();
-	
 	private JScrollPane chatScrollPane = new JScrollPane();
-	
 	private JTextPane textArea = new JTextPane();
 	private JTextField inputField = new JTextField();
 	private JButton exitBtn = new JButton(exitBtnImg);
@@ -88,10 +93,13 @@ public class WaitingRoom extends JFrame {
 			g.drawImage(waitChattingImg, 25, 620, null);
 		}
 	};
-	
+	BufferedImage capturedImg = null;
+	Rectangle rect;
 	public static Music waitingMusic = new Music("waiting beat.mp3", true);
 	
 	private int mouseX, mouseY;
+	
+	public WaitingRoom() { }
 	
 	public WaitingRoom(String userName, String ipAddress, String portNo) {
 		super("대기실");
@@ -469,11 +477,16 @@ public class WaitingRoom extends JFrame {
 						String [] gameInfo = cm.data.split("#");
 						int nowSelected = Integer.parseInt(gameInfo[0]);
 						String difficulty = gameInfo[1];
-						gameRoom.getGamePanel().gameStart(nowSelected, difficulty);
-						gameRoom.getGamePanel().addKeyListener(new KeyListener());
+						GamePanel panel = gameRoom.getGamePanel();
+						panel.gameStart(nowSelected, difficulty);
+						panel.addKeyListener(new KeyListener());
+						panel.requestFocus();
 						break;
 					case "460":	// game over
 						AppendText(msg);
+						break;
+					case "570": // capture screen
+						AppendScreenshot(cm.img);	
 						break;
 					case "900": // emoji
 						if (user.equals(cm.getId())) {
@@ -583,6 +596,16 @@ public class WaitingRoom extends JFrame {
 		textArea.setCaretPosition(len);
 		textArea.replaceSelection("\n");
 	}
+
+	public synchronized void AppendScreenshot(ImageIcon screenshot) {
+		int width = 300;
+		int height = 165;
+		JLabel p2 = gameRoom.getMonitorPanel().getP2Label();
+		Image screenshot_img = screenshot.getImage();
+		Image resizedImg = screenshot_img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		ImageIcon capture = new ImageIcon(resizedImg);
+		p2.setIcon(capture);
+	}
 	
 	public void enterRoom(String msg, String owner) {
 		roomInfo = msg.split("#");
@@ -637,4 +660,15 @@ public class WaitingRoom extends JFrame {
 			AppendText("SendObject Error");
 		}
 	}
+	
+	public synchronized BufferedImage capture(Component frame, String filePath) {
+		rect = new Rectangle(frame.getLocationOnScreen().x+45, frame.getLocationOnScreen().y+110, frame.getWidth()-80, frame.getHeight()-210);
+    	try {
+    		capturedImg = new Robot().createScreenCapture(rect);
+			ImageIO.write(capturedImg, "png", new File("./src/captures/" + filePath + ".png"));
+		} catch (AWTException | IOException e) {
+			e.printStackTrace();
+		}
+		return capturedImg;
+    }
 }

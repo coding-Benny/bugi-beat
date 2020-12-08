@@ -4,13 +4,20 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.ImageIcon;
 
 public class Game extends Thread {
 	private Image judgementLineImg = new ImageIcon(Main.class.getResource("/images/judgement-line.png")).getImage();
-	private Image fever_judgementLineImg = new ImageIcon(Main.class.getResource("/images/fever-judgement-line.png")).getImage();
+	private Image fever_judgementLineImg = new ImageIcon(Main.class.getResource("/images/fever-judgement-line.png"))
+			.getImage();
 	private Image noteRouteSImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	private Image noteRouteDImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
 	private Image noteRouteFImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
@@ -42,13 +49,17 @@ public class Game extends Thread {
 	private int line;
 	private Music gameMusic;
 	private EndingResult ending;
+
 	public static boolean showingResult;
 	public static int isSendItem = 0;
 	public static int isRecvItem = 0;
 	public static boolean isItemOn = false;
 
 	ArrayList<Note> noteList = new ArrayList<Note>();
-	
+	private CaptureTool captureTool = new CaptureTool(GameRoom.getGamePanel());
+
+	private ObjectOutputStream oos;
+
 	public Game(String titleName, String difficulty, String musicTitle, int line) {
 		this.titleName = titleName;
 		this.difficulty = difficulty;
@@ -65,7 +76,7 @@ public class Game extends Thread {
 			g.drawImage(judgementLineImg, 11, 500, null);
 		else
 			g.drawImage(fever_judgementLineImg, 11, 500, null);
-		
+
 		if (line == 6) {
 			g.drawImage(noteRouteSImg, 45, 80, null);
 			g.drawImage(noteRouteDImg, 160, 80, null);
@@ -207,14 +218,14 @@ public class Game extends Thread {
 	public void releaseSpace() {
 		// 스페이스바 뗐을때 이펙트
 	}
-	
+
 	public void releaseEnter() {
-		//엔터키
+		// 엔터키
 	}
 
 	public void pressEnter() {
-		if(showingResult)  // 결과창에서만 입력받음
-			GamePanel.game.close();  // 방 나가기
+		if (showingResult) // 결과창에서만 입력받음
+			GamePanel.game.close(); // 방 나가기
 	}
 
 	public void pressJ() {
@@ -254,6 +265,7 @@ public class Game extends Thread {
 
 	public void close() {
 		gameMusic.close();
+		captureTool.close();
 		this.interrupt();
 	}
 
@@ -352,7 +364,7 @@ public class Game extends Thread {
 			int startTime = 1000;
 			int gap = 114; /* 박자 계산 */
 			beats = new Beat[] { new Beat(startTime, "S"), new Beat(startTime + gap * 50, "end"),
-					//"end"노트는 +50
+					// "end"노트는 +50
 			};
 		} else if (titleName.equals("Onion - Lukrembo") && difficulty.equals("Hard")) {
 			int startTime = 1000;
@@ -360,11 +372,15 @@ public class Game extends Thread {
 		}
 		int i = 0;
 		gameMusic.start();
+		captureTool.start();
+		//captureName = cur.format(cal.getTime());
 		showingResult = false;
 		ending = new EndingResult();
 		while (i < beats.length && !isInterrupted()) {
 			boolean dropped = false;
 			if (beats[i].getTime() <= gameMusic.getTime()) {
+				//screenshot = waitingRoom.capture(GameRoom.getGamePanel(), WaitingRoom.user + captureName + i);
+				//sendCapture(new ImageIcon(screenshot));
 				Note note = new Note(beats[i].getNoteName(), line, note_Img);
 				note.start();
 				noteList.add(note);
@@ -378,15 +394,28 @@ public class Game extends Thread {
 					e.printStackTrace();
 				}
 			}
-			
 			if (showingResult) {
 				gameMusic.close();
+				captureTool.close();
 				ending.playBgm();
 				ending.takeScore(Note.score);
 				ending.calRank();
 				ending.writeScore(titleName);
 			}
 			ending.update();
+		}
+	}
+
+	public synchronized void sendCapture(ImageIcon capture) {
+		try {
+			oos = WaitingRoom.oos;
+			oos.flush();
+			
+			ChatMsg obcm = new ChatMsg(WaitingRoom.user, "570", "CAPTURE");
+			obcm.setImg(capture);
+			oos.writeObject(capture);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -400,13 +429,11 @@ public class Game extends Thread {
 				judgeEvent(note.judge());
 				break;
 			}
-			// note.getNoteImg()
 		}
 	}
 
 	public void judgeEvent(String judge) {
 		judgeImg = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
-
 		if (judge.equals("Miss"))
 			judgeImg = new ImageIcon(Main.class.getResource("/images/miss.png")).getImage();
 		else if (judge.equals("Good"))
@@ -415,6 +442,6 @@ public class Game extends Thread {
 			judgeImg = new ImageIcon(Main.class.getResource("/images/great.png")).getImage();
 		else if (judge.equals("Perfect"))
 			judgeImg = new ImageIcon(Main.class.getResource("/images/perfect.png")).getImage();
-
 	}
+
 }

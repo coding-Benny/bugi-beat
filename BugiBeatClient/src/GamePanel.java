@@ -4,18 +4,20 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 public class GamePanel extends JPanel {
@@ -135,8 +137,6 @@ public class GamePanel extends JPanel {
 						btnPressedMusic.start();
 					}
 					try {
-						socket = WaitingRoom.socket;
-	
 						oos = WaitingRoom.oos;
 						oos.flush();
 						ChatMsg obcm = new ChatMsg(WaitingRoom.user, "450", roomSetPanel.getNowSelected() + "#" + roomSetPanel.getDifficulty());

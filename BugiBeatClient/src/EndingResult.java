@@ -121,16 +121,10 @@ public class EndingResult {
 	
 	public synchronized void SendMessage(String msg) {
 		try {
-			socket = WaitingRoom.socket;
-
 			oos = WaitingRoom.oos;
 			oos.flush();
 			ChatMsg obcm = new ChatMsg(WaitingRoom.user, "460", msg);
-			try {
-				oos.writeObject(obcm);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+			oos.writeObject(obcm);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
