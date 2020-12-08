@@ -49,7 +49,7 @@ import javax.swing.text.StyleContext;
 public class WaitingRoom extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int BUF_LEN = 128; // Windows 처럼 BUF_LEN 을 정의
-	public Socket socket; // 연결소켓
+	public static Socket socket; // 연결소켓
 
 	public static ObjectInputStream ois;
 	public static ObjectOutputStream oos;
@@ -473,6 +473,10 @@ public class WaitingRoom extends JFrame {
 						break;
 					case "460":	// game over
 						AppendText(msg);
+						break;
+					case "500":	// item
+						gameRoom.gamePanel.game.recvItem();
+						System.out.println(msg);
 						break;
 					case "570": // capture screen
 						AppendScreenshot(cm.img);	

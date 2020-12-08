@@ -434,11 +434,11 @@ public class JavaGameServer extends JFrame {
 						record(cm);
 						break; 
 					} else if (cm.getCode().matches("500")) {	//send item
-						msg = String.format("[%s] %s", cm.getId(), cm.getData());
-						AppendText(msg); // server 화면에 출력
-						String[] args = msg.split(" "); // 단어들을 분리한다.
+//						msg = String.format("[%s] %s", cm.getId(), cm.getData());
+//						AppendText(msg); // server 화면에 출력
+//						String[] args = msg.split(" "); // 단어들을 분리한다.
 						
-						WriteOthers(msg);
+						WriteOthersObject(cm);
 					}
 					else if (cm.getCode().matches("230")) {	/* status: sleep */
 						UserStatus = "S";

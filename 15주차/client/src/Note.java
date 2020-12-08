@@ -115,7 +115,7 @@ public class Note extends Thread {
 		if (y > 560) { /* 판정바를 지나친 경우 */
 			combo = 0;
 			if (!noteType.equals("end")) {
-				life--;
+//				life--;
 				isFever = false;
 				fever = 0;
 			}

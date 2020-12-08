@@ -46,6 +46,7 @@ public class Game extends Thread {
 	private String musicTitle;
 	private int line;
 	private int cnt=0;
+	private int cnt2=0;
 	private Music gameMusic;
 	private Music itemsendcount = new Music("itemsendcount.mp3", false);
 	private Music itemrecvcount = new Music("itemsendcount.mp3", false);
@@ -214,9 +215,21 @@ public class Game extends Thread {
 	}
 
 	public void pressSpace() { // 아이템보내기
-		System.out.println(cnt);
+		try {
+			oos = WaitingRoom.oos;
+			oos.flush();
+			ChatMsg obcm = new ChatMsg(WaitingRoom.user, "500", "item1");
+			try {
+				oos.writeObject(obcm);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 		if(isItemOn) {
 			isSendItem=2;   //모니터패널 전송아이콘
+			
 			itemNotiImg = cloudnothing;
 			attackNotiImg = cloudrecvImg;
 			isItemOn=false;
@@ -491,85 +504,19 @@ public class Game extends Thread {
 			judgeImg = new ImageIcon(Main.class.getResource("/images/perfect.png")).getImage();
 
 	}
-	/*
-	// Server Message를 수신해서 화면에 표시
-		class ListenNetwork extends Thread {
-			public void run() {
-				while (true) {
-					try {
-						Object obcm = null;
-						String msg = null;
-						ChatMsg cm;
-						try {
-							obcm = WaitingRoom.ois.readObject();
-						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
-							break;
-						}
-						if (obcm == null)
-							break;
-						if (obcm instanceof ChatMsg) {
-							cm = (ChatMsg) obcm;
-							msg = String.format("[%s] %s", cm.id, cm.data);
-						} else
-							continue;
-						switch (cm.code) {
-						case "500": //아이템 공격받음
-							if (msg.contains("senditem")) {
-								String[] welcomeMsg = cm.getData().split("]");
-								String newUser = welcomeMsg[0].substring(1);
-								
-							}
-							if (!WaitingRoom.user.equals(cm.getId())) {
-								//먹구름
-								isRecvItem=2; //2번유저한테 받음
-								attackNotiImg=cloudrecvImg;
-							}
-							break;
-						case "200": // chat message
-							if (msg.contains("입장")) {
-								String[] welcomeMsg = cm.getData().split("]");
-								String newUser = welcomeMsg[0].substring(1);
-								UserListPanel.member.addElement(newUser);
-							}
-							if (WaitingRoom.user.equals(cm.getId())) {
-								//AppendMyText(msg);
-							}
-							else {
-								//AppendText(msg);
-							}
-							break;
-						}
-					} catch (IOException e) {
-						try {
-							WaitingRoom.ois.close();
-							oos.close();
-							socket.close();
+	
+	public void recvItem() {
+		isRecvItem=2;
+		System.out.println("아이템 받음");
+		attackNotiImg=cloudrecvImg;
 
-							break;
-						} catch (Exception ee) {
-							break;
-						} // catch문 끝
-					} // 바깥 catch문끝
-				}
-			}
+		new Music("attack.mp3", false).start();
+		if(cnt2!=0) {
+			itemrecvcount.stop();
+			itemrecvcount = new Music("itemsendcount.mp3", false);
 		}
-		
-		// Server에게 network으로 전송
-		public synchronized void SendMessage(String msg) {
-			try {
-				ChatMsg obcm = new ChatMsg(WaitingRoom.user, "200", msg);
-				oos.writeObject(obcm);
-			} catch (IOException e) {
-				try {
-					WaitingRoom.ois.close();
-					oos.close();
-					socket.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-					System.exit(0);
-				}
-			}
-		}
-		*/
+		itemrecvcount.start();
+		cnt2++;
+	}
+
 }
