@@ -107,7 +107,8 @@ public class GameRoom extends JFrame {
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
-					gamePanel.getBackgroundMusic().close();	// 게임방 배경음악은 끄고
+					if (Main.SOUND_EFFECT)
+						gamePanel.getBackgroundMusic().close();	// 게임방 배경음악은 끄고
 					// 대기실 배경음악은 켜야 함
 				}
 				dispose();

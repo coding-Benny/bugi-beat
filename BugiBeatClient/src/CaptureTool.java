@@ -20,6 +20,7 @@ public class CaptureTool extends Thread {
 	private Component frame;
 	private Rectangle rect;
 	private int num = 0;
+	private int score = 0;
 	private String fileName;
 	private String date;
 	private boolean isPlaying;
@@ -58,6 +59,8 @@ public class CaptureTool extends Thread {
 				oos.flush();
 				ChatMsg obcm = new ChatMsg(WaitingRoom.user, "570", fileName);
 				obcm.setImg(new ImageIcon(screenshot));
+				oos.writeObject(obcm);
+				obcm = new ChatMsg(WaitingRoom.user, "580", Integer.toString(Note.score));
 				oos.writeObject(obcm);
 				Thread.sleep(1000);
 			} catch (InterruptedException | IOException e) {

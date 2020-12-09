@@ -35,8 +35,8 @@ public class RoomSetting extends JPanel {
 	private JButton leftBtn = new JButton(leftBtnImg);
 	private JButton rightBtn = new JButton(rightBtnImg);
 	private JButton quitBtn = new JButton(quitBtnImg);
-	private JButton setBg1Btn= new JButton(setbg11Img);
-	private JButton setBg2Btn= new JButton(setbg21Img);
+	private JButton setBg1Btn = new JButton(setbg11Img);
+	private JButton setBg2Btn = new JButton(setbg21Img);
 
 	private ArrayList<Track> trackList = new ArrayList<Track>();
 	
@@ -58,6 +58,7 @@ public class RoomSetting extends JPanel {
 		setLayout(null);
 		background = bgImg;
 
+		trackList.add(new Track("All I Want for Christmas Is You-image.png", "All I Want for Christmas Is You-highlight.mp3", "All I Want for Christmas Is You.mp3", "All I Want for Christmas Is You"));
 		trackList.add(new Track("onion-start-image.png", "onion-highlight.mp3", "Onion.mp3", "Onion - Lukrembo"));
 		trackList.add(new Track("alien-start-image.png", "alien-highlight.mp3", "LEE SUHYUN-ALIEN.mp3", "Alien - Lee SuHyun"));
 		trackList.add(new Track("shadow-start-image.png", "shadow - f(x)-highlight.mp3", "shadow - f(x).mp3", "미행 - f(x)"));
@@ -73,8 +74,10 @@ public class RoomSetting extends JPanel {
 			public void mouseEntered(MouseEvent e) {
 				rightBtn.setIcon(rightBtnEnteredImg);
 				rightBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
-				btnEnteredMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+					btnEnteredMusic.start();
+				}
 			}
 			
 			@Override
@@ -85,8 +88,10 @@ public class RoomSetting extends JPanel {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
-				btnPressedMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+					btnPressedMusic.start();
+				}
 				selectRight();
 			}
 		});
@@ -101,8 +106,10 @@ public class RoomSetting extends JPanel {
 			public void mouseEntered(MouseEvent e) {
 				leftBtn.setIcon(leftBtnEnteredImg);
 				leftBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
-				btnEnteredMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+					btnEnteredMusic.start();
+				}
 			}
 			
 			@Override
@@ -113,8 +120,10 @@ public class RoomSetting extends JPanel {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
-				btnPressedMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+					btnPressedMusic.start();
+				}
 				selectLeft();
 			}
 		});
@@ -125,7 +134,7 @@ public class RoomSetting extends JPanel {
 			easyBtn = new JButton(easyBtnImg);
 			hardBtn = new JButton(hardBtnEnteredImg);
 		}
-		else {     //난이도 easy
+		else {	// 난이도 easy
 			easyBtn = new JButton(easyBtnEnteredImg);
 			hardBtn = new JButton(hardBtnImg);
 		}
@@ -138,8 +147,10 @@ public class RoomSetting extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				easyBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
-				btnEnteredMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+					btnEnteredMusic.start();
+				}
 			}
 			
 			@Override
@@ -149,8 +160,10 @@ public class RoomSetting extends JPanel {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
-				btnPressedMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+					btnPressedMusic.start();
+				}
 				difficulty = "Easy";
 				easyBtn.setIcon(easyBtnEnteredImg);
 				hardBtn.setIcon(hardBtnImg);
@@ -166,8 +179,10 @@ public class RoomSetting extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				hardBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
-				btnEnteredMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+					btnEnteredMusic.start();
+				}
 			}
 			
 			@Override
@@ -177,8 +192,10 @@ public class RoomSetting extends JPanel {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
-				btnPressedMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+					btnPressedMusic.start();
+				}
 				difficulty = "Hard";
 				easyBtn.setIcon(easyBtnImg);
 				hardBtn.setIcon(hardBtnEnteredImg);
@@ -214,14 +231,13 @@ public class RoomSetting extends JPanel {
 					btnPressedMusic.start();
 					setVisible(false);
 				}
-				// standbyMusic 볼륨 키우는 코드 추가 예정
 				if (selectedMusic != null)
 					selectedMusic.close();
 			}
 		});
 		add(quitBtn);
 		
-		if(bgSet == 1) {
+		if (bgSet == 1) {
 			setBg1Btn.setIcon(setbg12Img);
 			setBg2Btn.setIcon(setbg21Img);
 		}
@@ -238,8 +254,10 @@ public class RoomSetting extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				setBg1Btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
-				btnEnteredMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+					btnEnteredMusic.start();
+				}
 			}
 			
 			@Override
@@ -249,11 +267,13 @@ public class RoomSetting extends JPanel {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
-				btnPressedMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+					btnPressedMusic.start();
+				}
 				setBg1Btn.setIcon(setbg12Img);
 				setBg2Btn.setIcon(setbg21Img);
-				bgSet=1;
+				bgSet = 1;
 				GamePanel.background = getGamePanelBg();
 				MonitorPanel.background = getMonitorPanelBg();
 			}
@@ -268,8 +288,10 @@ public class RoomSetting extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				setBg2Btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
-				btnEnteredMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
+					btnEnteredMusic.start();
+				}
 			}
 			
 			@Override
@@ -279,11 +301,13 @@ public class RoomSetting extends JPanel {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
-				btnPressedMusic.start();
+				if (Main.SOUND_EFFECT) {
+					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
+					btnPressedMusic.start();
+				}
 				setBg1Btn.setIcon(setbg11Img);
 				setBg2Btn.setIcon(setbg22Img);
-				bgSet=2;
+				bgSet = 2;
 				GamePanel.background = getGamePanelBg();
 				MonitorPanel.background = getMonitorPanelBg();
 			}
@@ -295,7 +319,6 @@ public class RoomSetting extends JPanel {
 	public void selectTrack(int nowSelected) {
 		if (selectedMusic != null)
 			selectedMusic.close();
-		// standByMusic 볼륨 줄이기 코드 추가 예정
 		selectedImg = new ImageIcon(Main.class.getResource("/images/" + trackList.get(nowSelected).getStartImage())).getImage();
 		selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true);
 		selectedMusic.start();
@@ -331,6 +354,10 @@ public class RoomSetting extends JPanel {
 	
 	public int getLine() {
 		return line;
+	}
+	
+	public void setLine(int line) {
+		this.line = line;
 	}
 	
 	public int getBgSet() {

@@ -34,7 +34,9 @@ public class GamePanel extends JPanel {
 	private ImageIcon quitBtnImg = new ImageIcon(Main.class.getResource("/images/roomquit0.png"));
 	private ImageIcon roomsetEnteredImg = new ImageIcon(Main.class.getResource("/images/roomsetting1.png"));
 	private ImageIcon roomsetImg = new ImageIcon(Main.class.getResource("/images/roomsetting0.png"));
-
+	private ImageIcon readyBtnImg = new ImageIcon(Main.class.getResource("/images/ready0.png"));
+	private ImageIcon readyBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/ready1.png"));
+	
 	private JButton startBtn = new JButton(startBtnImg);
 	private JButton readyBtn = new JButton("준비");
 	private JButton roomsetBtn = new JButton(roomsetImg);
@@ -84,8 +86,10 @@ public class GamePanel extends JPanel {
 		setLayout(null);
 		background = roomSetPanel.getGamePanelBg();
 		gameScreenBg = gamescreenbgImg;
-
-		standbyMusic.start();
+		
+		roomSetPanel.setLine(WaitingRoom.numOfLines);
+		if (Main.SOUND_EFFECT)
+			standbyMusic.start();
 
 		roomSetPanel.setBounds(12, 100, 780, 442); // 가로위치, 세로위치, 가로길이, 세로길이
 		roomSetPanel.setVisible(false);
@@ -148,7 +152,7 @@ public class GamePanel extends JPanel {
 			readyBtn.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					//readyBtn.setIcon(readyBtnEnteredImg);
+					readyBtn.setIcon(readyBtnEnteredImg);
 					readyBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 					if (Main.SOUND_EFFECT) {
 						Music btnEnteredMusic = new Music("btnEnteredSound.mp3", false);
@@ -158,7 +162,7 @@ public class GamePanel extends JPanel {
 
 				@Override
 				public void mouseExited(MouseEvent e) {
-					//readyBtn.setIcon(readyBtnImg);
+					readyBtn.setIcon(readyBtnImg);
 					readyBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
 
@@ -288,7 +292,7 @@ public class GamePanel extends JPanel {
 		lifeBar.setMaximum(10);
 		add(lifeBar);
 
-		roomInfo.setText("방 이름: " + WaitingRoom.roomTitle + " - 난이도: " + WaitingRoom.difficulty);
+		roomInfo.setText("방 이름: " + WaitingRoom.roomTitle + " - 난이도: " + WaitingRoom.difficulty + "/" + WaitingRoom.numOfLines);
 		roomInfo.setBounds(35, 30, 500, 30);
 		roomInfo.setForeground(Color.WHITE);
 		roomInfo.setFont(new Font("산돌수필B", Font.PLAIN, 28));
@@ -309,6 +313,7 @@ public class GamePanel extends JPanel {
 		isGameScreen = true;
 		roomChatPanel.setVisible(false);
 		startBtn.setVisible(false);
+		readyBtn.setVisible(false);
 		roomsetBtn.setVisible(false);
 		roomSetPanel.setVisible(false);
 		roomInfo.setVisible(false);
@@ -319,7 +324,9 @@ public class GamePanel extends JPanel {
 			gameScreenBg = line6_bg_Img;
 		else if (roomSetPanel.getLine() == 4)
 			gameScreenBg = line4_bg_Img;
-		standbyMusic.close();
+		
+		if (Main.SOUND_EFFECT)
+			standbyMusic.close();
 
 		game.start();
 		setFocusable(true);
