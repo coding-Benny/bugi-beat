@@ -59,7 +59,7 @@ public class WaitingRoom extends JFrame {
 	private int roomID;
 	public static String roomTitle;
 	public static String difficulty;
-	private int numOfLines;
+	public static int numOfLines;
 	private String owner;
 	private GameRoom gameRoom;
 
@@ -535,7 +535,6 @@ public class WaitingRoom extends JFrame {
 						break;
 					case "500":	// item
 						gameRoom.gamePanel.game.recvItem();
-						System.out.println(msg);
 						break;
 					case "570": // capture screen
 						AppendScreenshot(cm.img, cm.getId());

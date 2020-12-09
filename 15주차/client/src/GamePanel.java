@@ -88,7 +88,8 @@ public class GamePanel extends JPanel {
 		setLayout(null);
 		background = roomSetPanel.getGamePanelBg();
 		gameScreenBg = gamescreenbgImg;
-		
+
+		roomSetPanel.setLine(WaitingRoom.numOfLines);
 		if(Main.SOUND_EFFECT)
 			standbyMusic.start();
 
@@ -244,7 +245,7 @@ public class GamePanel extends JPanel {
 		lifeBar.setMaximum(10);
 		add(lifeBar);
 		
-		roomInfo.setText("방 이름: " + WaitingRoom.roomTitle + " - 난이도: " + WaitingRoom.difficulty);
+		roomInfo.setText("방 이름: " + WaitingRoom.roomTitle + " - 난이도: " + WaitingRoom.difficulty + "/"+WaitingRoom.numOfLines);
 		roomInfo.setBounds(35, 30, 500, 30);
 		roomInfo.setForeground(Color.WHITE);
 		roomInfo.setFont(new Font("산돌수필B", Font.PLAIN, 28));

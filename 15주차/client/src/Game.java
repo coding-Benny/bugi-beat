@@ -218,31 +218,31 @@ public class Game extends Thread {
 	}
 
 	public void pressSpace() { // 아이템보내기
-		// if(isItemOn) {
-		isSendItem = 2; // 모니터패널 전송아이콘
-		itemNotiImg = cloudnothing;
-		isItemOn = false;
-		new Music("senditem.mp3", false).start();
-		if (cnt != 0) {
-			itemsendcount.stop();
-			itemsendcount = new Music("itemcount.mp3", false);
-		}
-		itemsendcount.start();
-		cnt++;
+		if (isItemOn) {
+			isSendItem = 2; // 모니터패널 전송아이콘
+			itemNotiImg = cloudnothing;
+			isItemOn = false;
+			new Music("senditem.mp3", false).start();
+			if (cnt != 0) {
+				itemsendcount.stop();
+				itemsendcount = new Music("itemcount.mp3", false);
+			}
+			itemsendcount.start();
+			cnt++;
 
-		try {
-			oos = WaitingRoom.oos;
-			oos.flush();
-			ChatMsg obcm = new ChatMsg(WaitingRoom.user, "500", "item1");
 			try {
-				oos.writeObject(obcm);
-			} catch (IOException ex) {
+				oos = WaitingRoom.oos;
+				oos.flush();
+				ChatMsg obcm = new ChatMsg(WaitingRoom.user, "500", "item1");
+				try {
+					oos.writeObject(obcm);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
-		// }
 	}
 
 	public void releaseSpace() {
@@ -997,8 +997,7 @@ public class Game extends Thread {
 					new Beat(startTime + gap * 450, "F"), new Beat(startTime + gap * 452, "D"),
 					new Beat(startTime + gap * 454, "F"), new Beat(startTime + gap * 459, "K"),
 					new Beat(startTime + gap * 462, "L"), new Beat(startTime + gap * 466, "K"),
-					new Beat(startTime + gap * 469, "J"), new Beat(startTime + gap * 520, "end"),
-			};
+					new Beat(startTime + gap * 469, "J"), new Beat(startTime + gap * 520, "end"), };
 		}
 		int i = 0;
 		int j = 0;

@@ -423,7 +423,7 @@ public class JavaGameServer extends JFrame {
 						String difficulty = roomInfo[2];
 						int numOfLines = Integer.parseInt(roomInfo[3]);
 						GameRoom newGameRoom = RoomManager.createRoom(new GameUser(cm.id), title, difficulty, numOfLines);
-						String gameRoomInfo = String.format("%d#%s#%s#%s", newGameRoom.getId(), newGameRoom.getRoomTitle(), newGameRoom.getDifficulty(), newGameRoom.getNumOfLines());
+						String gameRoomInfo = String.format("%d#%s#%s#%d", newGameRoom.getId(), newGameRoom.getRoomTitle(), newGameRoom.getDifficulty(), newGameRoom.getNumOfLines());
 						obcm = new ChatMsg(UserName, "400", gameRoomInfo);
 						oos.writeObject(obcm);
 					} else if (cm.getCode().matches("425")) {
@@ -434,10 +434,6 @@ public class JavaGameServer extends JFrame {
 						record(cm);
 						break; 
 					} else if (cm.getCode().matches("500")) {	//send item
-//						msg = String.format("[%s] %s", cm.getId(), cm.getData());
-//						AppendText(msg); // server 화면에 출력
-//						String[] args = msg.split(" "); // 단어들을 분리한다.
-						
 						WriteOthersObject(cm);
 					}
 					else if (cm.getCode().matches("230")) {	/* status: sleep */

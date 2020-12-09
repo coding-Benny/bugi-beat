@@ -354,6 +354,9 @@ public class RoomSetting extends JPanel {
 	public int getLine() {
 		return line;
 	}
+	public void setLine(int line) {
+		this.line = line;
+	}
 
 	public int getBgSet() {
 		return bgSet;
