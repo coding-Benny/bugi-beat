@@ -305,7 +305,7 @@ public class JavaGameServer extends JFrame {
 			try {
 				fw = new FileWriter(new File("src/ScoreLog.txt"), true);
 				writer = new BufferedWriter(fw);
-				writer.write(dateStr + "\t\t");
+				writer.write(dateStr + "##");
 				writer.write(UserName+ "##");
 				writer.write(titleStr + "##");
 				writer.write(scoreStr);
@@ -482,9 +482,9 @@ public class JavaGameServer extends JFrame {
 					} else if (cm.getCode().matches("425")) {
 						
 					} else if (cm.getCode().matches("430")) {	// ready
-						WriteAllObject(cm);
+						WriteOthersObject(cm);
 					} else if (cm.getCode().matches("440")) {	// not ready
-						WriteAllObject(cm);
+						WriteOthersObject(cm);
 					} else if (cm.getCode().matches("450")) {	// game start
 						WriteAllObject(cm);
 					} else if (cm.getCode().matches("460")) {	// game over
@@ -502,6 +502,8 @@ public class JavaGameServer extends JFrame {
 					} else if (cm.getCode().matches("240")) {	/* status: wakeup */
 						UserStatus = "O";
 					} else if (cm.getCode().matches("570")) {	// capture game screen
+						WriteOthersObject(cm);
+					} else if (cm.getCode().matches("580")) {	// game score
 						WriteOthersObject(cm);
 					} else if (cm.getCode().matches("600")) { // transfer record
 						transferRecord();
