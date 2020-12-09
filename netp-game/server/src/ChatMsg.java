@@ -1,5 +1,3 @@
-package main;
-
 
 //ChatMsg.java 채팅 메시지 ObjectStream 용.
 import java.io.Serializable;

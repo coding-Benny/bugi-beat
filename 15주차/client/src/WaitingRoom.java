@@ -1,31 +1,23 @@
 
-import java.awt.AWTException;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
-import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -60,7 +52,7 @@ public class WaitingRoom extends JFrame {
 	public static String roomTitle;
 	public static String difficulty;
 	public static int numOfLines;
-	private String owner;
+	public static String owner;
 	private GameRoom gameRoom;
 
 	private Image background;
@@ -100,7 +92,6 @@ public class WaitingRoom extends JFrame {
 	public static Music waitingMusic = new Music("waiting beat.mp3", true);
 
 	private int mouseX, mouseY;
-	public int usercnt=1;
 
 	public WaitingRoom(String userName, String ipAddress, String portNo) {
 		super("대기실");
@@ -188,96 +179,96 @@ public class WaitingRoom extends JFrame {
 					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 					btnPressedMusic.start();
 				}
-					// 방 설정 다이얼로그 띄우기
-					JDialog dialog = new JDialog();
-					dialog.getContentPane().setLayout(null);
-					dialog.setLocationRelativeTo(null);
-					dialog.setModal(true);
-					dialog.setSize(400, 250);
+				// 방 설정 다이얼로그 띄우기
+				JDialog dialog = new JDialog();
+				dialog.getContentPane().setLayout(null);
+				dialog.setLocationRelativeTo(null);
+				dialog.setModal(true);
+				dialog.setSize(400, 250);
 
-					JLabel roomTitleLabel = new JLabel("방제 : ");
-					roomTitleLabel.setBounds(dialog.getWidth() / 2 - 100, 30, 100, 20);
-					dialog.getContentPane().add(roomTitleLabel);
-					
-					JTextField roomTitle = new JTextField(15);
-					roomTitle.setBounds(dialog.getWidth() / 2 - 50, 30, 100, 20);
-					dialog.getContentPane().add(roomTitle);
-					
-					JLabel roomPwdLabel = new JLabel("비번 : ");
-					roomPwdLabel.setBounds(dialog.getWidth() / 2 - 100, 60, 100, 20);
-					dialog.getContentPane().add(roomPwdLabel);
-					
-					JPasswordField roomPwd = new JPasswordField(15);
-					roomPwd.setBounds(dialog.getWidth() / 2 - 50, 60, 100, 20);
-					roomPwd.setEnabled(false);
-					roomPwd.setEditable(false);
-					dialog.getContentPane().add(roomPwd);
-					
-					JCheckBox roomSecret = new JCheckBox("비밀방");
-					roomSecret.setBounds(dialog.getWidth() / 2 + 75, 60, 100, 20);
-					roomSecret.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							if (roomSecret.isSelected()) {
-								roomPwd.setEditable(true);
-								roomPwd.setEnabled(true);
-							}
-							else {
-								roomPwd.setEditable(false);
-								roomPwd.setEnabled(false);
-							}
+				JLabel roomTitleLabel = new JLabel("방제 : ");
+				roomTitleLabel.setBounds(dialog.getWidth() / 2 - 100, 30, 100, 20);
+				dialog.getContentPane().add(roomTitleLabel);
+				
+				JTextField roomTitle = new JTextField(15);
+				roomTitle.setBounds(dialog.getWidth() / 2 - 50, 30, 100, 20);
+				dialog.getContentPane().add(roomTitle);
+				
+				JLabel roomPwdLabel = new JLabel("비번 : ");
+				roomPwdLabel.setBounds(dialog.getWidth() / 2 - 100, 60, 100, 20);
+				dialog.getContentPane().add(roomPwdLabel);
+				
+				JPasswordField roomPwd = new JPasswordField(15);
+				roomPwd.setBounds(dialog.getWidth() / 2 - 50, 60, 100, 20);
+				roomPwd.setEnabled(false);
+				roomPwd.setEditable(false);
+				dialog.getContentPane().add(roomPwd);
+				
+				JCheckBox roomSecret = new JCheckBox("비밀방");
+				roomSecret.setBounds(dialog.getWidth() / 2 + 75, 60, 100, 20);
+				roomSecret.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						if (roomSecret.isSelected()) {
+							roomPwd.setEditable(true);
+							roomPwd.setEnabled(true);
 						}
-					});
-					dialog.getContentPane().add(roomSecret);
-					
-					JLabel difficultyLabel = new JLabel("난이도 : ");
-					difficultyLabel.setBounds(dialog.getWidth() / 2 - 100, 90, 100, 20);
-					dialog.getContentPane().add(difficultyLabel);
-					
-					ButtonGroup difficultyGroup = new ButtonGroup();
-					JRadioButton easyBtn = new JRadioButton("Easy");
-					easyBtn.setBounds(dialog.getWidth() / 2 - 50, 90, 70, 20);
-					easyBtn.setActionCommand("Easy");
-					dialog.getContentPane().add(easyBtn);
-					JRadioButton hardBtn = new JRadioButton("Hard");
-					hardBtn.setBounds(dialog.getWidth() / 2 + 25, 90, 70, 20);
-					hardBtn.setActionCommand("Hard");
-					dialog.getContentPane().add(hardBtn);
-					difficultyGroup.add(easyBtn);
-					difficultyGroup.add(hardBtn);
-					
-					JLabel numOfLineLabel = new JLabel("칸 수 : ");
-					numOfLineLabel.setBounds(dialog.getWidth() / 2 - 100, 120, 100, 20);
-					dialog.getContentPane().add(numOfLineLabel);
-					
-					ButtonGroup numOfLineGroup = new ButtonGroup();
-					JRadioButton line4Btn = new JRadioButton("4칸");
-					line4Btn.setBounds(dialog.getWidth() / 2 - 50, 120, 70, 20);
-					line4Btn.setActionCommand("4");
-					dialog.getContentPane().add(line4Btn);
-					JRadioButton line6Btn = new JRadioButton("6칸");
-					line6Btn.setBounds(dialog.getWidth() / 2 + 25, 120, 70, 20);
-					line6Btn.setActionCommand("6");
-					dialog.getContentPane().add(line6Btn);
-					numOfLineGroup.add(line4Btn);
-					numOfLineGroup.add(line6Btn);
-					
-					JButton createBtn = new JButton("Create");
-					createBtn.setBounds(dialog.getWidth() / 2 - 40, 160, 80, 20);
-					createBtn.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							String roomInfo = String.format("%s#%s#%s#%s", roomTitle.getText(), roomPwd.getPassword(), difficultyGroup.getSelection().getActionCommand(), numOfLineGroup.getSelection().getActionCommand());
-							ChatMsg obcm = new ChatMsg(userName, "420", roomInfo);
-							RoomListPanel.room.addElement(roomTitle.getText());
-							SendObject(obcm);
-							dialog.setVisible(false);
+						else {
+							roomPwd.setEditable(false);
+							roomPwd.setEnabled(false);
 						}
-					});
-					dialog.getContentPane().add(createBtn);
-					
-					dialog.setVisible(true);
-				}
+					}
+				});
+				dialog.getContentPane().add(roomSecret);
+				
+				JLabel difficultyLabel = new JLabel("난이도 : ");
+				difficultyLabel.setBounds(dialog.getWidth() / 2 - 100, 90, 100, 20);
+				dialog.getContentPane().add(difficultyLabel);
+				
+				ButtonGroup difficultyGroup = new ButtonGroup();
+				JRadioButton easyBtn = new JRadioButton("Easy");
+				easyBtn.setBounds(dialog.getWidth() / 2 - 50, 90, 70, 20);
+				easyBtn.setActionCommand("Easy");
+				dialog.getContentPane().add(easyBtn);
+				JRadioButton hardBtn = new JRadioButton("Hard");
+				hardBtn.setBounds(dialog.getWidth() / 2 + 25, 90, 70, 20);
+				hardBtn.setActionCommand("Hard");
+				dialog.getContentPane().add(hardBtn);
+				difficultyGroup.add(easyBtn);
+				difficultyGroup.add(hardBtn);
+				
+				JLabel numOfLineLabel = new JLabel("칸 수 : ");
+				numOfLineLabel.setBounds(dialog.getWidth() / 2 - 100, 120, 100, 20);
+				dialog.getContentPane().add(numOfLineLabel);
+				
+				ButtonGroup numOfLineGroup = new ButtonGroup();
+				JRadioButton line4Btn = new JRadioButton("4칸");
+				line4Btn.setBounds(dialog.getWidth() / 2 - 50, 120, 70, 20);
+				line4Btn.setActionCommand("4");
+				dialog.getContentPane().add(line4Btn);
+				JRadioButton line6Btn = new JRadioButton("6칸");
+				line6Btn.setBounds(dialog.getWidth() / 2 + 25, 120, 70, 20);
+				line6Btn.setActionCommand("6");
+				dialog.getContentPane().add(line6Btn);
+				numOfLineGroup.add(line4Btn);
+				numOfLineGroup.add(line6Btn);
+				
+				JButton createBtn = new JButton("Create");
+				createBtn.setBounds(dialog.getWidth() / 2 - 40, 160, 80, 20);
+				createBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						String roomInfo = String.format("%s#%s#%s#%s", roomTitle.getText(), roomPwd.getPassword(), difficultyGroup.getSelection().getActionCommand(), numOfLineGroup.getSelection().getActionCommand());
+						ChatMsg obcm = new ChatMsg(userName, "420", roomInfo);
+						RoomListPanel.room.addElement(roomTitle.getText());
+						SendObject(obcm);
+						dialog.setVisible(false);
+					}
+				});
+				dialog.getContentPane().add(createBtn);
+				
+				dialog.setVisible(true);
+			}
 		});
 		c.add(createRoomBtn);
 
@@ -308,57 +299,57 @@ public class WaitingRoom extends JFrame {
 					Music btnPressedMusic = new Music("btnPressedSound.mp3", false);
 					btnPressedMusic.start();
 				}
-					// 방 설정 다이얼로그 띄우기
-					JDialog dialog = new JDialog();
-					dialog.getContentPane().setLayout(null);
-					dialog.setLocationRelativeTo(null);
-					dialog.setModal(true);
-					dialog.setSize(400, 250);
+				// 방 설정 다이얼로그 띄우기
+				JDialog dialog = new JDialog();
+				dialog.getContentPane().setLayout(null);
+				dialog.setLocationRelativeTo(null);
+				dialog.setModal(true);
+				dialog.setSize(400, 250);
 
-					JLabel backMusicLabel = new JLabel("UI Sound");
-					backMusicLabel.setBounds(dialog.getWidth() / 2 - 100, 90, 100, 20);
-					dialog.getContentPane().add(backMusicLabel);
-					
-					ButtonGroup backMusicGroup = new ButtonGroup();
-					JRadioButton musicOnBtn = new JRadioButton("On");
-					musicOnBtn.setBounds(dialog.getWidth() / 2 - 50, 90, 70, 20);
-					musicOnBtn.setActionCommand("On");
-					dialog.getContentPane().add(musicOnBtn);
-					JRadioButton musicOffBtn = new JRadioButton("Off");
-					musicOffBtn.setBounds(dialog.getWidth() / 2 + 25, 90, 70, 20);
-					musicOffBtn.setActionCommand("Off");
-					dialog.getContentPane().add(musicOffBtn);
-					
-					if(Main.SOUND_EFFECT) {
-						musicOnBtn.setSelected(true);
-						musicOffBtn.setSelected(false);
-					}
-					else {
-						musicOnBtn.setSelected(false);
-						musicOffBtn.setSelected(true);
-					}
-					backMusicGroup.add(musicOnBtn);
-					backMusicGroup.add(musicOffBtn);
-					
-					JButton okBtn = new JButton("적용");
-					okBtn.setBounds(dialog.getWidth() / 2 - 40, 160, 80, 20);
-					okBtn.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							if(!musicOnBtn.isSelected()) {
-								Main.SOUND_EFFECT=false;
-								waitingMusic.close();
-							}
-							else
-								Main.SOUND_EFFECT=true;
-							dialog.setVisible(false);
-							dialog.dispose();
-						}
-					});
-					dialog.getContentPane().add(okBtn);
-					
-					dialog.setVisible(true);
+				JLabel backMusicLabel = new JLabel("UI Sound");
+				backMusicLabel.setBounds(dialog.getWidth() / 2 - 100, 90, 100, 20);
+				dialog.getContentPane().add(backMusicLabel);
+
+				ButtonGroup backMusicGroup = new ButtonGroup();
+				JRadioButton musicOnBtn = new JRadioButton("On");
+				musicOnBtn.setBounds(dialog.getWidth() / 2 - 50, 90, 70, 20);
+				musicOnBtn.setActionCommand("On");
+				dialog.getContentPane().add(musicOnBtn);
+				JRadioButton musicOffBtn = new JRadioButton("Off");
+				musicOffBtn.setBounds(dialog.getWidth() / 2 + 25, 90, 70, 20);
+				musicOffBtn.setActionCommand("Off");
+				dialog.getContentPane().add(musicOffBtn);
+
+				if(Main.SOUND_EFFECT) {
+					musicOnBtn.setSelected(true);
+					musicOffBtn.setSelected(false);
 				}
+				else {
+					musicOnBtn.setSelected(false);
+					musicOffBtn.setSelected(true);
+				}
+				backMusicGroup.add(musicOnBtn);
+				backMusicGroup.add(musicOffBtn);
+
+				JButton okBtn = new JButton("적용");
+				okBtn.setBounds(dialog.getWidth() / 2 - 40, 160, 80, 20);
+				okBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						if(!musicOnBtn.isSelected()) {
+							Main.SOUND_EFFECT = false;
+							waitingMusic.close();
+						}
+						else
+							Main.SOUND_EFFECT = true;
+						dialog.setVisible(false);
+						dialog.dispose();
+					}
+				});
+				dialog.getContentPane().add(okBtn);
+
+				dialog.setVisible(true);
+			}
 		});
 		c.add(gameSetBtn);
 
@@ -434,6 +425,9 @@ public class WaitingRoom extends JFrame {
 			ChatMsg obcm = new ChatMsg(userName, "100", "Hello");
 			UserListPanel.member.addElement(userName);
 			SendObject(obcm);
+			
+			obcm = new ChatMsg(userName, "600", "Request Record");
+			SendObject(obcm);
 
 			ListenNetwork net = new ListenNetwork();
 			net.start();
@@ -504,22 +498,19 @@ public class WaitingRoom extends JFrame {
 						break;
 					case "405":
 						gameRoom.getMonitorPanel().getP2Name().setText(cm.data);
-						if(usercnt==3)
-							gameRoom.getMonitorPanel().getP3Name().setText(cm.data);
-						else if(usercnt==4)
-							gameRoom.getMonitorPanel().getP4Name().setText(cm.data);
 						break;
-					case "410":
-						if(cm.getId().equals(gameRoom.getMonitorPanel().getP2Name().getText())) 
-							gameRoom.getMonitorPanel().getP2Name().setText("");
-						else if(cm.getId().equals(gameRoom.getMonitorPanel().getP3Name().getText())) 
-							gameRoom.getMonitorPanel().getP3Name().setText("");
-						else if(cm.getId().equals(gameRoom.getMonitorPanel().getP4Name().getText())) 
-							gameRoom.getMonitorPanel().getP4Name().setText("");
+					case "410":	// leave room
+						gameRoom.getMonitorPanel().getP2Name().setText("");
 						break;
 					case "425":	// 기존 게임 방
 						String existGameRoom = cm.data;
 						RoomListPanel.room.addElement(existGameRoom);
+						break;
+					case "430":
+						gameRoom.getMonitorPanel().getP2Status().setText("READY");
+						break;
+					case "440":
+						gameRoom.getMonitorPanel().getP2Status().setText("");
 						break;
 					case "450":	// start game
 						String [] gameInfo = cm.data.split("#");
@@ -535,9 +526,21 @@ public class WaitingRoom extends JFrame {
 						break;
 					case "500":	// item
 						gameRoom.gamePanel.game.recvItem();
+						System.out.println(msg);
 						break;
 					case "570": // capture screen
-						AppendScreenshot(cm.img, cm.getId());
+						AppendScreenshot(cm.img);	
+						break;
+					case "580":
+						gameRoom.getMonitorPanel().getP2Score().setText(cm.data);
+						break;
+					case "600":	// ranking
+						String[] record = cm.data.split("##");
+						String player = record[1];
+						String playMusic = record[2];
+						String score = record[3];
+						String recordText = String.format("[%s - %s점] %s", player, score, playMusic);
+						RankingPanel.rank.addElement(recordText);
 						break;
 					case "900": // emoji
 						if (user.equals(cm.getId())) {
@@ -648,25 +651,18 @@ public class WaitingRoom extends JFrame {
 		textArea.replaceSelection("\n");
 	}
 
-	public synchronized void AppendScreenshot(ImageIcon screenshot, String userName) {
+	public synchronized void AppendScreenshot(ImageIcon screenshot) {
 		int width = 300;
 		int height = 165;
 		JLabel p2 = gameRoom.getMonitorPanel().getP2Label();
-		JLabel p3 = gameRoom.getMonitorPanel().getP3Label();
-		JLabel p4 = gameRoom.getMonitorPanel().getP4Label();
 		Image screenshot_img = screenshot.getImage();
 		Image resizedImg = screenshot_img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		ImageIcon capture = new ImageIcon(resizedImg);
-		
-		if(gameRoom.getMonitorPanel().getP2Name().getText().equals(userName)) {
-			p2.setIcon(capture);
-		}
-		else if(gameRoom.getMonitorPanel().getP3Name().getText().equals(userName)) {
-			p3.setIcon(capture);
-		}
-		else if(gameRoom.getMonitorPanel().getP4Name().getText().equals(userName)) {
-			p4.setIcon(capture);
-		}
+		p2.setIcon(capture);
+	}
+	
+	public synchronized void AppendScore(String score) {
+				
 	}
 	
 	public void enterRoom(String msg) {
@@ -676,7 +672,6 @@ public class WaitingRoom extends JFrame {
 		difficulty = roomInfo[2];
 		numOfLines = Integer.parseInt(roomInfo[3]);
 		try {
-			usercnt = Integer.parseInt(roomInfo[5]);
 			owner = roomInfo[4];
 			gameRoom = new GameRoom(roomID, roomTitle, difficulty, numOfLines, owner);
 			if (!user.equals(owner))

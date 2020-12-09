@@ -1,5 +1,3 @@
-package main;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,15 +6,19 @@ public class GameRoom {
 	private List<GameUser> userList;
 	private GameUser roomOwner;	// 방장
 	private String roomTitle;	// 방제
+	private String difficulty;	// 난이도
+	private int numOfLines;	// 칸 수
 	
 	public GameRoom(int roomID) {
 		this.id = roomID;
 		userList = new ArrayList<GameUser>();
 	}
 	
-	public GameRoom(int roomID, GameUser user, String title) {
+	public GameRoom(int roomID, GameUser user, String title, String difficulty, int numOfLines) {
 		this.id = roomID;
 		this.roomTitle = title;
+		this.difficulty = difficulty;
+		this.numOfLines = numOfLines;
 		userList = new ArrayList<GameUser>();
 		user.enterRoom(this);
 		userList.add(user);	// 유저를 추가
@@ -54,12 +56,6 @@ public class GameRoom {
 		this.userList = null;
 	}
 	
-	public void broadcast(byte[] data) {
-		for (GameUser user : userList) {
-			// 각 유저에게 데이터 전송
-		}
-	}
-	
 	public void setOwner(GameUser gameUser) {
 		this.roomOwner = gameUser;
 	}
@@ -80,11 +76,11 @@ public class GameRoom {
 		return roomOwner;
 	}
 	
-	public List getUserList() {
+	public List<GameUser> getUserList() {
 		return userList;
 	}
 	
-	public void setUserList(List userList) {
+	public void setUserList(List<GameUser> userList) {
 		this.userList = userList;
 	}
 	
@@ -98,6 +94,14 @@ public class GameRoom {
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getDifficulty() {
+		return difficulty;
+	}
+	
+	public int getNumOfLines() {
+		return numOfLines;
 	}
 	
 }

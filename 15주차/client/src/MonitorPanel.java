@@ -1,9 +1,5 @@
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-
 import javax.swing.*;
 
 public class MonitorPanel extends JPanel {
@@ -21,7 +17,9 @@ public class MonitorPanel extends JPanel {
 	private RoomSetting roomSetPanel = new RoomSetting();
 	private JPanel p2Panel, p3Panel, p4Panel;
 	private JLabel p2Label, p3Label, p4Label;
+	private JLabel p2Status, p3Status, p4Status;
 	private JLabel p2Name, p3Name, p4Name;
+	private JLabel p2Score, p3Score, p4Score;
 	private JLabel p2Rank, p3Rank, p4Rank;
 	private JLabel p2Icon, p3Icon, p4Icon;
 
@@ -65,24 +63,39 @@ public class MonitorPanel extends JPanel {
 		background = roomSetPanel.getMonitorPanelBg();
 		
 		p2Label = new JLabel();
+		p2Status = new JLabel();
 		p2Panel = new JPanel();
 		p2Panel.setBackground(new Color(0, 0, 0));
 		p2Panel.setBounds(120, 40, 300, 165);
+		p2Status.setBounds(p2Panel.getX()*3/2, p2Panel.getY(), p2Panel.getWidth()/2, p2Panel.getHeight()/3);
+		p2Status.setFont(new Font("산돌수필B", Font.BOLD, 60));
+		p2Status.setForeground(Color.MAGENTA);
 		p2Panel.add(p2Label);
+		p2Panel.add(p2Status);
 		add(p2Panel);
 		
 		p3Label = new JLabel();
+		p3Status = new JLabel();
 		p3Panel = new JPanel();
 		p3Panel.setBackground(new Color(0, 0, 0));
 		p3Panel.setBounds(120, 260, 300, 165);
+		p3Status.setBounds(p2Panel.getX()*3/2, p2Panel.getY(), p2Panel.getWidth()/2, p2Panel.getHeight()/3);
+		p3Status.setFont(new Font("산돌수필B", Font.BOLD, 60));
+		p3Status.setForeground(Color.PINK);
 		p3Panel.add(p3Label);
+		p3Panel.add(p3Status);
 		add(p3Panel);
 		
 		p4Label = new JLabel();
+		p4Status = new JLabel();
 		p4Panel = new JPanel();
 		p4Panel.setBackground(new Color(0, 0, 0));
 		p4Panel.setBounds(120, 480, 300, 165);
+		p4Status.setBounds(p2Panel.getX()*3/2, p2Panel.getY(), p2Panel.getWidth()/2, p2Panel.getHeight()/3);
+		p4Status.setFont(new Font("산돌수필B", Font.BOLD, 60));
+		p4Status.setForeground(Color.CYAN);
 		p4Panel.add(p4Label);
+		p4Panel.add(p4Status);
 		add(p4Panel);
 		
 		p2Name = new JLabel();
@@ -102,6 +115,23 @@ public class MonitorPanel extends JPanel {
 		add(p3Name);
 		add(p4Name);
 
+		p2Score = new JLabel();
+		p3Score = new JLabel();
+		p4Score = new JLabel();
+		
+		p2Score.setBounds(350, 210, 100, 40);
+		p3Score.setBounds(350, 430, 100, 40);
+		p4Score.setBounds(350, 650, 100, 40);
+		p2Score.setFont(new Font("산돌수필B", Font.PLAIN, 32));
+		p3Score.setFont(new Font("산돌수필B", Font.PLAIN, 32));
+		p4Score.setFont(new Font("산돌수필B", Font.PLAIN, 32));
+		p2Score.setForeground(Color.PINK);
+		p3Score.setForeground(Color.PINK);
+		p4Score.setForeground(Color.PINK);
+		add(p2Score);
+		add(p3Score);
+		add(p4Score);
+		
 		p2Rank = new JLabel();
 		p3Rank = new JLabel();
 		p4Rank = new JLabel();
@@ -133,19 +163,16 @@ public class MonitorPanel extends JPanel {
 	public JLabel getP2Label() {
 		return p2Label;
 	}
+	
 	public JLabel getP2Name() {
 		return p2Name;
 	}
-	public JLabel getP3Label() {
-		return p3Label;
+	
+	public JLabel getP2Status() {
+		return p2Status;
 	}
-	public JLabel getP3Name() {
-		return p3Name;
-	}
-	public JLabel getP4Label() {
-		return p4Label;
-	}
-	public JLabel getP4Name() {
-		return p4Name;
+	
+	public JLabel getP2Score() {
+		return p2Score;
 	}
 }

@@ -1,5 +1,3 @@
-package main;
-
 import java.net.Socket;
 
 public class GameUser {
