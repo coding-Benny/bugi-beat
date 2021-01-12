@@ -39,9 +39,13 @@ public class Music extends Thread {
 	 * 실행 중 다른 곡 play 원할 때 안정적인 종료 지원
 	 */
 	public void close() {
-		isLoop = false;
-		player.close();
-		this.interrupt();	/* 해당 스레드를 중지 상태로 만듦 */
+		try {
+			isLoop = false;
+			player.close();
+			this.interrupt(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/*

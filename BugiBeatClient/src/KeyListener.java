@@ -30,6 +30,9 @@ public class KeyListener extends KeyAdapter {
 		else if (e.getKeyCode() == KeyEvent.VK_L) {
 			GamePanel.game.pressL();
 		}
+		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			GamePanel.game.pressEnter();
+		}
 	}
 	
 	@Override
@@ -58,6 +61,9 @@ public class KeyListener extends KeyAdapter {
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_L) {
 			GamePanel.game.releaseL();
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			GamePanel.game.releaseEnter();
 		}
 	}
 }

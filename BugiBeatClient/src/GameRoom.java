@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -9,21 +10,24 @@ import java.util.Set;
 import javax.swing.*;
 
 public class GameRoom extends JFrame {
-	private Image screenImage;
-	private Graphics screenGraphic;
-	private Image background;
-	
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("/images/bar.png")));
 	private ImageIcon exitBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/exit1.png"));
 	private ImageIcon exitBtnImg = new ImageIcon(Main.class.getResource("/images/exit0.png"));
 	private JButton exitBtn = new JButton(exitBtnImg);
-	
-	private GamePanel gamePanel = new GamePanel();
+
+	public static GamePanel gamePanel = new GamePanel();
 	private MonitorPanel monitorPanel = new MonitorPanel();
 	
 	private int mouseX, mouseY;
+	private ObjectOutputStream oos;
 	
-	public GameRoom(int id, String title) {
+	private int id;
+	private String title;
+	private String difficulty;
+	private int numOfLines;
+	private String owner;
+	
+	public GameRoom(int id, String title, String difficulty, int numOfLines, String owner) {
 		super("게임 방");
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,6 +36,11 @@ public class GameRoom extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setVisible(true);
+		this.id = id;
+		this.title = title;
+		this.difficulty = difficulty;
+		this.numOfLines = numOfLines;
+		this.owner = owner;
 		
 		Container c = getContentPane();
 		c.setLayout(null);
@@ -53,8 +62,7 @@ public class GameRoom extends JFrame {
 			}
 		});
 		c.add(menuBar);
-
-
+	
 		exitBtn.setBounds(1238, 12, 30, 27);
 		exitBtn.setBorderPainted(false);
 		exitBtn.setContentAreaFilled(false);
@@ -87,8 +95,23 @@ public class GameRoom extends JFrame {
 				} catch (InterruptedException ex) {
 					ex.printStackTrace();
 				}
-				gamePanel.getBackgroundMusic().close();
-				setVisible(false);
+				if (gamePanel.isPlaying())	// 게임중에 나가면 대기실로 이동
+					GamePanel.game.close();
+				else {	// 게임방에서 나가기
+					try {
+						oos = WaitingRoom.oos;
+						oos.flush();
+						
+						ChatMsg obcm = new ChatMsg(WaitingRoom.user, "410", "LEAVE");
+						oos.writeObject(obcm);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+					if (Main.SOUND_EFFECT)
+						gamePanel.getBackgroundMusic().close();	// 게임방 배경음악은 끄고
+					// 대기실 배경음악은 켜야 함
+				}
+				dispose();
 			}
 		});
 		c.add(exitBtn);
@@ -98,5 +121,21 @@ public class GameRoom extends JFrame {
 		
 		monitorPanel.setBounds(800, 0, 480, 720);
 		c.add(monitorPanel);
+	}
+
+	public int getId() {
+		return id;
+	}
+	
+	public String getRoomTitle() {
+		return title;
+	}
+	
+	public static GamePanel getGamePanel() {
+		return gamePanel;
+	}
+	
+	public MonitorPanel getMonitorPanel() {
+		return monitorPanel;
 	}
 }
