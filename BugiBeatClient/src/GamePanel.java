@@ -38,7 +38,7 @@ public class GamePanel extends JPanel {
 	private ImageIcon readyBtnEnteredImg = new ImageIcon(Main.class.getResource("/images/ready1.png"));
 	
 	private JButton startBtn = new JButton(startBtnImg);
-	private JButton readyBtn = new JButton("준비");
+	private JButton readyBtn = new JButton(readyBtnImg);
 	private JButton roomsetBtn = new JButton(roomsetImg);
 	private JButton quitBtn = new JButton(quitBtnImg);
 	private JLabel roomInfo = new JLabel("");
