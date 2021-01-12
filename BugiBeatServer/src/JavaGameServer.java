@@ -490,11 +490,7 @@ public class JavaGameServer extends JFrame {
 					} else if (cm.getCode().matches("460")) {	// game over
 						record(cm);
 						break; 
-					} else if (cm.getCode().matches("500")) {	//send item
-//						msg = String.format("[%s] %s", cm.getId(), cm.getData());
-//						AppendText(msg); // server 화면에 출력
-//						String[] args = msg.split(" "); // 단어들을 분리한다.
-						
+					} else if (cm.getCode().matches("500")) {	//send item						
 						WriteOthersObject(cm);
 					}
 					else if (cm.getCode().matches("230")) {	/* status: sleep */
